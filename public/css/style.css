@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #222;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background-color: white;
+    border-bottom: 1px solid #eee;
+}
+
+.navbar h2 {
+    margin: 0;
+}
+
+.navbar a {
+    color: #222;
+    text-decoration: none;
+}
+
+.hero {
+    padding: 100px 20px;
+    text-align: center;
+    background-color: #eef2f5;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #666;
+}
+
+.cars {
+    padding: 60px 8%;
+}
