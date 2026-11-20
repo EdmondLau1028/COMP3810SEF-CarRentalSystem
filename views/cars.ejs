@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Browse cars | DriveEase</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="/">DriveEase</a>
+        <nav aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/cars" aria-current="page">Browse cars</a>
+            <% if (user) { %>
+                <a href="/my-booking">My bookings</a>
+                <a href="/manage-cars">Manage cars</a>
+                <span class="nav-greeting">Hi, <%= user.name %></span>
+                <form class="nav-form" action="/logout" method="post"><button class="nav-button" type="submit">Log out</button></form>
+            <% } else { %>
+                <a href="/login">Log in</a>
+                <a class="button button-small" href="/register">Create account</a>
+            <% } %>
+        </nav>
+    </header>
+    <main class="section page-content">
+        <% if (notice) { %><p class="notice" role="status"><%= notice %></p><% } %>
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">CHOOSE YOUR RIDE</p>
+                <h1>Available cars</h1>
+                <p class="muted">Pick a car that fits your plans. Prices are shown per day.</p>
+            </div>
+            <p class="result-count"><%= cars.length %> <%= cars.length === 1 ? 'car' : 'cars' %></p>
+        </div>
+        <% if (cars.length) { %>
+            <div class="car-grid">
+                <% cars.forEach((car) => { %>
+                    <article class="car-card">
+                        <a class="car-image-link" href="/cars/<%= car._id %>" aria-label="View <%= car.name %>">
+                            <img src="<%= car.image || '/images/car.jpg' %>" alt="<%= car.brand %> <%= car.name %>">
+                        </a>
+                        <div class="car-card-body">
+                            <p class="car-category"><%= car.category %></p>
+                            <h2><a href="/cars/<%= car._id %>"><%= car.brand %> <%= car.name %></a></h2>
+                            <p class="car-specs"><%= car.seats %> seats <span aria-hidden="true">·</span> <%= car.transmission %> <span aria-hidden="true">·</span> <%= car.fuel %></p>
+                            <div class="car-card-footer">
+                                <p class="price">HK$<%= car.pricePerDay %><span> / day</span></p>
+                                <a class="button button-small" href="/cars/<%= car._id %>">View details</a>
+                            </div>
+                        </div>
+                    </article>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <h2>No cars available</h2>
+                <p>Please check back later or return to the <a class="text-link" href="/">home page</a>.</p>
+            </div>
+        <% } %>
+    </main>
+    <footer class="footer"><p>DriveEase <span aria-hidden="true">·</span> A smoother way to get there.</p></footer>
+</body>
+</html>

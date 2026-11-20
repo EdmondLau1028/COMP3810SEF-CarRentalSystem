@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %> | DriveEase</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="/">DriveEase</a>
+        <nav aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/cars">Browse cars</a>
+            <a href="/my-booking">My bookings</a>
+            <a href="/manage-cars">Manage cars</a>
+            <span class="nav-greeting">Hi, <%= user.name %></span>
+            <form class="nav-form" action="/logout" method="post"><button class="nav-button" type="submit">Log out</button></form>
+        </nav>
+    </header>
+    <main class="section page-content">
+        <p class="breadcrumbs"><a href="/manage-cars">Manage cars</a> <span aria-hidden="true">/</span> <%= title %></p>
+        <% if (typeof error !== 'undefined' && error) { %><p class="alert" role="alert"><%= error %></p><% } %>
+        <section class="car-form-card">
+            <h1><%= title %></h1>
+            <form action="<%= action %>" method="post" class="car-form">
+                <div>
+                    <label for="carId">Car ID</label>
+                    <input id="carId" name="carId" value="<%= car.carId || '' %>" minlength="3" maxlength="20" pattern="[A-Za-z][A-Za-z0-9-]{2,19}" title="Use 3 to 20 letters, numbers, or hyphens; start with a letter." required>
+                    <small>Enter a unique code, such as CAR001.</small>
+                </div>
+                <div>
+                    <label for="brand">Brand</label>
+                    <input id="brand" name="brand" value="<%= car.brand || '' %>" required>
+                </div>
+                <div>
+                    <label for="name">Model</label>
+                    <input id="name" name="name" value="<%= car.name || '' %>" required>
+                </div>
+                <div>
+                    <label for="category">Category</label>
+                    <input id="category" name="category" value="<%= car.category || '' %>" required>
+                </div>
+                <div>
+                    <label for="seats">Seats</label>
+                    <input id="seats" name="seats" type="number" min="1" value="<%= car.seats || '' %>" required>
+                </div>
+                <div>
+                    <label for="transmission">Transmission</label>
+                    <input id="transmission" name="transmission" value="<%= car.transmission || '' %>" required>
+                </div>
+                <div>
+                    <label for="fuel">Fuel</label>
+                    <input id="fuel" name="fuel" value="<%= car.fuel || '' %>" required>
+                </div>
+                <div>
+                    <label for="pricePerDay">Price per day (HK$)</label>
+                    <input id="pricePerDay" name="pricePerDay" type="number" min="1" step="1" value="<%= car.pricePerDay || '' %>" required>
+                </div>
+                <div>
+                    <label for="available">Availability</label>
+                    <select id="available" name="available">
+                        <option value="true" <%= car.available !== false ? 'selected' : '' %>>Available</option>
+                        <option value="false" <%= car.available === false ? 'selected' : '' %>>Unavailable</option>
+                    </select>
+                </div>
+                <div class="form-wide">
+                    <label for="image">Image path</label>
+                    <input id="image" name="image" value="<%= car.image || '/images/car.jpg' %>">
+                </div>
+                <div class="form-wide">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4"><%= car.description || '' %></textarea>
+                </div>
+                <div class="form-wide form-actions">
+                    <button class="button" type="submit"><%= title %></button>
+                    <a class="button button-outline" href="/manage-cars">Back to cars</a>
+                </div>
+            </form>
+        </section>
+    </main>
+    <footer class="footer"><p>DriveEase <span aria-hidden="true">·</span> A smoother way to get there.</p></footer>
+</body>
+</html>

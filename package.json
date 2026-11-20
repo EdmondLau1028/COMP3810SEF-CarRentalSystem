@@ -4,7 +4,7 @@
   "description": "Car Rental Booking System using Express.js and MongoDB",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,6 @@
   },
   "homepage": "https://github.com/EdmondLau1028/COMP3810SEF-CarRentalSystem#readme",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "dotenv": "^18.0.10",
     "ejs": "^7.0.2",
     "express": "^5.3.0",
     "express-session": "^1.19.0",

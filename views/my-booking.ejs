@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My bookings | DriveEase</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="/">DriveEase</a>
+        <nav aria-label="Main navigation">
+            <a href="/">Home</a>
+            <a href="/cars">Browse cars</a>
+            <a href="/my-booking" aria-current="page">My bookings</a>
+            <a href="/manage-cars">Manage cars</a>
+            <span class="nav-greeting">Hi, <%= user.name %></span>
+            <form class="nav-form" action="/logout" method="post"><button class="nav-button" type="submit">Log out</button></form>
+        </nav>
+    </header>
+    <main class="section page-content">
+        <% if (notice) { %><p class="notice" role="status"><%= notice %></p><% } %>
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">YOUR TRIPS</p>
+                <h1>My bookings</h1>
+                <p class="muted">View your upcoming rentals and booking history.</p>
+            </div>
+            <a class="button button-small" href="/cars">Book a car</a>
+        </div>
+        <% if (bookings.length) { %>
+            <div class="booking-list">
+                <% bookings.forEach((booking) => { %>
+                    <article class="booking-card">
+                        <div class="booking-info">
+                            <h2><%= booking.carName %></h2>
+                            <p><strong>Pick-up:</strong> <time datetime="<%= booking.startDate %>"><%= booking.startDate %></time></p>
+                            <p><strong>Return:</strong> <time datetime="<%= booking.endDate %>"><%= booking.endDate %></time></p>
+                            <p><strong>Duration:</strong> <%= booking.days %> <%= booking.days === 1 ? 'day' : 'days' %></p>
+                        </div>
+                        <div class="booking-total">
+                            <p class="price">HK$<%= booking.totalPrice %></p>
+                        </div>
+                    </article>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <h2>No bookings yet</h2>
+                <p>When you book a car, it will appear here.</p>
+                <a class="button" href="/cars">Browse available cars</a>
+            </div>
+        <% } %>
+    </main>
+    <footer class="footer"><p>DriveEase <span aria-hidden="true">·</span> A smoother way to get there.</p></footer>
+</body>
+</html>
