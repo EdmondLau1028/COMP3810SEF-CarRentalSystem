@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>DriveEase | Browse Cars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#142235; --orange:#f97316; --pale:#f3f4f5; --muted:#667085; --line:#d9dde3; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--navy); background:#f3f3f3; font-family:Outfit,Arial,'PingFang HK','Microsoft JhengHei',sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    input,select,button { font:inherit; }
+    button { cursor:pointer; }
+    .container { width:min(1220px,calc(100% - 40px)); margin:0 auto; }
+    .topline { background:#111d2a; color:#cdd5df; padding:8px 0; font-size:12px; }
+    .topline .container { display:flex; justify-content:space-between; }
+    .header { background:white; border-bottom:1px solid #e5e7eb; position:sticky; top:0; z-index:50; }
+    .nav { min-height:77px; display:flex; align-items:center; gap:25px; justify-content:space-between; }
+    .brand { font-size:30px; font-weight:900; font-family:Outfit,Arial,sans-serif; letter-spacing:-1.7px; white-space:nowrap; }
+    .brand em { color:var(--orange); font-style:italic; }
+    .nav-links,.account { display:flex; align-items:center; flex-wrap:wrap; gap:17px; font-size:14px; font-weight:700; }
+    .nav-links a:hover,.account a:hover { color:var(--orange); }
+    .account form { margin:0; }
+    .lang { background:#f0f2f5; display:flex; padding:4px; border-radius:11px; }
+    .lang button { border:0; padding:8px 10px; border-radius:8px; background:transparent; color:#64748b; font-size:12px; font-weight:800; }
+    .lang button.active { background:white; color:#dc5d0b; box-shadow:0 2px 6px #0001; }
+    .orange-btn { padding:11px 15px; background:var(--orange); color:white!important; border-radius:10px; font-weight:800; }
+    .logout { border:0; border-radius:10px; color:#cb500c; background:#fff0e5; padding:11px 15px; font-weight:800; }
+    .banner { height:245px; position:relative; background:linear-gradient(rgba(8,15,25,.28),rgba(8,15,25,.48)),url('/images/car23.jpg') center 46% / cover no-repeat; display:flex; align-items:center; justify-content:center; }
+    .banner h1 { text-align:center; color:#fff; font-size:clamp(30px,4vw,43px); text-shadow:0 2px 18px #0009; margin:0; letter-spacing:.01em; }
+    .page { padding:58px 0 90px; }
+    .category-row { display:flex; align-items:stretch; justify-content:center; flex-wrap:wrap; gap:24px; padding-bottom:38px; }
+    .cat-link { min-width:160px; padding:15px 24px 14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:#8a8f98; border-bottom:2px solid transparent; transition:color .2s,border-color .2s; }
+    .cat-link:hover,.cat-link.active { color:#d8631b; border-color:var(--orange); }
+    .cat-icon { height:55px; width:75px; display:grid; place-items:center; }
+    .cat-icon svg { width:69px; height:50px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+    .cat-link span:last-child { font-size:15px; font-weight:700; white-space:nowrap; }
+    .filter-panel { margin:5px auto 42px; max-width:1110px; }
+    .filters { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:17px 29px; }
+    .field { min-width:0; position:relative; }
+    .field label { color:#586474; font-size:12px; font-weight:800; display:block; margin-bottom:6px; }
+    .field select,.field input { width:100%; height:43px; padding:0 35px 0 8px; background:transparent; border:0; border-bottom:1px solid #c9cdd2; border-radius:0; color:#3d4652; outline:0; }
+    .field select:focus,.field input:focus { border-color:var(--orange); }
+    .field select { cursor:pointer; }
+    .filter-actions { display:flex; align-items:center; justify-content:center; gap:24px; margin-top:25px; }
+    .filter-submit { background:#142235; color:white; border:0; padding:12px 32px; font-weight:800; border-radius:3px; }
+    .filter-submit:hover { background:var(--orange); }
+    .filter-reset { font-size:14px; color:#667085; font-weight:700; }
+    .results-head { max-width:1110px; margin:0 auto 18px; display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+    .results-head h2 { margin:0; font-size:23px; font-weight:800; }
+    .results-head span { color:#667085; font-size:14px; }
+    .car-list { max-width:1110px; margin:0 auto; display:grid; gap:23px; }
+    .car-row { display:grid; grid-template-columns:285px minmax(0,1fr) 190px; min-height:215px; padding:23px; background:white; gap:24px; box-shadow:0 2px 20px #0e1b2b07; }
+    .car-photo { height:168px; background:#e6e9ed; display:block; overflow:hidden; }
+    .car-photo img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s; }
+    .car-photo:hover img { transform:scale(1.05); }
+    .car-middle h3 { font-size:24px; margin:0 0 14px; font-weight:800; }
+    .highlights { display:flex; flex-wrap:wrap; gap:9px 14px; font-size:12px; color:#64748b; margin-bottom:14px; }
+    .highlights span::before { content:'✓'; display:inline-grid; place-items:center; width:16px; height:16px; border-radius:50%; background:#a9d3df; color:white; font-size:11px; font-weight:900; margin-right:6px; }
+    .car-description { color:#667085; font-size:13px; line-height:1.65; margin:0 0 12px; }
+    .spec-line { display:flex; gap:14px; flex-wrap:wrap; color:#475467; font-size:13px; font-weight:500; }
+    .spec-line span { white-space:nowrap; }
+    .car-price { border-left:1px solid #d7dade; padding:10px 0 7px 25px; display:flex; flex-direction:column; align-items:stretch; justify-content:center; gap:9px; }
+    .price-caption { color:#667085; font-size:13px; font-weight:700; }
+    .price-number { color:#24272b; font-size:30px; font-weight:900; line-height:1; }
+    .price-number small { color:#667085; font-size:14px; font-weight:700; }
+    .view-details { display:inline-block; text-align:center; border:1px solid #142235; margin-top:14px; padding:11px 6px; font-weight:700; font-size:13px; transition:background .2s,color .2s; }
+    .view-details:hover { background:#142235; color:white; }
+    .empty { padding:55px 20px; background:#fff; text-align:center; color:#6b7280; }
+    .footer { padding:26px; background:#101a29; color:#d0d7e1; text-align:center; font-size:13px; }
+    @media(max-width:1100px) { .nav-links { display:none; }.car-row { grid-template-columns:245px minmax(0,1fr) 160px; gap:17px; }.car-middle h3 { font-size:21px; } }
+    @media(max-width:820px) { .car-row { grid-template-columns:200px minmax(0,1fr); }.car-price { grid-column:1 / -1; border-left:0; border-top:1px solid #e3e7ed; padding:15px 0 0; display:flex; flex-direction:row; justify-content:space-between; align-items:center; }.view-details { margin:0; min-width:130px; }.filters { grid-template-columns:repeat(2,minmax(0,1fr)); }.cat-link { min-width:130px; padding:12px; } }
+    @media(max-width:580px) { .container { width:calc(100% - 26px); }.topline span:last-child { display:none; }.brand { font-size:26px; }.nav { min-height:70px; gap:10px; }.account { gap:7px; }.account .greeting { display:none; }.banner { height:185px; }.page { padding:28px 0 60px; }.category-row { gap:0; }.cat-link { min-width:50%; padding:12px; }.filters { grid-template-columns:1fr; gap:14px; }.car-row { grid-template-columns:1fr; padding:15px; gap:14px; }.car-photo { height:225px; }.car-price { grid-column:auto; }.results-head h2 { font-size:20px; } }
+  </style>
+</head>
+<body>
+  <div class="topline"><div class="container"><span data-t="topline">Your Hong Kong car rental platform</span><span data-t="rentalModes">Daily · Weekly · Monthly</span></div></div>
+  <header class="header"><div class="container nav">
+    <a href="/" class="brand" aria-label="DriveEase Home">Drive<em>Ease</em></a>
+    <nav class="nav-links">
+      <a href="/" data-t="home">Home</a><a href="/cars?category=private" data-t="private">Private Cars</a><a href="/cars?category=family" data-t="family">Family Cars</a><a href="/cars?category=electric" data-t="electric">Electric Cars</a><a href="/cars?category=luxury" data-t="luxury">Luxury Cars</a>
+    </nav>
+    <div class="account">
+      <div class="lang"><button type="button" data-lang="en">EN</button><button type="button" data-lang="zh">繁中</button></div>
+      <% if (currentUser) { %>
+        <span class="greeting"><span data-t="hello">Hi,</span> <%= currentUser %></span><a href="/my-booking" data-t="myBookings">My Bookings</a>
+        <form method="POST" action="/logout"><button type="submit" class="logout" data-t="logout">Logout</button></form>
+      <% } else { %>
+        <a href="/login" data-t="login">Login</a><a href="/register" class="orange-btn" data-t="register">Register</a>
+      <% } %>
+    </div>
+  </div></header>
+
+  <section class="banner"><h1 data-t="bannerTitle">Choose your ideal car</h1></section>
+  <main class="page container">
+    <!-- Only the four categories supported by DriveEase -->
+    <nav class="category-row" aria-label="Car categories">
+      <a href="/cars" class="cat-link <%= filters.category === 'all' ? 'active' : '' %>">
+        <span class="cat-icon"><svg viewBox="0 0 64 44"><path d="M5 30l5-10h43l6 10v7H5z"/><path d="M15 20l7-9h21l9 9"/><circle cx="17" cy="36" r="5"/><circle cx="49" cy="36" r="5"/><path d="M10 30h49M28 20v-9"/></svg></span><span data-t="allCars">All Cars</span>
+      </a>
+      <a href="/cars?category=private" class="cat-link <%= filters.category === 'private' ? 'active' : '' %>">
+        <span class="cat-icon"><svg viewBox="0 0 64 44"><path d="M4 29l7-9h42l7 9v8H4z"/><path d="M16 20l7-9h18l10 9"/><circle cx="17" cy="36" r="5"/><circle cx="49" cy="36" r="5"/><path d="M7 29h52M32 11v9"/></svg></span><span data-t="private">Private Cars</span>
+      </a>
+      <a href="/cars?category=family" class="cat-link <%= filters.category === 'family' ? 'active' : '' %>">
+        <span class="cat-icon"><svg viewBox="0 0 64 44"><path d="M6 13h38l13 10v14H6z"/><path d="M15 13V7h27l9 16H6"/><path d="M22 13v10M39 13v10"/><circle cx="18" cy="37" r="5"/><circle cx="47" cy="37" r="5"/></svg></span><span data-t="family">Family Cars</span>
+      </a>
+      <a href="/cars?category=electric" class="cat-link <%= filters.category === 'electric' ? 'active' : '' %>">
+        <span class="cat-icon"><svg viewBox="0 0 64 44"><path d="M5 30l6-10h43l5 10v7H5z"/><path d="M16 20l7-9h20l9 9"/><circle cx="17" cy="36" r="5"/><circle cx="49" cy="36" r="5"/><path d="M33 14l-5 8h7l-4 8 10-12h-7z"/></svg></span><span data-t="electric">Electric Cars</span>
+      </a>
+      <a href="/cars?category=luxury" class="cat-link <%= filters.category === 'luxury' ? 'active' : '' %>">
+        <span class="cat-icon"><svg viewBox="0 0 64 44"><path d="M10 20l8 7 14-8 14 8 8-7-5 17H15z"/><path d="M32 9l4 5-4 5-4-5z"/><path d="M10 20l-5-5 5-5 5 5zM54 20l5-5-5-5-5 5z"/><path d="M15 37h34"/></svg></span><span data-t="luxury">Luxury Cars</span>
+      </a>
+    </nav>
+
+    <section class="filter-panel" aria-label="Search and filters">
+      <form action="/cars" method="GET" id="filters-form">
+        <input type="hidden" name="category" value="<%= filters.category %>">
+        <div class="filters">
+          <div class="field"><label for="brand" data-t="brandLabel">Brand</label><select id="brand" name="brand"><option value="" data-t="anyBrand">All Brands</option><% brands.forEach(brand => { %><option value="<%= brand %>" <%= filters.brand === brand ? 'selected' : '' %>><%= brand %></option><% }) %></select></div>
+          <div class="field"><label for="model" data-t="modelLabel">Model</label><select id="model" name="model"><option value="" data-t="anyModel">All Models</option><% models.forEach(model => { %><option value="<%= model %>" <%= filters.model === model ? 'selected' : '' %>><%= model %></option><% }) %></select></div>
+          <div class="field"><label for="maxPrice" data-t="priceLabel">Daily Price</label><select id="maxPrice" name="maxPrice"><option value="0" data-t="anyPrice">All Prices</option><% [500,800,1200,2000,4000,7000].forEach(n => { %><option value="<%= n %>" <%= filters.maxPrice === n ? 'selected' : '' %>>≤ HK$<%= n.toLocaleString('en-HK') %></option><% }) %></select></div>
+          <div class="field"><label for="location" data-t="locationLabel">Location</label><select id="location" name="location"><option value="" data-t="anyLocation">All Areas</option><% ['Hong Kong Island','Kowloon','New Territories'].forEach(loc => { %><option value="<%= loc %>" data-location-value="<%= loc %>" <%= filters.location === loc ? 'selected' : '' %>><%= loc %></option><% }) %></select></div>
+          <div class="field"><label for="minSeats" data-t="seatsLabel">Seats</label><select id="minSeats" name="minSeats"><option value="0" data-t="anySeats">Any Seats</option><option value="5" <%= filters.minSeats === 5 ? 'selected' : '' %>>5+</option><option value="7" <%= filters.minSeats === 7 ? 'selected' : '' %>>7+</option></select></div>
+          <div class="field"><label for="transmission" data-t="transmissionLabel">Transmission</label><select id="transmission" name="transmission"><option value="" data-t="anyTransmission">All Transmissions</option><option value="Automatic" <%= filters.transmission === 'Automatic' ? 'selected' : '' %> data-t="automatic">Automatic</option><option value="Manual" <%= filters.transmission === 'Manual' ? 'selected' : '' %> data-t="manual">Manual</option></select></div>
+          <div class="field"><label for="keyword" data-t="keywordLabel">Keyword</label><input id="keyword" type="search" name="keyword" maxlength="80" value="<%= filters.keyword %>" placeholder="Search car brand or model" data-placeholder="keywordPlaceholder"></div>
+        </div>
+        <div class="filter-actions"><button class="filter-submit" type="submit" data-t="search">Search Cars</button><a class="filter-reset" href="/cars" data-t="reset">Clear All</a></div>
+      </form>
+    </section>
+
+    <div class="results-head"><h2 data-t="availableCars">Available Cars</h2><span><%= cars.length %> <span data-t="results">matching vehicles</span></span></div>
+    <section class="car-list">
+      <% if (cars.length === 0) { %>
+      <div class="empty"><h3 data-t="emptyTitle">No cars found</h3><p data-t="emptyText">Try changing your filters.</p><a href="/cars" data-t="allCars">All Cars</a></div>
+      <% } %>
+      <% cars.forEach(car => { %>
+      <article class="car-row">
+        <a class="car-photo" href="/cars/<%= car._id.toString() %>"><img src="<%= car.image || '/images/car01.jpg' %>" alt="<%= car.brand %> <%= car.model %>" loading="lazy" onerror="this.onerror=null;this.src='/images/car01.jpg'"></a>
+        <div class="car-middle">
+          <h3><%= car.brand %> <%= car.model %></h3>
+          <div class="highlights"><span><%= car.year || '—' %> <span data-t="modelYear">Model Year</span></span><span data-raw-value="<%= car.transmission || '—' %>"><%= car.transmission || '—' %></span><span data-category="<%= car.category %>"><%= car.category %></span></div>
+          <p class="car-description" data-description-en="<%= car.description || '' %>" data-description-zh="<%= car.descriptionZh || '' %>"><%= car.descriptionZh || '' %></p>
+          <div class="spec-line"><span>♧ <%= car.seats || '—' %> <span data-t="seats">Seats</span></span><span>⚙ <span data-raw-value="<%= car.fuelType || '—' %>"><%= car.fuelType || '—' %></span></span><span>⌖ <span data-raw-value="<%= car.location || '—' %>"><%= car.location || '—' %></span></span></div>
+        </div>
+        <div class="car-price"><span class="price-caption" data-t="dayRate">Daily Rental</span><span class="price-number">HK$<%= Number(car.pricePerDay || 0).toLocaleString('en-HK') %> <small data-t="perDay">/ day</small></span><a class="view-details" href="/cars/<%= car._id.toString() %>" data-t="viewDetails">View Details →</a></div>
+      </article>
+      <% }) %>
+    </section>
+  </main>
+  <footer class="footer">© 2026 DriveEase. All Rights Reserved.</footer>
+  <script>
+    const messages = {
+      en:{topline:'Your Hong Kong car rental platform',rentalModes:'Daily · Weekly · Monthly',home:'Home',private:'Private Cars',family:'Family Cars',electric:'Electric Cars',luxury:'Luxury Cars',allCars:'All Cars',hello:'Hi,',myBookings:'My Bookings',logout:'Logout',login:'Login',register:'Register',bannerTitle:'Choose your ideal car',brandLabel:'Brand',anyBrand:'All Brands',modelLabel:'Model',anyModel:'All Models',priceLabel:'Daily Price',anyPrice:'All Prices',locationLabel:'Location',anyLocation:'All Areas',seatsLabel:'Seats',anySeats:'Any Seats',transmissionLabel:'Transmission',anyTransmission:'All Transmissions',automatic:'Automatic',manual:'Manual',keywordLabel:'Keyword',keywordPlaceholder:'Search car brand or model',search:'Search Cars',reset:'Clear All',availableCars:'Available Cars',results:'matching vehicles',emptyTitle:'No cars found',emptyText:'Try changing your filters.',modelYear:'Model Year',seats:'Seats',dayRate:'Daily Rental',perDay:'/ day',viewDetails:'View Details →'},
+      zh:{topline:'你的香港租車平台',rentalModes:'日租 · 週租 · 月租',home:'首頁',private:'私家車',family:'家庭車',electric:'電動車',luxury:'豪華車',allCars:'全部車款',hello:'你好，',myBookings:'我的預訂',logout:'登出',login:'登入',register:'註冊',bannerTitle:'挑選心儀車款',brandLabel:'品牌',anyBrand:'所有品牌',modelLabel:'型號',anyModel:'所有型號',priceLabel:'日租價錢',anyPrice:'不限價格',locationLabel:'地點',anyLocation:'所有地區',seatsLabel:'座位數',anySeats:'不限座位',transmissionLabel:'傳動系統',anyTransmission:'不限波箱',automatic:'自動波',manual:'手動波',keywordLabel:'關鍵字',keywordPlaceholder:'搜尋品牌或型號',search:'搜尋車輛',reset:'清除篩選',availableCars:'可租用車輛',results:'輛符合條件的車',emptyTitle:'找不到符合條件的車輛',emptyText:'請調整你的搜尋條件。',modelYear:'年份',seats:'座',dayRate:'日租',perDay:'／天',viewDetails:'查看詳情 →'}
+    };
+    const vehicleValues = {
+      en: {},
+      zh: {
+        Automatic:'自動波', Manual:'手動波',
+        Petrol:'汽油', Diesel:'柴油', Hybrid:'混能', Electric:'電動',
+        'Hong Kong Island':'香港島', Kowloon:'九龍', 'New Territories':'新界'
+      }
+    };
+    function setLanguage(lang){
+      localStorage.setItem('driveease_language',lang);
+      document.documentElement.lang=lang==='zh'?'zh-Hant':'en';
+      document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+      document.querySelectorAll('[data-t]').forEach(el=>el.textContent=messages[lang][el.dataset.t]||el.textContent);
+      document.querySelectorAll('[data-placeholder]').forEach(el=>el.placeholder=messages[lang][el.dataset.placeholder]||el.placeholder);
+      document.querySelectorAll('[data-category]').forEach(el=>el.textContent=messages[lang][el.dataset.category]||el.dataset.category);
+      document.querySelectorAll('[data-description-en]').forEach(el=>{
+        el.textContent=lang==='zh'?el.dataset.descriptionZh:el.dataset.descriptionEn;
+      });
+      document.querySelectorAll('[data-raw-value]').forEach(el=>{
+        const raw=el.dataset.rawValue;
+        el.textContent=vehicleValues[lang][raw]||raw;
+      });
+      document.querySelectorAll('[data-location-value]').forEach(el=>{
+        const raw=el.dataset.locationValue;
+        el.textContent=vehicleValues[lang][raw]||raw;
+      });
+    }
+    document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.lang)));
+    setLanguage(localStorage.getItem('driveease_language')==='en'?'en':'zh');
+  </script>
+</body>
+</html>

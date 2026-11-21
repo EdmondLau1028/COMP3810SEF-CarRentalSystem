@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= mode === 'edit' ? '編輯會員' : '新增會員' %> | DriveEase Admin</title>
+  <style>
+    :root { --sidebar:#28323b; --blue:#32a7df; --bg:#eff7fb; --text:#334550; --muted:#758692; --line:#dce5eb; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:14px Arial,"Noto Sans TC","Microsoft JhengHei",sans-serif; background:var(--bg); color:var(--text); }
+    a { color:inherit; text-decoration:none; }
+    input,select,button { font:inherit; }
+    .layout { min-height:100vh; display:grid; grid-template-columns:238px minmax(0,1fr); }
+    .sidebar { display:flex; flex-direction:column; background:var(--sidebar); color:#a8b9c6; }
+    .brand { height:61px; display:flex; align-items:center; gap:12px; padding:0 20px; color:white; background:var(--blue); }
+    .de-brand { display:inline-flex; align-items:baseline; font-size:21px; font-weight:900; line-height:1; letter-spacing:-1px; }
+    .de-ease { color:#ff781f; font-style:italic; }
+    .de-admin { font-size:10px; letter-spacing:1px; color:#e8f6fd; font-weight:700; }
+    .identity { padding:20px 18px; font-weight:700; color:white; border-bottom:1px solid #3a454f; }
+    .identity small { display:block; font-size:11px; margin-top:5px; color:#9ab0bf; font-weight:400; }
+    .group { padding:22px 19px 8px; color:#8397a4; font-size:10px; letter-spacing:1.3px; font-weight:bold; }
+    .side-link { display:block; padding:12px 19px; min-height:42px; font-size:13px; }
+    .side-link:hover { color:white; background:#34434e; }
+    .side-link.active { color:white; background:#344854; border-left:3px solid var(--blue); padding-left:16px; font-weight:700; }
+    .side-footer { margin-top:auto; border-top:1px solid #3a454f; padding:12px 0; }
+    .logout { border:0; background:transparent; text-align:left; color:#a8b9c6; padding:12px 19px; width:100%; cursor:pointer; }
+    .topbar { height:61px; padding:0 28px; display:flex; align-items:center; font-size:12px; border-bottom:1px solid var(--line); background:white; color:var(--muted); }
+    .topbar a { color:#167cb1; }
+    .content { max-width:1100px; padding:30px 28px 45px; margin:auto; }
+    .heading { display:flex; align-items:start; justify-content:space-between; gap:16px; margin-bottom:24px; }
+    h1 { font-size:22px; margin:0; color:#364a58; }
+    .back { background:white; border:1px solid #c5d3dd; border-radius:2px; padding:10px 14px; font-size:12px; }
+    .panel { border:1px solid var(--line); background:white; }
+    .panel-title { padding:16px 21px; background:#f4f8fa; border-bottom:1px solid var(--line); font-size:15px; font-weight:bold; }
+    .form-body { padding:23px; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:21px 24px; }
+    .field label { display:block; font-size:12px; font-weight:bold; margin-bottom:7px; }
+    .field input,.field select { border:1px solid #c5d3dd; border-radius:2px; background:white; color:var(--text); padding:9px 11px; width:100%; min-height:40px; }
+    .field small { display:block; margin-top:8px; font-size:11px; color:var(--muted); }
+    .full { grid-column:1/-1; }
+    .req { color:#d4514d; }
+    .error { background:#fff4f3; border:1px solid #e3a4a0; padding:12px 14px; margin-bottom:18px; color:#a53c35; }
+    .panel-footer { padding:17px 23px; display:flex; justify-content:flex-end; gap:10px; border-top:1px solid var(--line); background:#fafcfd; }
+    .submit { border:0; background:#35bb74; color:white; font-weight:bold; padding:11px 19px; border-radius:3px; cursor:pointer; font-size:13px; }
+    .cancel { border:1px solid #c5d3dd; padding:10px 17px; background:white; border-radius:3px; font-size:13px; }
+    @media(max-width:850px) { .layout{grid-template-columns:185px minmax(0,1fr)} .content{padding:20px 15px} }
+    @media(max-width:620px) { .layout{display:block} .brand{height:48px} .sidebar nav,.identity,.side-footer{display:none} .grid{grid-template-columns:1fr} .full{grid-column:auto} .heading{flex-direction:column} }
+  </style>
+</head>
+<body>
+<%
+  const isEdit = mode === 'edit';
+  const who = typeof currentUser === 'string' && currentUser ? currentUser : 'Admin';
+  const values = form || {};
+  const val = key => typeof values[key] === 'string' ? values[key] : '';
+  const action = isEdit ? '/admin/users/' + userId + '/edit' : '/admin/users/new';
+%>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><a class="de-brand" href="/admin"><span>Drive</span><span class="de-ease">Ease</span></a><small class="de-admin">ADMIN</small></div>
+    <div class="identity"><%= who %><small>Administrator</small></div>
+    <nav>
+      <div class="group">MANAGEMENT</div>
+      <a class="side-link" href="/admin/cars">▤　車輛管理</a>
+      <a class="side-link" href="/admin/cars/new">＋　新增車輛</a>
+      <a class="side-link" href="/admin/bookings">▣　預訂管理</a>
+      <a class="side-link active" href="/admin/users">♙　會員管理</a>
+      <div class="group">OTHER</div><a class="side-link" href="/admin">↩　返回後台</a>
+    </nav>
+    <div class="side-footer"><form method="POST" action="/logout"><button type="submit" class="logout">⇥　登出</button></form></div>
+  </aside>
+  <div>
+    <header class="topbar"><a href="/admin">Admin</a>　›　<a href="/admin/users">會員管理</a>　›　<%= isEdit ? '編輯會員' : '新增會員' %></header>
+    <main class="content">
+      <div class="heading"><h1><%= isEdit ? '編輯會員' : '新增會員' %></h1><a href="/admin/users" class="back">← 返回會員列表</a></div>
+      <form method="POST" action="<%= action %>" <%- isEdit ? 'onsubmit="return confirm(\'確定儲存會員資料？\');"' : '' %>>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <section class="panel">
+          <div class="panel-title">Member Information / 會員基本資料</div>
+          <div class="form-body">
+            <% if (error) { %><div class="error" role="alert"><%= error %></div><% } %>
+            <div class="grid">
+              <div class="field"><label for="name">姓名 Name <span class="req">*</span></label><input id="name" name="name" required maxlength="80" value="<%= val('name') %>" placeholder="會員名稱"></div>
+              <div class="field"><label for="email">Email <span class="req">*</span></label><input type="email" id="email" name="email" required maxlength="254" value="<%= val('email') %>" placeholder="name@example.com"></div>
+              <% if (isEdit) { %>
+                <div class="field"><label for="newPassword">重設密碼 Reset Password</label><input id="newPassword" name="newPassword" type="password" minlength="8" autocomplete="new-password" placeholder="留空 = 不更改密碼"><small>選填，最少 8 字元；留空會保留原密碼。</small></div>
+              <% } else { %>
+                <div class="field"><label for="password">密碼 Password <span class="req">*</span></label><input id="password" name="password" type="password" required minlength="8" autocomplete="new-password"></div>
+                <div class="field"><label for="confirmPassword">確認密碼 <span class="req">*</span></label><input id="confirmPassword" name="confirmPassword" type="password" required minlength="8" autocomplete="new-password"></div>
+              <% } %>
+            </div>
+          </div>
+          <div class="panel-footer"><a class="cancel" href="/admin/users">取消</a><button type="submit" class="submit"><%= isEdit ? 'Save Changes' : '＋ Create Member' %></button></div>
+        </section>
+      </form>
+    </main>
+  </div>
+</div>
+</body>
+</html>

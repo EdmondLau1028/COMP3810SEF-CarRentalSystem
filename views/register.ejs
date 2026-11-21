@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | DriveEase</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* ================================
+           GLOBAL
+        ================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Outfit", Arial, sans-serif;
+            background: #f7f8fa;
+            color: #142235;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+
+        /* ================================
+           MAIN LAYOUT
+        ================================= */
+
+        .register-container {
+            display: grid;
+            grid-template-columns: 48% 52%;
+            min-height: 100vh;
+        }
+
+
+        /* ================================
+           LEFT PANEL
+        ================================= */
+
+        .register-left {
+            display: flex;
+            flex-direction: column;
+
+            padding: 35px 8%;
+
+            background: white;
+        }
+
+
+        /* ================================
+           HEADER
+        ================================= */
+
+        .register-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        /* ================================
+           LOGO
+        ================================= */
+
+        .register-logo {
+            display: inline-flex;
+            align-items: baseline;
+
+            font-size: 34px;
+            font-weight: 900;
+
+            letter-spacing: -1.8px;
+
+            white-space: nowrap;
+        }
+
+        .logo-drive {
+            color: #142235;
+        }
+
+        .logo-ease {
+            color: #f97316;
+            font-style: italic;
+        }
+
+
+        /* ================================
+           LANGUAGE SWITCH
+        ================================= */
+
+        .language-switch {
+            display: flex;
+            gap: 5px;
+
+            background: #f3f4f6;
+
+            padding: 4px;
+
+            border-radius: 9px;
+        }
+
+        .language-switch button {
+            border: none;
+
+            padding: 7px 10px;
+
+            background: transparent;
+
+            color: #667085;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+        }
+
+        .language-switch button.active {
+            background: white;
+            color: #ea580c;
+
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        }
+
+
+        /* ================================
+           FORM AREA
+        ================================= */
+
+        .register-content {
+            width: 100%;
+            max-width: 420px;
+
+            margin: auto;
+
+            padding: 55px 0;
+        }
+
+        .register-label {
+            display: inline-block;
+
+            background: #fff1e6;
+            color: #ea580c;
+
+            padding: 8px 13px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 22px;
+        }
+
+        .register-content h1 {
+            font-size: 43px;
+            font-weight: 800;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 12px;
+        }
+
+        .register-description {
+            color: #667085;
+
+            font-size: 15px;
+            line-height: 1.7;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* ================================
+           FORM INPUTS
+        ================================= */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #344054;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 51px;
+
+            padding: 0 16px;
+
+            border: 1px solid #d8dde7;
+
+            border-radius: 11px;
+
+            background: #fafbfc;
+
+            color: #142235;
+
+            font-size: 14px;
+
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+
+            border-color: #f97316;
+
+            background: white;
+
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.10);
+        }
+
+        .form-group input::placeholder {
+            color: #98a2b3;
+        }
+
+
+        /* ================================
+           PASSWORD
+        ================================= */
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 82px;
+        }
+
+        .password-toggle {
+            position: absolute;
+
+            right: 12px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+            background: transparent;
+
+            color: #667085;
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            padding: 8px;
+        }
+
+        .password-toggle:hover {
+            color: #f97316;
+        }
+
+        .password-hint {
+            display: block;
+
+            color: #98a2b3;
+
+            font-size: 12px;
+
+            margin-top: 7px;
+        }
+
+
+        /* ================================
+           REGISTER BUTTON
+        ================================= */
+
+        .register-btn {
+            width: 100%;
+            height: 54px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 12px;
+
+            margin-top: 27px;
+
+            border: none;
+            border-radius: 11px;
+
+            background: linear-gradient(
+                120deg,
+                #f97316,
+                #ea580c
+            );
+
+            color: white;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: all 0.25s ease;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.25);
+        }
+
+
+        /* ================================
+           MESSAGES
+        ================================= */
+
+        .error-message {
+            padding: 14px 16px;
+
+            margin-bottom: 20px;
+
+            border-radius: 10px;
+
+            background: #fef2f2;
+
+            border: 1px solid #fecaca;
+
+            color: #b91c1c;
+
+            font-size: 13px;
+        }
+
+        .success-message {
+            padding: 14px 16px;
+
+            margin-bottom: 20px;
+
+            border-radius: 10px;
+
+            background: #ecfdf3;
+
+            border: 1px solid #a6f4c5;
+
+            color: #067647;
+
+            font-size: 13px;
+        }
+
+
+        /* ================================
+           LINKS
+        ================================= */
+
+        .login-text {
+            text-align: center;
+
+            margin-top: 28px;
+
+            color: #667085;
+
+            font-size: 14px;
+        }
+
+        .login-text a {
+            color: #ea580c;
+            font-weight: 800;
+        }
+
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: inline-block;
+
+            margin-top: 23px;
+
+            color: #667085;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-home:hover {
+            color: #f97316;
+        }
+
+
+        /* ================================
+           RIGHT PANEL
+        ================================= */
+
+        .register-right {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            padding: 70px;
+
+            color: white;
+
+            background-image:
+                linear-gradient(
+                    180deg,
+                    rgba(10, 20, 32, 0.10) 0%,
+                    rgba(10, 20, 32, 0.30) 40%,
+                    rgba(10, 20, 32, 0.88) 100%
+                ),
+                url("/images/car03.jpg");
+
+            background-size: cover;
+
+            background-position: center;
+
+            overflow: hidden;
+        }
+
+        .register-right-content {
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 550px;
+        }
+
+        .register-right-label {
+            display: inline-block;
+
+            padding: 9px 15px;
+
+            background: rgba(255, 255, 255, 0.15);
+
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+            border-radius: 30px;
+
+            backdrop-filter: blur(10px);
+
+            font-size: 12px;
+            font-weight: 700;
+
+            margin-bottom: 25px;
+        }
+
+        .register-right h2 {
+            font-size: clamp(36px, 4vw, 57px);
+
+            font-weight: 800;
+
+            line-height: 1.15;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 20px;
+        }
+
+        .register-right p {
+            color: #e5e7eb;
+
+            line-height: 1.8;
+
+            font-size: 16px;
+        }
+
+
+        /* ================================
+           FOOTER
+        ================================= */
+
+        .register-footer {
+            color: #98a2b3;
+
+            font-size: 12px;
+
+            margin-top: 30px;
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 950px) {
+
+            .register-container {
+                grid-template-columns: 1fr;
+            }
+
+            .register-right {
+                display: none;
+            }
+
+            .register-left {
+                min-height: 100vh;
+                padding: 25px 6%;
+            }
+
+            .register-content {
+                max-width: 450px;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            .register-content h1 {
+                font-size: 34px;
+            }
+
+            .register-logo {
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="register-container">
+
+
+    <!-- =====================================
+         LEFT SIDE
+    ====================================== -->
+
+    <section class="register-left">
+
+
+        <!-- Logo and Language -->
+        <div class="register-top">
+
+
+            <a href="/" class="register-logo">
+
+                <span class="logo-drive">Drive</span><span class="logo-ease">Ease</span>
+
+            </a>
+
+
+            <div class="language-switch">
+
+                <button
+                    type="button"
+                    data-language="en"
+                    class="active"
+                >
+                    EN
+                </button>
+
+                <button
+                    type="button"
+                    data-language="zh"
+                >
+                    繁中
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- Registration Form -->
+        <main class="register-content">
+
+
+            <span class="register-label" data-t="welcomeLabel">
+                JOIN DRIVEEASE
+            </span>
+
+
+            <h1 data-t="registerTitle">
+                Create your account.
+            </h1>
+
+
+            <p class="register-description" data-t="registerDescription">
+                Join DriveEase and discover a better way to rent your next car.
+            </p>
+
+
+
+            <!-- Error -->
+            <% if (typeof error !== "undefined" && error) { %>
+
+                <div class="error-message" role="alert">
+
+                    <%= error %>
+
+                </div>
+
+            <% } %>
+
+
+
+            <!-- Success -->
+            <% if (typeof success !== "undefined" && success) { %>
+
+                <div class="success-message" role="status">
+
+                    <%= success %>
+
+                    <a href="/login" data-t="loginLink">
+                        Sign In
+                    </a>
+
+                </div>
+
+            <% } %>
+
+
+
+            <!-- Register Form -->
+            <form action="/register" method="POST" id="registerForm">
+
+
+                <!-- Full Name -->
+                <div class="form-group">
+
+                    <label for="name" data-t="nameLabel">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        maxlength="80"
+                        required
+                        data-placeholder="namePlaceholder"
+                    >
+
+                </div>
+
+
+
+                <!-- Email -->
+                <div class="form-group">
+
+                    <label for="email" data-t="emailLabel">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                        maxlength="254"
+                        required
+                        data-placeholder="emailPlaceholder"
+                    >
+
+                </div>
+
+
+
+                <!-- Password -->
+                <div class="form-group">
+
+                    <label for="password" data-t="passwordLabel">
+                        Password
+                    </label>
+
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                            data-placeholder="passwordPlaceholder"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-toggle-for="password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+
+                    <small class="password-hint" data-t="passwordHint">
+                        Minimum 8 characters.
+                    </small>
+
+                </div>
+
+
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+
+                    <label for="confirmPassword" data-t="confirmLabel">
+                        Confirm Password
+                    </label>
+
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Confirm your password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            required
+                            data-placeholder="confirmPlaceholder"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-toggle-for="confirmPassword"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Register Button -->
+                <button type="submit" class="register-btn">
+
+                    <span data-t="registerButton">
+                        Create Account
+                    </span>
+
+                    <span aria-hidden="true">→</span>
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- Login Link -->
+            <p class="login-text">
+
+                <span data-t="alreadyAccount">
+                    Already have an account?
+                </span>
+
+                <a href="/login" data-t="loginLink">
+                    Sign In
+                </a>
+
+            </p>
+
+
+
+            <!-- Back Home -->
+            <a href="/" class="back-home" data-t="backHome">
+
+                ← Back to Homepage
+
+            </a>
+
+
+
+        </main>
+
+
+
+        <!-- Footer -->
+        <div class="register-footer">
+
+            © 2026 DriveEase — Car Rental Booking System
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================
+         RIGHT SIDE
+    ====================================== -->
+
+    <section class="register-right" aria-label="DriveEase car rental">
+
+
+        <div class="register-right-content">
+
+
+            <span class="register-right-label" data-t="rightLabel">
+                START YOUR JOURNEY
+            </span>
+
+
+            <h2 data-t="rightTitle">
+                Your next adventure starts here.
+            </h2>
+
+
+            <p data-t="rightDescription">
+                Create your DriveEase account to discover rental cars,
+                explore new destinations and manage your bookings in one place.
+            </p>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+
+<!-- =====================================
+     JAVASCRIPT
+====================================== -->
+
+<script>
+
+
+    /* ================================
+       TRANSLATIONS
+    ================================= */
+
+    const translations = {
+
+        en: {
+
+            welcomeLabel: "JOIN DRIVEEASE",
+
+            registerTitle: "Create your account.",
+
+            registerDescription:
+                "Join DriveEase and discover a better way to rent your next car.",
+
+            nameLabel: "Full Name",
+
+            namePlaceholder: "Enter your full name",
+
+            emailLabel: "Email Address",
+
+            emailPlaceholder: "Enter your email address",
+
+            passwordLabel: "Password",
+
+            passwordPlaceholder: "Create a password",
+
+            passwordHint: "Minimum 8 characters.",
+
+            confirmLabel: "Confirm Password",
+
+            confirmPlaceholder: "Confirm your password",
+
+            registerButton: "Create Account",
+
+            alreadyAccount: "Already have an account?",
+
+            loginLink: "Sign In",
+
+            backHome: "← Back to Homepage",
+
+            rightLabel: "START YOUR JOURNEY",
+
+            rightTitle: "Your next adventure starts here.",
+
+            rightDescription:
+                "Create your DriveEase account to discover rental cars, explore new destinations and manage your bookings in one place.",
+
+            show: "Show",
+
+            hide: "Hide",
+
+            mismatch: "Passwords do not match."
+
+        },
+
+        zh: {
+
+            welcomeLabel: "加入 DRIVEEASE",
+
+            registerTitle: "建立你的帳戶",
+
+            registerDescription:
+                "立即加入 DriveEase，探索更方便的租車體驗。",
+
+            nameLabel: "姓名",
+
+            namePlaceholder: "請輸入你的姓名",
+
+            emailLabel: "電郵地址",
+
+            emailPlaceholder: "請輸入電郵地址",
+
+            passwordLabel: "密碼",
+
+            passwordPlaceholder: "請設定密碼",
+
+            passwordHint: "密碼至少需要 8 個字元。",
+
+            confirmLabel: "確認密碼",
+
+            confirmPlaceholder: "請再次輸入密碼",
+
+            registerButton: "建立帳戶",
+
+            alreadyAccount: "已經有帳戶？",
+
+            loginLink: "立即登入",
+
+            backHome: "← 返回首頁",
+
+            rightLabel: "展開你的旅程",
+
+            rightTitle: "下一段精彩旅程，由這裡開始。",
+
+            rightDescription:
+                "立即註冊 DriveEase，探索不同租車選擇，輕鬆管理預訂，享受自在出行。",
+
+            show: "顯示",
+
+            hide: "隱藏",
+
+            mismatch: "兩次輸入的密碼不一致。"
+
+        }
+
+    };
+
+
+
+    /* ================================
+       LANGUAGE
+    ================================= */
+
+    let currentLanguage =
+        localStorage.getItem("driveease_language") === "zh"
+            ? "zh"
+            : "en";
+
+
+
+    function changeLanguage(language) {
+
+        currentLanguage = language;
+
+        localStorage.setItem("driveease_language", language);
+
+        document.documentElement.lang =
+            language === "zh" ? "zh-Hant" : "en";
+
+
+        // Text
+        document.querySelectorAll("[data-t]").forEach(function (element) {
+
+            const key = element.dataset.t;
+
+            if (translations[language][key]) {
+
+                element.textContent = translations[language][key];
+
+            }
+
+        });
+
+
+        // Placeholders
+        document.querySelectorAll("[data-placeholder]").forEach(function (element) {
+
+            const key = element.dataset.placeholder;
+
+            if (translations[language][key]) {
+
+                element.placeholder = translations[language][key];
+
+            }
+
+        });
+
+
+        // Language buttons
+        document.querySelectorAll("[data-language]").forEach(function (button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.language === language
+            );
+
+        });
+
+
+        updatePasswordButtons();
+
+    }
+
+
+
+    /* ================================
+       SHOW / HIDE PASSWORD
+    ================================= */
+
+    function updatePasswordButtons() {
+
+        document.querySelectorAll("[data-toggle-for]").forEach(function (button) {
+
+            const input = document.getElementById(
+                button.dataset.toggleFor
+            );
+
+            const hidden = input.type === "password";
+
+            button.textContent = hidden
+                ? translations[currentLanguage].show
+                : translations[currentLanguage].hide;
+
+        });
+
+    }
+
+
+
+    document.querySelectorAll("[data-toggle-for]").forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            const input = document.getElementById(
+                button.dataset.toggleFor
+            );
+
+            input.type =
+                input.type === "password"
+                    ? "text"
+                    : "password";
+
+            updatePasswordButtons();
+
+        });
+
+    });
+
+
+
+    /* ================================
+       VALIDATE PASSWORDS MATCH
+    ================================= */
+
+    const registerForm = document.getElementById("registerForm");
+
+    const password = document.getElementById("password");
+
+    const confirmPassword = document.getElementById("confirmPassword");
+
+
+    confirmPassword.addEventListener("input", function () {
+
+        confirmPassword.setCustomValidity("");
+
+    });
+
+
+    registerForm.addEventListener("submit", function (event) {
+
+        if (password.value !== confirmPassword.value) {
+
+            event.preventDefault();
+
+            confirmPassword.setCustomValidity(
+                translations[currentLanguage].mismatch
+            );
+
+            confirmPassword.reportValidity();
+
+        } else {
+
+            confirmPassword.setCustomValidity("");
+
+        }
+
+    });
+
+
+
+    /* ================================
+       LANGUAGE BUTTONS
+    ================================= */
+
+    document.querySelectorAll("[data-language]").forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            changeLanguage(button.dataset.language);
+
+        });
+
+    });
+
+
+
+    // Initialize
+    changeLanguage(currentLanguage);
+
+
+</script>
+
+
+</body>
+
+</html>

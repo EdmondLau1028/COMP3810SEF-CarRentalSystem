@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>編輯車輛 | DriveEase Admin</title>
+  <style>
+    :root { --sidebar:#28323b; --ice:#32a7df; --ice-bg:#eff7fb; --text:#344955; --muted:#7b8d99; --border:#dce5eb; --green:#35bb74; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,"Noto Sans TC","Microsoft JhengHei",sans-serif; font-size:14px; color:var(--text); background:var(--ice-bg); }
+    a { text-decoration:none; color:inherit; }
+    button,input,select,textarea { font:inherit; }
+    .layout { min-height:100vh; display:grid; grid-template-columns:238px minmax(0,1fr); }
+    .sidebar { background:var(--sidebar); color:#a8b9c6; display:flex; flex-direction:column; }
+    .side-brand { height:61px; padding:0 20px; display:flex; align-items:center; gap:12px; background:var(--ice); color:#fff; font-size:15px; font-weight:700; }
+    .de-brand { display:inline-flex; align-items:baseline; gap:0; font-size:21px; line-height:1; font-weight:900; letter-spacing:-1px; white-space:nowrap; }
+    .de-brand .de-ease { color:#ff781f; font-style:italic; }
+    .de-admin { font-size:10px; letter-spacing:1px; color:#e8f6fd; font-weight:700; }
+    .user-card { padding:20px 18px; border-bottom:1px solid #3a454f; color:white; font-weight:600; }
+    .user-card small { display:block; margin-top:5px; color:#9ab0bf; font-size:11px; font-weight:400; }
+    .group-label { padding:22px 19px 8px; font-size:10px; color:#8097a4; letter-spacing:1.4px; font-weight:700; }
+    .side-link { display:block; padding:12px 19px; font-size:13px; }
+    .side-link.active { background:#344854; border-left:3px solid var(--ice); padding-left:16px; color:white; font-weight:700; }
+    .side-link.muted { color:#788b98; }
+    .side-link:hover:not(.muted) { background:#34434e; color:#fff; }
+    .side-footer { margin-top:auto; border-top:1px solid #3a454f; padding:12px 0; }
+    .side-footer form { margin:0; }
+    .logout { background:transparent; border:0; text-align:left; width:100%; color:#a8b9c6; font-size:13px; padding:12px 19px; cursor:pointer; }
+    .topbar { height:61px; display:flex; align-items:center; background:#fff; padding:0 28px; border-bottom:1px solid var(--border); color:var(--muted); font-size:12px; }
+    .topbar a { color:#177fb4; }
+    .workspace { min-width:0; }
+    .content { padding:30px 28px 50px; max-width:1170px; margin:auto; }
+    .heading { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:24px; }
+    h1 { font-size:22px; margin:0 0 9px; font-weight:700; }
+    .subtitle { color:var(--muted); font-size:13px; margin:0; }
+    .return-link { display:inline-block; padding:10px 14px; border:1px solid #bfcfd9; border-radius:3px; background:#fff; font-size:12px; }
+    .panel { border:1px solid var(--border); background:#fff; }
+    .panel-head { padding:17px 21px; background:#f4f8fa; border-bottom:1px solid var(--border); font-weight:700; font-size:15px; }
+    .form-body { padding:23px; }
+    .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:19px 24px; }
+    .field label { display:block; margin-bottom:7px; font-size:12px; font-weight:700; color:#425969; }
+    .req { color:#d4514d; }
+    .field input,.field select,.field textarea { width:100%; min-height:39px; padding:9px 11px; background:#fff; border:1px solid #c5d3dd; border-radius:2px; color:var(--text); outline-color:#75b9df; }
+    .field textarea { min-height:91px; resize:vertical; line-height:1.5; }
+    .span2 { grid-column:1/-1; }
+    .hint { font-size:11px; color:#7a8f9c; margin:7px 0 0; }
+    .checkboxes { display:flex; gap:25px; flex-wrap:wrap; padding:3px 0; }
+    .check-label { display:flex; align-items:center; gap:8px; font-size:13px; }
+    .check-label input { width:16px; height:16px; accent-color:#188fc2; }
+    .form-footer { border-top:1px solid var(--border); background:#fafcfd; padding:17px 23px; display:flex; gap:10px; justify-content:flex-end; }
+    .save { background:var(--green); color:#fff; font-weight:700; border:0; border-radius:3px; padding:11px 19px; cursor:pointer; font-size:13px; }
+    .cancel { background:#fff; color:#526a79; border:1px solid #c3d1db; border-radius:3px; padding:10px 18px; font-size:13px; }
+    .error { padding:12px 14px; border:1px solid #e3a4a0; background:#fff4f3; color:#a53c35; font-size:13px; margin-bottom:19px; }
+    @media(max-width:860px){.layout{grid-template-columns:180px minmax(0,1fr)}.content{padding:20px 15px}.form-grid{gap:16px}.topbar{padding:0 15px}}
+    @media(max-width:620px){.layout{display:block}.sidebar nav,.side-footer,.user-card{display:none}.side-brand{height:48px}.heading{flex-direction:column}.form-grid{grid-template-columns:1fr}.span2{grid-column:auto}.content{padding:15px 10px}}
+  </style>
+</head>
+<body>
+<%
+  const values = form || {};
+  const who = typeof currentUser === "string" && currentUser ? currentUser : "Admin";
+  const val = (key, fallback = "") => values[key] === undefined ? fallback : values[key];
+  const isChecked = key => values[key] === "true" || values[key] === true;
+%>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="side-brand"><a class="de-brand" href="/admin" aria-label="DriveEase Admin"><span>Drive</span><span class="de-ease">Ease</span></a><small class="de-admin">ADMIN</small></div>
+    <div class="user-card"><%= who %><small>Administrator</small></div>
+    <nav>
+      <div class="group-label">MANAGEMENT</div>
+      <a class="side-link active" href="/admin/cars">▤　車輛管理</a>
+      <a class="side-link" href="/admin/cars/new">＋　新增車輛</a>
+      <a class="side-link" href="/admin/bookings">▣　預訂管理</a>
+      <a class="side-link" href="/admin/users">♙　會員管理</a>
+      <div class="group-label">OTHER</div>
+      <a class="side-link" href="/admin">↩　返回後台</a>
+    </nav>
+    <div class="side-footer"><form action="/logout" method="POST"><button class="logout" type="submit">⇥　登出</button></form></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><a href="/admin">Admin</a>　›　<a href="/admin/cars">車輛管理</a>　›　編輯車輛</header>
+    <main class="content">
+      <div class="heading">
+        <div><h1>編輯車輛</h1></div>
+        <a class="return-link" href="/admin/cars">← 返回車輛列表</a>
+      </div>
+      <form action="/admin/cars/<%= carId %>/edit" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <section class="panel">
+          <div class="panel-head">Vehicle Information / 車輛基本資料</div>
+          <div class="form-body">
+            <% if (error) { %><div class="error" role="alert"><%= error %></div><% } %>
+            <div class="form-grid">
+              <div class="field"><label for="brand">品牌 Brand <span class="req">*</span></label><input id="brand" name="brand" maxlength="60" required placeholder="Toyota" value="<%= val('brand') %>"></div>
+              <div class="field"><label for="model">型號 Model <span class="req">*</span></label><input id="model" name="model" maxlength="60" required placeholder="Corolla" value="<%= val('model') %>"></div>
+              <div class="field"><label for="year">年份 Year <span class="req">*</span></label><input id="year" name="year" type="number" min="2000" max="2035" required value="<%= val('year', '2024') %>"></div>
+              <div class="field"><label for="category">類別 Category <span class="req">*</span></label><select id="category" name="category" required>
+                <option value="private" <%= val('category', 'private') === 'private' ? 'selected' : '' %>>私家車</option>
+                <option value="family" <%= val('category') === 'family' ? 'selected' : '' %>>家庭車</option>
+                <option value="electric" <%= val('category') === 'electric' ? 'selected' : '' %>>電動車</option>
+                <option value="luxury" <%= val('category') === 'luxury' ? 'selected' : '' %>>豪華車</option>
+              </select></div>
+              <div class="field"><label for="pricePerDay">每日租金 Price Per Day (HK$) <span class="req">*</span></label><input id="pricePerDay" name="pricePerDay" type="number" min="1" max="100000" step="1" required placeholder="450" value="<%= val('pricePerDay') %>"></div>
+              <div class="field"><label for="seats">座位數 Seats <span class="req">*</span></label><input id="seats" name="seats" type="number" min="1" max="9" required value="<%= val('seats', '5') %>"></div>
+              <div class="field"><label for="transmission">波箱 Transmission</label><select id="transmission" name="transmission">
+                <option value="Automatic" <%= val('transmission', 'Automatic') === 'Automatic' ? 'selected' : '' %>>Automatic（自動）</option>
+                <option value="Manual" <%= val('transmission') === 'Manual' ? 'selected' : '' %>>Manual（手動）</option>
+              </select></div>
+              <div class="field"><label for="fuelType">燃料 Fuel Type</label><select id="fuelType" name="fuelType">
+                <% ['Petrol', 'Hybrid', 'Electric', 'Diesel'].forEach(fuel => { %>
+                  <option value="<%= fuel %>" <%= val('fuelType', 'Petrol') === fuel ? 'selected' : '' %>><%= fuel %></option>
+                <% }) %>
+              </select></div>
+              <div class="field"><label for="location">取車地點 Location</label><select id="location" name="location">
+                <% ['Kowloon', 'Hong Kong Island', 'New Territories'].forEach(place => { %>
+                  <option value="<%= place %>" <%= val('location', 'Kowloon') === place ? 'selected' : '' %>><%= place %></option>
+                <% }) %>
+              </select></div>
+              <div class="field"><label for="image">圖片路徑 Image Path</label><input id="image" name="image" maxlength="120" value="<%= val('image', '/images/car01.jpg') %>" placeholder="/images/car25.jpg"><p class="hint">圖片需預先放入 public/images/。目前不提供圖片上傳。</p></div>
+              <div class="field span2"><label for="description">車輛描述 Description</label><textarea id="description" name="description" maxlength="300" placeholder="車輛特色、車廂空間及適用場景"><%= val('description') %></textarea></div>
+              <div class="span2">
+                <div class="checkboxes">
+                  <label class="check-label"><input type="checkbox" name="available" value="true" <%= isChecked('available') ? 'checked' : '' %>>立即上架 Available</label>
+                  <label class="check-label"><input type="checkbox" name="featured" value="true" <%= isChecked('featured') ? 'checked' : '' %>>首頁推薦 Featured</label>
+                </div>
+                <p class="hint">取消勾選「立即上架」即可暫停這輛車的新預訂，舊預訂紀錄仍會保留。</p>
+              </div>
+            </div>
+          </div>
+          <div class="form-footer">
+            <a class="cancel" href="/admin/cars">取消</a>
+            <button class="save" type="submit">Save Changes</button>
+          </div>
+        </section>
+      </form>
+    </main>
+  </div>
+</div>
+</body>
+</html>

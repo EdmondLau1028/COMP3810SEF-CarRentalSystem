@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>預訂管理 | DriveEase Admin</title>
+  <style>
+    :root { --sidebar:#28323b; --blue:#32a7df; --blue-dark:#167cb1; --bg:#eff7fb; --text:#334550; --muted:#758692; --line:#dce5eb; --green:#17865c; --red:#e65047; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Arial,"Noto Sans TC","Microsoft JhengHei",sans-serif; font-size:14px; background:var(--bg); color:var(--text); }
+    a { color:inherit; text-decoration:none; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    .layout { min-height:100vh; display:grid; grid-template-columns:238px minmax(0,1fr); }
+    .sidebar { display:flex; flex-direction:column; background:var(--sidebar); color:#a8b9c6; }
+    .brand { height:61px; display:flex; align-items:center; gap:12px; background:var(--blue); color:#fff; padding:0 20px; font-weight:bold; font-size:15px; }
+    .de-brand { display:inline-flex; align-items:baseline; gap:0; font-size:21px; line-height:1; font-weight:900; letter-spacing:-1px; white-space:nowrap; }
+    .de-brand .de-ease { color:#ff781f; font-style:italic; }
+    .de-admin { font-size:10px; letter-spacing:1px; color:#e8f6fd; font-weight:700; }
+    .identity { padding:17px 18px; min-height:67px; display:flex; align-items:center; gap:11px; border-bottom:1px solid #3a454f; }
+    .avatar { width:34px; height:34px; background:#42525f; border-radius:50%; color:#fff; font-weight:bold; display:grid; place-items:center; }
+    .identity-name { display:block; color:#fff; font-weight:700; }
+    .identity small { display:block; font-size:11px; color:#8ea3b0; margin-top:4px; }
+    .nav-heading { padding:20px 19px 7px; font-size:10px; letter-spacing:1.3px; color:#8397a4; font-weight:700; }
+    .nav-link { display:flex; align-items:center; gap:11px; padding:12px 19px; font-size:13px; min-height:42px; }
+    .nav-link:hover { background:#34434e; color:#fff; }
+    .nav-link.active { background:#344854; border-left:3px solid var(--blue); padding-left:16px; color:#fff; font-weight:700; }
+    .nav-icon { width:16px; text-align:center; font-size:15px; }
+    .sidebar-footer { margin-top:auto; border-top:1px solid #3a454f; padding:12px 0 20px; }
+    .sidebar-footer form { margin:0; }
+    .logout { border:0; padding:12px 19px; background:transparent; color:#a8b9c6; font-size:13px; width:100%; text-align:left; }
+    .logout:hover { color:white; background:#34434e; }
+    .workspace { min-width:0; }
+    .topbar { height:61px; padding:0 27px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); background:#fff; font-size:12px; }
+    .crumb a { color:var(--blue-dark); }
+    .top-user { color:var(--muted); }
+    .content { padding:29px 28px 42px; max-width:1600px; margin:auto; }
+    h1 { margin:0 0 25px; color:#364a58; font-size:21px; }
+    .panel { border:1px solid var(--line); background:white; }
+    .panel-tools { padding:14px 16px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center; }
+    .panel-title { font-size:15px; font-weight:700; }
+    .panel-title span { color:var(--muted); font-size:12px; font-weight:normal; margin-left:8px; }
+    .filters { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .filters input,.filters select { height:35px; border:1px solid #cbd8e1; border-radius:2px; padding:6px 10px; background:white; color:var(--text); }
+    .filters input { width:260px; }
+    .filters select { width:130px; }
+    .filter-btn { height:35px; border:1px solid var(--blue-dark); border-radius:2px; padding:6px 14px; color:white; background:var(--blue-dark); font-size:12px; }
+    .reset-btn { height:35px; display:inline-flex; align-items:center; border:1px solid #cbd8e1; padding:6px 12px; color:var(--blue-dark); font-size:12px; }
+    .notice { padding:12px 15px; margin-bottom:15px; background:#eaf8f0; border:1px solid #b4d9c7; color:#246747; font-size:13px; }
+    .scroll { overflow-x:auto; }
+    table { width:100%; min-width:1100px; border-collapse:collapse; text-align:left; }
+    th { background:#f1f5f8; color:#4c6271; font-size:12px; font-weight:bold; padding:13px 12px; border-bottom:1px solid #cbd9e3; white-space:nowrap; }
+    td { padding:13px 12px; border-bottom:1px solid #e5ecf0; font-size:12px; vertical-align:middle; }
+    tbody tr:nth-child(even) { background:#f9fbfc; }
+    tbody tr:hover { background:#edf7fc; }
+    .ref { font-weight:700; color:#167cb1; }
+    .minor { display:block; font-size:10px; color:#8ea0ab; margin-top:4px; }
+    .member-name { color:#334550; font-weight:700; }
+    .car { display:flex; align-items:center; gap:10px; min-width:160px; }
+    .car img { width:56px; height:39px; object-fit:cover; border:1px solid #e1e9ef; }
+    .dates { white-space:nowrap; line-height:1.65; }
+    .money { font-weight:700; white-space:nowrap; }
+    .badge { display:inline-block; border-radius:2px; padding:5px 9px; font-size:11px; font-weight:bold; }
+    .badge.confirmed { color:#168b5b; background:#e5f6ee; }
+    .badge.cancelled { color:#8a4c48; background:#f9eae9; }
+    .action-row { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+    .action-row form { display:inline; margin:0; }
+    .action { display:inline-block; padding:7px 10px; border:0; border-radius:2px; color:white; font-size:11px; line-height:1; }
+    .view { background:#f3a126; }
+    .cancel { background:var(--red); }
+    .empty { text-align:center; padding:40px 12px; color:var(--muted); }
+    .foot { padding:12px 16px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; display:flex; justify-content:space-between; gap:12px; align-items:center; }
+    .pagination { display:flex; align-items:center; gap:8px; }
+    .page-link { padding:7px 12px; color:var(--blue-dark); border:1px solid #cbd8e1; }
+    .page-link.disabled { opacity:.35; pointer-events:none; }
+    @media(max-width:840px){ .layout{grid-template-columns:185px minmax(0,1fr)} .content{padding:20px 13px} .topbar{padding:0 12px} }
+    @media(max-width:620px){ .layout{display:block} .brand{height:48px} .sidebar nav,.identity,.sidebar-footer{display:none} .content{padding:16px 10px} .filters input{width:175px} }
+  </style>
+</head>
+<body>
+<%
+  const rows = Array.isArray(bookings) ? bookings : [];
+  const who = typeof currentUser === "string" && currentUser ? currentUser : "Admin";
+  const canCancel = booking => booking.status === "confirmed" && booking.pickupDate > today;
+%>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><a class="de-brand" href="/admin" aria-label="DriveEase Admin"><span>Drive</span><span class="de-ease">Ease</span></a><small class="de-admin">ADMIN</small></div>
+    <div class="identity"><span class="avatar"><%= who.slice(0,1).toUpperCase() %></span><div><span class="identity-name"><%= who %></span><small>Administrator</small></div></div>
+    <nav aria-label="後台選單">
+      <div class="nav-heading">MANAGEMENT</div>
+      <a class="nav-link" href="/admin/cars"><span class="nav-icon">▤</span>車輛管理</a>
+      <a class="nav-link" href="/admin/cars/new"><span class="nav-icon">＋</span>新增車輛</a>
+      <a class="nav-link active" href="/admin/bookings" aria-current="page"><span class="nav-icon">▣</span>預訂管理</a>
+      <a class="nav-link" href="/admin/users"><span class="nav-icon">♙</span>會員管理</a>
+      <div class="nav-heading">OTHER</div>
+      <a class="nav-link" href="/admin"><span class="nav-icon">↩</span>返回後台</a>
+    </nav>
+    <div class="sidebar-footer"><form action="/logout" method="POST"><button class="logout" type="submit">⇥　登出</button></form></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div class="crumb"><a href="/admin">Admin</a>　›　<strong>預訂管理</strong></div><div class="top-user"><%= who %></div></header>
+    <main class="content">
+      <h1>預訂管理</h1>
+      <% if (notice) { %><div class="notice" role="status"><%= notice %></div><% } %>
+      <section class="panel" aria-label="預訂資料表">
+        <div class="panel-tools">
+          <div class="panel-title">預訂清單 <span>符合條件：<%= totalBookings %> 筆</span></div>
+          <form method="GET" action="/admin/bookings" class="filters" role="search">
+            <input type="search" name="q" maxlength="80" value="<%= q %>" placeholder="搜尋預訂編號、會員或車輛" aria-label="搜尋預訂">
+            <select name="status" aria-label="預訂狀態">
+              <option value="" <%= status === "" ? "selected" : "" %>>所有狀態</option>
+              <option value="confirmed" <%= status === "confirmed" ? "selected" : "" %>>Confirmed</option>
+              <option value="cancelled" <%= status === "cancelled" ? "selected" : "" %>>Cancelled</option>
+            </select>
+            <button type="submit" class="filter-btn">搜尋</button>
+            <a class="reset-btn" href="/admin/bookings">重設</a>
+          </form>
+        </div>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>預訂編號</th><th>會員</th><th>車輛</th><th>租車日期</th><th>天數</th><th>總租金</th><th>狀態</th><th>操作</th></tr></thead>
+            <tbody>
+              <% rows.forEach(booking => { %>
+                <tr>
+                  <td><a class="ref" href="/admin/bookings/<%= String(booking._id) %>" title="<%= String(booking._id) %>">#<%= String(booking._id).slice(-8) %></a></td>
+                  <td><span class="member-name"><%= booking.members && booking.members.name ? booking.members.name : "已刪除會員" %></span><small class="minor"><%= booking.members && booking.members.email ? booking.members.email : "—" %></small></td>
+                  <td><div class="car"><img src="<%= booking.carImage || '/images/car01.jpg' %>" alt="" loading="lazy" onerror="this.onerror=null;this.src='/images/car01.jpg'"><span><%= booking.carBrand || "—" %> <%= booking.carModel || "—" %></span></div></td>
+                  <td class="dates"><%= booking.pickupDate || "—" %><br>至 <%= booking.returnDate || "—" %></td>
+                  <td><%= booking.totalDays || "—" %></td>
+                  <td class="money">HK$<%= Number(booking.totalPrice || 0).toLocaleString('en-HK') %></td>
+                  <td><span class="badge <%= booking.status === 'confirmed' ? 'confirmed' : 'cancelled' %>"><%= booking.status === 'confirmed' ? 'Confirmed' : 'Cancelled' %></span></td>
+                  <td><div class="action-row"><a class="action view" href="/admin/bookings/<%= String(booking._id) %>">Details</a>
+                    <% if (canCancel(booking)) { %>
+                      <form action="/admin/bookings/<%= String(booking._id) %>/cancel" method="POST" onsubmit="return confirm('確定取消此預訂？這個操作不能復原。');">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="action cancel">Cancel</button>
+                      </form>
+                    <% } %>
+                  </div></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% if (!rows.length) { %><div class="empty">沒有符合條件的預訂紀錄。</div><% } %>
+        </div>
+        <div class="foot"><span>第 <%= currentPage %> / <%= totalPages %> 頁，每頁最多 20 筆</span>
+          <div class="pagination"><a class="page-link <%= prevUrl ? '' : 'disabled' %>" href="<%= prevUrl || '#' %>">上一頁</a><a class="page-link <%= nextUrl ? '' : 'disabled' %>" href="<%= nextUrl || '#' %>">下一頁</a></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>會員管理 | DriveEase Admin</title>
+  <style>
+    :root { --sidebar:#28323b; --blue:#32a7df; --blue-dark:#167cb1; --bg:#eff7fb; --text:#334550; --muted:#758692; --line:#dce5eb; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:14px Arial,"Noto Sans TC","Microsoft JhengHei",sans-serif; background:var(--bg); color:var(--text); }
+    a { color:inherit; text-decoration:none; }
+    button,input,select { font:inherit; }
+    button { cursor:pointer; }
+    .layout { min-height:100vh; display:grid; grid-template-columns:238px minmax(0,1fr); }
+    .sidebar { display:flex; flex-direction:column; background:var(--sidebar); color:#a8b9c6; }
+    .brand { height:61px; display:flex; align-items:center; gap:12px; background:var(--blue); color:white; padding:0 20px; }
+    .de-brand { display:inline-flex; align-items:baseline; font-size:21px; line-height:1; font-weight:900; letter-spacing:-1px; white-space:nowrap; }
+    .de-ease { color:#ff781f; font-style:italic; }
+    .de-admin { font-size:10px; letter-spacing:1px; color:#e8f6fd; font-weight:bold; }
+    .identity { padding:17px 18px; min-height:67px; display:flex; gap:11px; align-items:center; border-bottom:1px solid #3a454f; }
+    .avatar { width:34px; height:34px; background:#42525f; border-radius:50%; display:grid; place-items:center; color:white; font-weight:700; }
+    .identity-name { display:block; color:white; font-weight:700; }
+    .identity small { display:block; color:#8ea3b0; margin-top:4px; font-size:11px; }
+    .nav-heading { padding:20px 19px 7px; font-size:10px; color:#8397a4; letter-spacing:1.3px; font-weight:bold; }
+    .nav-link { min-height:42px; padding:12px 19px; display:flex; align-items:center; gap:11px; font-size:13px; }
+    .nav-link:hover { color:white; background:#34434e; }
+    .nav-link.active { border-left:3px solid var(--blue); padding-left:16px; background:#344854; color:white; font-weight:700; }
+    .nav-icon { width:16px; text-align:center; }
+    .sidebar-footer { margin-top:auto; border-top:1px solid #3a454f; padding:12px 0; }
+    .logout { background:transparent; border:0; text-align:left; width:100%; color:#a8b9c6; padding:12px 19px; font-size:13px; }
+    .topbar { height:61px; display:flex; justify-content:space-between; align-items:center; background:white; border-bottom:1px solid var(--line); padding:0 27px; font-size:12px; }
+    .topbar a { color:var(--blue-dark); }
+    .workspace { min-width:0; }
+    .content { padding:29px 28px 45px; max-width:1600px; margin:auto; }
+    .heading { display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:25px; }
+    h1 { font-size:21px; margin:0; color:#364a58; }
+    .add-btn { display:inline-block; background:#35bb74; color:white; padding:11px 16px; font-size:12px; font-weight:bold; border-radius:3px; }
+    .notice { background:#eaf8f0; color:#246747; border:1px solid #b4d9c7; padding:12px 15px; margin-bottom:16px; }
+    .panel { background:#fff; border:1px solid var(--line); }
+    .tools { display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; padding:15px 16px; border-bottom:1px solid var(--line); }
+    .panel-title { font-size:15px; font-weight:700; }
+    .panel-title span { font-size:12px; font-weight:400; color:var(--muted); margin-left:8px; }
+    .filters { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .filters input { background:white; border:1px solid #cbd8e1; border-radius:2px; min-height:35px; padding:6px 10px; color:var(--text); }
+    .filters input { width:230px; }
+    .search-btn { border:1px solid var(--blue-dark); border-radius:2px; padding:9px 14px; background:var(--blue-dark); color:white; font-size:12px; }
+    .reset-btn { display:inline-block; padding:9px 12px; color:var(--blue-dark); border:1px solid #cbd8e1; font-size:12px; }
+    .scroll { overflow-x:auto; }
+    table { width:100%; min-width:850px; border-collapse:collapse; text-align:left; }
+    thead { background:#f1f5f8; }
+    th { border-bottom:1px solid #cbd9e3; padding:13px 12px; font-size:12px; color:#4c6271; }
+    td { border-bottom:1px solid #e5ecf0; padding:13px 12px; font-size:12px; }
+    tbody tr:nth-child(even) { background:#f9fbfc; }
+    tbody tr:hover { background:#edf7fc; }
+    .user-name { font-weight:700; color:#235b7e; }
+    .actions { display:flex; gap:6px; white-space:nowrap; }
+    .action { border:0; border-radius:2px; color:white; display:inline-block; padding:7px 11px; font-size:11px; }
+    .view { background:#f3a126; }
+    .edit { background:#36a8d9; }
+    .foot { border-top:1px solid var(--line); padding:12px 16px; display:flex; justify-content:space-between; gap:12px; align-items:center; color:var(--muted); font-size:12px; }
+    .page-link { border:1px solid #cbd8e1; padding:7px 12px; color:var(--blue-dark); margin-left:7px; display:inline-block; }
+    .page-link.disabled { opacity:.35; pointer-events:none; }
+    .empty { padding:34px; text-align:center; color:var(--muted); }
+    @media(max-width:840px) { .layout{grid-template-columns:185px minmax(0,1fr)} .content{padding:20px 14px} .topbar{padding:0 13px} }
+    @media(max-width:620px) { .layout{display:block} .brand{height:48px} .sidebar nav,.identity,.sidebar-footer{display:none} .content{padding:16px 10px} .filters input{width:170px} }
+  </style>
+</head>
+<body>
+<% const who = typeof currentUser === 'string' && currentUser ? currentUser : 'Admin'; %>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><a class="de-brand" href="/admin"><span>Drive</span><span class="de-ease">Ease</span></a><small class="de-admin">ADMIN</small></div>
+    <div class="identity"><span class="avatar"><%= who.slice(0,1).toUpperCase() %></span><div><span class="identity-name"><%= who %></span><small>Administrator</small></div></div>
+    <nav aria-label="後台選單">
+      <div class="nav-heading">MANAGEMENT</div>
+      <a class="nav-link" href="/admin/cars"><span class="nav-icon">▤</span>車輛管理</a>
+      <a class="nav-link" href="/admin/cars/new"><span class="nav-icon">＋</span>新增車輛</a>
+      <a class="nav-link" href="/admin/bookings"><span class="nav-icon">▣</span>預訂管理</a>
+      <a class="nav-link active" href="/admin/users" aria-current="page"><span class="nav-icon">♙</span>會員管理</a>
+      <div class="nav-heading">OTHER</div><a class="nav-link" href="/admin"><span class="nav-icon">↩</span>返回後台</a>
+    </nav>
+    <div class="sidebar-footer"><form action="/logout" method="POST"><button class="logout" type="submit">⇥　登出</button></form></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div><a href="/admin">Admin</a>　›　<strong>會員管理</strong></div><div><%= who %></div></header>
+    <main class="content">
+      <div class="heading"><h1>會員管理</h1><a class="add-btn" href="/admin/users/new">＋ 新增會員</a></div>
+      <% if (notice) { %><div class="notice" role="status"><%= notice %></div><% } %>
+      <section class="panel">
+        <div class="tools"><div class="panel-title">會員清單 <span><%= totalUsers %> 筆資料</span></div>
+          <form class="filters" method="GET" action="/admin/users" role="search">
+            <input type="search" name="q" maxlength="80" placeholder="搜尋名稱或 Email" value="<%= q %>">
+            <button type="submit" class="search-btn">搜尋</button><a class="reset-btn" href="/admin/users">重設</a>
+          </form>
+        </div>
+        <div class="scroll"><table>
+          <thead><tr><th>會員</th><th>Email</th><th>預訂數量</th><th>註冊日期</th><th>操作</th></tr></thead>
+          <tbody>
+            <% users.forEach(user => { %>
+            <tr>
+              <td><span class="user-name"><%= user.name || '未命名' %></span></td>
+              <td><%= user.email || '—' %></td>
+              <td><%= user.bookingCount || 0 %></td>
+              <td><%= user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-CA', {timeZone:'Asia/Hong_Kong'}) : '—' %></td>
+              <td><div class="actions"><a class="action view" href="/admin/users/<%= String(user._id) %>">Details</a><a class="action edit" href="/admin/users/<%= String(user._id) %>/edit">Edit</a></div></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table><% if (!users.length) { %><div class="empty">沒有符合條件的會員。</div><% } %></div>
+        <div class="foot"><span>第 <%= page %> / <%= totalPages %> 頁，每頁最多 20 筆</span><span><a class="page-link <%= prevUrl ? '' : 'disabled' %>" href="<%= prevUrl || '#' %>">上一頁</a><a class="page-link <%= nextUrl ? '' : 'disabled' %>" href="<%= nextUrl || '#' %>">下一頁</a></span></div>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

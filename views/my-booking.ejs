@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我的預訂 | DriveEase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:#19243a; --orange:#f36b21; --blue:#3165e9; --muted:#77849a;
+      --bg:#eef0f5; --line:#e4e8ef; --white:#fff;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--navy); font-family:Outfit,Arial,"PingFang HK","Microsoft JhengHei",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    button { font:inherit; cursor:pointer; }
+    .container { width:min(1210px,calc(100% - 40px)); margin-inline:auto; }
+    .header { background:#fff; border-bottom:1px solid var(--line); }
+    .nav { min-height:79px; display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    .logo { font-size:30px; font-weight:900; letter-spacing:-1.7px; white-space:nowrap; }
+    .logo em { color:var(--orange); font-style:italic; }
+    .nav-links { display:flex; align-items:center; gap:24px; font-size:14px; font-weight:700; }
+    .nav-links a:hover { color:var(--orange); }
+    .account { display:flex; align-items:center; gap:13px; font-size:12px; font-weight:700; }
+    .greeting { color:#647086; }
+    .account form { margin:0; }
+    .language { display:flex; gap:3px; padding:4px; background:#f0f2f5; border-radius:9px; }
+    .language button { border:0; background:transparent; color:#65738a; border-radius:7px; padding:8px 11px; font-size:12px; font-weight:800; }
+    .language button.active { background:white; color:#de601a; box-shadow:0 1px 6px #00000012; }
+    .logout { background:#fff0e7; border:0; border-radius:7px; padding:10px 14px; color:#b75420; font-weight:800; }
+
+    .page { padding-top:36px; padding-bottom:90px; }
+    .page-head { display:flex; align-items:end; justify-content:space-between; gap:25px; margin-bottom:25px; }
+    .page-head h1 { margin:0 0 7px; font-size:clamp(29px,4vw,41px); letter-spacing:-.035em; }
+    .page-head p { margin:0; color:#6c798f; font-size:14px; line-height:1.7; }
+    .head-actions { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .count { border:1px solid #dfe5ee; background:#fff; color:#607086; padding:10px 14px; border-radius:7px; white-space:nowrap; font-size:13px; font-weight:800; }
+    .browse { display:inline-block; background:var(--orange); padding:12px 18px; border-radius:7px; color:white; font-weight:800; font-size:13px; white-space:nowrap; }
+    .browse:hover { background:#df5b15; }
+    .notice { border-radius:8px; border:1px solid #c6e9d9; background:#e9f8ef; padding:14px 18px; margin:0 0 18px; font-size:14px; color:#177a4b; }
+    .notice.failure { color:#a64226; background:#fff4eb; border-color:#ffdac5; }
+
+    .booking-list { display:flex; flex-direction:column; gap:17px; }
+    .booking-card { display:grid; grid-template-columns:238px minmax(0,1fr) 205px; gap:24px; align-items:stretch; padding:21px; border:1px solid #e9edf3; border-radius:10px; background:#fff; box-shadow:0 6px 22px #152b4910; min-width:0; }
+    .photo { width:238px; min-height:174px; height:100%; border-radius:8px; overflow:hidden; background:#edf0f3; display:block; }
+    .photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .booking-main { min-width:0; display:flex; flex-direction:column; }
+    .booking-top { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .booking-top h2 { margin:0; font-weight:800; font-size:25px; line-height:1.3; letter-spacing:-.03em; }
+    .status { padding:5px 11px; border-radius:30px; color:#16834f; background:#e4f6ea; font-size:12px; white-space:nowrap; font-weight:800; }
+    .status.cancelled { color:#6b7587; background:#eef0f4; }
+    .reference { margin:9px 0 15px; color:#8a95a5; font-size:12px; overflow-wrap:anywhere; }
+    .booking-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 22px; margin-top:auto; }
+    .fact span { display:block; color:#8793a6; font-size:12px; margin-bottom:4px; }
+    .fact strong { display:block; color:#344057; font-size:15px; font-weight:800; overflow-wrap:anywhere; }
+
+    .booking-side { border-left:1px solid var(--line); padding-left:22px; display:flex; flex-direction:column; justify-content:center; align-items:stretch; min-width:0; }
+    .price-label { display:block; font-size:12px; font-weight:700; color:#758197; margin-bottom:6px; }
+    .price { display:block; margin-bottom:23px; color:var(--orange); font-size:28px; font-weight:900; letter-spacing:-.02em; white-space:nowrap; }
+    .detail-button,.cancel-button { display:block; width:100%; text-align:center; padding:11px 12px; border:1px solid var(--blue); border-radius:5px; color:var(--blue); background:white; font-size:13px; font-weight:800; }
+    .detail-button:hover { background:#f0f5ff; }
+    .cancel-form { margin:10px 0 0; }
+    .cancel-button { border-color:#e9ab9d; color:#b54b32; }
+    .cancel-button:hover { background:#fff3ee; }
+    .empty { background:white; padding:80px 25px; text-align:center; border:1px solid #e5e9f0; border-radius:12px; }
+    .empty-icon { width:64px; height:64px; background:#fff0e6; color:var(--orange); display:grid; place-items:center; border-radius:50%; font-size:28px; margin:0 auto 20px; }
+    .empty h2 { margin:0 0 9px; font-size:24px; }
+    .empty p { color:#7a8798; margin:0 0 24px; }
+    .footer { text-align:center; background:#142031; padding:25px; color:#c4cbd7; font-size:12px; }
+    @media (max-width:1000px) { .booking-card { grid-template-columns:195px minmax(0,1fr) 177px; gap:17px; } .photo { width:195px; } .booking-side { padding-left:17px; } .booking-top h2 { font-size:22px; } .price { font-size:24px; } }
+    @media (max-width:780px) {
+      .nav-links { display:none; } .booking-card { grid-template-columns:185px minmax(0,1fr); }
+      .photo { width:185px; } .booking-side { grid-column:2; border:0; border-top:1px solid var(--line); padding:16px 0 0; flex-direction:row; align-items:center; flex-wrap:wrap; gap:12px; justify-content:flex-start; }
+      .price-wrap { margin-right:auto; } .price { margin:0; } .detail-button,.cancel-button { width:auto; padding-inline:15px; } .cancel-form { margin:0; }
+    }
+    @media (max-width:570px) {
+      .container { width:calc(100% - 24px); } .nav { min-height:69px; } .logo { font-size:26px; } .greeting { display:none; }
+      .page { padding-top:23px; } .page-head { align-items:start; flex-direction:column; gap:15px; } .head-actions { width:100%; }
+      .booking-card { grid-template-columns:1fr; padding:15px; gap:16px; } .photo { width:100%; height:205px; min-height:0; }
+      .booking-side { grid-column:1; } .booking-facts { gap:13px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header"><div class="container nav">
+    <a class="logo" href="/" aria-label="DriveEase Home">Drive<em>Ease</em></a>
+    <nav class="nav-links">
+      <a href="/" data-t="home">首頁</a>
+      <a href="/cars" data-t="cars">瀏覽車輛</a>
+      <a href="/my-booking" data-t="myBookings">我的預訂</a>
+    </nav>
+    <div class="account">
+      <div class="language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="zh">繁中</button></div>
+      <span class="greeting"><span data-t="hello">你好，</span> <%= currentUser %></span>
+      <form action="/logout" method="POST"><button class="logout" type="submit" data-t="logout">登出</button></form>
+    </div>
+  </div></header>
+
+  <main class="container page">
+    <div class="page-head">
+      <div>
+        <h1 data-t="myBookings">我的預訂</h1>
+        <p data-t="intro">查看你的租車預訂、租金及預訂狀態。</p>
+      </div>
+      <div class="head-actions">
+        <span class="count"><%= bookings.length %> <span data-booking-count="<%= bookings.length %>" data-t="bookingCount">筆預訂</span></span>
+        <a href="/cars" class="browse" data-t="browseCars">瀏覽其他車款 →</a>
+      </div>
+    </div>
+
+    <% if (cancelled) { %><p class="notice" data-t="cancelResult">已成功取消預訂。</p><% } %>
+    <% if (cancelFailed) { %><p class="notice failure" data-t="cancelFailed">此預訂未能取消，或已經取消。</p><% } %>
+
+    <% if (bookings.length === 0) { %>
+      <div class="empty">
+        <div class="empty-icon" aria-hidden="true">⌕</div>
+        <h2 data-t="noBookings">暫時沒有預訂</h2>
+        <p data-t="startExploring">揀選心儀車款，開始計劃下一趟旅程。</p>
+        <a href="/cars" class="browse" data-t="browseCars">瀏覽其他車款 →</a>
+      </div>
+    <% } %>
+
+    <section class="booking-list" aria-label="Booking list">
+      <% bookings.forEach(booking => { %>
+        <article class="booking-card">
+          <a class="photo" href="/booking/confirmation/<%= booking._id.toString() %>" aria-label="<%= booking.carBrand %> <%= booking.carModel %>">
+            <img src="<%= booking.carImage || '/images/car01.jpg' %>"
+                 alt="<%= booking.carBrand %> <%= booking.carModel %>"
+                 loading="lazy" onerror="this.onerror=null;this.src='/images/car01.jpg'">
+          </a>
+          <div class="booking-main">
+            <div class="booking-top">
+              <h2><%= booking.carBrand %> <%= booking.carModel %></h2>
+              <span class="status <%= booking.status === 'cancelled' ? 'cancelled' : '' %>"
+                    data-status="<%= booking.status %>"><%= booking.status %></span>
+            </div>
+            <p class="reference"><span data-t="reference">預訂編號：</span> <%= booking._id.toString() %></p>
+            <div class="booking-facts">
+              <div class="fact"><span data-t="pickup">取車日期</span><strong><%= booking.pickupDate %></strong></div>
+              <div class="fact"><span data-t="return">還車日期</span><strong><%= booking.returnDate %></strong></div>
+              <div class="fact"><span data-t="days">租用日數</span><strong><%= booking.totalDays %> <span data-t="dayUnit" style="display:inline;color:inherit">天</span></strong></div>
+              <div class="fact"><span data-t="dailyRate">每日租金</span><strong>HK$<%= Number(booking.pricePerDay || 0).toLocaleString('en-HK') %></strong></div>
+            </div>
+          </div>
+          <div class="booking-side">
+            <div class="price-wrap"><span class="price-label" data-t="total">租金總額</span><strong class="price">HK$<%= Number(booking.totalPrice || 0).toLocaleString('en-HK') %></strong></div>
+            <a class="detail-button" href="/booking/confirmation/<%= booking._id.toString() %>" data-t="details">查看詳情 →</a>
+            <% if (booking.status === 'confirmed' && booking.pickupDate > today) { %>
+              <form action="/booking/<%= booking._id.toString() %>/cancel" method="POST" class="cancel-form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit" class="cancel-button" data-t="cancelBooking">取消預訂</button>
+              </form>
+            <% } %>
+          </div>
+        </article>
+      <% }) %>
+    </section>
+  </main>
+
+  <footer class="footer">© 2026 DriveEase. All Rights Reserved.</footer>
+  <script>
+    const words = {
+      en: {
+        home:'Home',cars:'Browse Cars',myBookings:'My Bookings',hello:'Hi,',logout:'Logout',
+        intro:'Review your car rentals, total prices and booking statuses.',
+        bookingCount:'bookings',browseCars:'Browse other cars →',
+        cancelResult:'Your booking has been cancelled.',cancelFailed:'This booking cannot be cancelled or has already been cancelled.',
+        noBookings:'No bookings yet',startExploring:'Find your favourite car and plan your next trip.',
+        reference:'Booking reference:',pickup:'Pick-up date',return:'Return date',days:'Rental days',
+        dayUnit:'days',dailyRate:'Daily rental',total:'Total rental',
+        details:'View details →',cancelBooking:'Cancel booking',
+        confirmed:'Confirmed',cancelled:'Cancelled',
+        confirmCancel:'Are you sure you want to cancel this booking?'
+      },
+      zh: {
+        home:'首頁',cars:'瀏覽車輛',myBookings:'我的預訂',hello:'你好，',logout:'登出',
+        intro:'查看你的租車預訂、租金及預訂狀態。',
+        bookingCount:'筆預訂',browseCars:'瀏覽其他車款 →',
+        cancelResult:'已成功取消預訂。',cancelFailed:'此預訂未能取消，或已經取消。',
+        noBookings:'暫時沒有預訂',startExploring:'揀選心儀車款，開始計劃下一趟旅程。',
+        reference:'預訂編號：',pickup:'取車日期',return:'還車日期',days:'租用日數',
+        dayUnit:'天',dailyRate:'每日租金',total:'租金總額',
+        details:'查看詳情 →',cancelBooking:'取消預訂',
+        confirmed:'已確認',cancelled:'已取消',
+        confirmCancel:'確定要取消這個預訂嗎？'
+      }
+    };
+    let currentLanguage='zh';
+    function setLanguage(lang) {
+      currentLanguage=lang;
+      localStorage.setItem('driveease_language',lang);
+      document.documentElement.lang=lang==='zh'?'zh-Hant':'en';
+      document.querySelectorAll('[data-lang]').forEach(el=>el.classList.toggle('active',el.dataset.lang===lang));
+      document.querySelectorAll('[data-t]').forEach(el=>el.textContent=words[lang][el.dataset.t]||el.textContent);
+      document.querySelectorAll('[data-status]').forEach(el=>el.textContent=words[lang][el.dataset.status]||el.dataset.status);
+      document.querySelectorAll('[data-booking-count]').forEach(el=>{
+        el.textContent=lang==='en' && Number(el.dataset.bookingCount)===1 ? 'booking' : words[lang].bookingCount;
+      });
+    }
+    document.querySelectorAll('[data-lang]').forEach(el=>el.addEventListener('click',()=>setLanguage(el.dataset.lang)));
+    document.querySelectorAll('.cancel-form').forEach(form=>{
+      form.addEventListener('submit',event=>{
+        if (!window.confirm(words[currentLanguage].confirmCancel)) event.preventDefault();
+      });
+    });
+    setLanguage(localStorage.getItem('driveease_language')==='en'?'en':'zh');
+  </script>
+</body>
+</html>

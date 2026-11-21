@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>預訂詳情 | DriveEase Admin</title>
+  <style>
+    :root { --sidebar:#28323b; --blue:#32a7df; --bg:#eff7fb; --text:#334550; --muted:#758692; --line:#dce5eb; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:14px Arial,"Noto Sans TC","Microsoft JhengHei",sans-serif; color:var(--text); background:var(--bg); }
+    a { text-decoration:none; color:inherit; }
+    button { font:inherit; cursor:pointer; }
+    .layout { min-height:100vh; display:grid; grid-template-columns:238px minmax(0,1fr); }
+    .sidebar { display:flex; flex-direction:column; background:var(--sidebar); color:#a8b9c6; }
+    .brand { height:61px; background:var(--blue); color:#fff; display:flex; align-items:center; gap:12px; padding:0 20px; font-size:15px; font-weight:700; }
+    .de-brand { display:inline-flex; align-items:baseline; gap:0; font-size:21px; line-height:1; font-weight:900; letter-spacing:-1px; white-space:nowrap; }
+    .de-brand .de-ease { color:#ff781f; font-style:italic; }
+    .de-admin { font-size:10px; letter-spacing:1px; color:#e8f6fd; font-weight:700; }
+    .identity { padding:20px 18px; border-bottom:1px solid #3a454f; color:#fff; font-weight:700; }
+    .identity small { display:block; margin-top:5px; color:#9ab0bf; font-size:11px; font-weight:400; }
+    .nav-heading { padding:20px 19px 7px; color:#8397a4; font-weight:bold; font-size:10px; letter-spacing:1.3px; }
+    .nav-link { display:flex; gap:11px; align-items:center; min-height:42px; padding:12px 19px; font-size:13px; }
+    .nav-link:hover { color:white; background:#34434e; }
+    .nav-link.active { background:#344854; border-left:3px solid var(--blue); padding-left:16px; color:#fff; font-weight:700; }
+    .nav-icon { width:16px; text-align:center; }
+    .sidebar-footer { margin-top:auto; border-top:1px solid #3a454f; padding:12px 0; }
+    .sidebar-footer form { margin:0; }
+    .logout { border:0; background:transparent; color:#a8b9c6; width:100%; text-align:left; padding:12px 19px; font-size:13px; }
+    .topbar { height:61px; padding:0 28px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; font-size:12px; color:var(--muted); }
+    .topbar a { color:#167cb1; }
+    .content { padding:30px 28px 45px; max-width:1200px; margin:auto; }
+    .heading { display:flex; justify-content:space-between; gap:20px; align-items:start; margin-bottom:24px; }
+    h1 { margin:0 0 8px; font-size:22px; color:#364a58; }
+    .subtitle { margin:0; color:var(--muted); font-size:12px; }
+    .back { border:1px solid #c5d5de; padding:10px 14px; background:white; border-radius:2px; white-space:nowrap; font-size:12px; }
+    .panel { background:white; border:1px solid var(--line); margin-bottom:17px; }
+    .panel-title { border-bottom:1px solid var(--line); padding:14px 19px; font-weight:700; font-size:15px; background:#f4f8fa; }
+    .body { padding:20px; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 28px; }
+    .label { display:block; color:var(--muted); font-size:12px; margin-bottom:6px; }
+    .value { display:block; font-size:15px; font-weight:700; word-break:break-word; }
+    .mono { font-size:13px; overflow-wrap:anywhere; }
+    .vehicle { display:flex; gap:15px; align-items:center; }
+    .vehicle img { width:126px; height:82px; object-fit:cover; border:1px solid var(--line); }
+    .badge { display:inline-block; padding:6px 10px; border-radius:2px; font-size:12px; font-weight:bold; }
+    .badge.confirmed { background:#e5f6ee; color:#168b5b; }
+    .badge.cancelled { background:#f9eae9; color:#8a4c48; }
+    .money { font-size:21px; color:#233c4a; }
+    .action-bar { padding:15px 20px; border-top:1px solid var(--line); background:#fafcfd; display:flex; justify-content:flex-end; }
+    .cancel { background:#e65047; border:0; border-radius:2px; padding:11px 17px; color:white; font-size:13px; font-weight:700; }
+    .note { color:var(--muted); font-size:12px; margin-top:16px; }
+    .notice { border:1px solid #b4d9c7; padding:12px 15px; background:#eaf8f0; color:#246747; margin-bottom:17px; }
+    @media(max-width:840px) { .layout{grid-template-columns:185px minmax(0,1fr)} .content{padding:20px 15px} }
+    @media(max-width:620px) { .layout{display:block} .brand{height:48px} .sidebar nav,.identity,.sidebar-footer{display:none} .heading{flex-direction:column} .grid{grid-template-columns:1fr} .content{padding:15px 10px} }
+  </style>
+</head>
+<body>
+<%
+  const who = typeof currentUser === 'string' && currentUser ? currentUser : 'Admin';
+  const canCancel = booking.status === 'confirmed' && booking.pickupDate > today;
+  const displayTime = value => {
+    if (!value) return '—';
+    const date = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(date.getTime())) return '—';
+    return new Intl.DateTimeFormat('zh-HK', {timeZone:'Asia/Hong_Kong',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(date);
+  };
+%>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><a class="de-brand" href="/admin" aria-label="DriveEase Admin"><span>Drive</span><span class="de-ease">Ease</span></a><small class="de-admin">ADMIN</small></div>
+    <div class="identity"><%= who %><small>Administrator</small></div>
+    <nav aria-label="後台選單">
+      <div class="nav-heading">MANAGEMENT</div>
+      <a class="nav-link" href="/admin/cars"><span class="nav-icon">▤</span>車輛管理</a>
+      <a class="nav-link" href="/admin/cars/new"><span class="nav-icon">＋</span>新增車輛</a>
+      <a class="nav-link active" href="/admin/bookings" aria-current="page"><span class="nav-icon">▣</span>預訂管理</a>
+      <a class="nav-link" href="/admin/users"><span class="nav-icon">♙</span>會員管理</a>
+      <div class="nav-heading">OTHER</div>
+      <a class="nav-link" href="/admin"><span class="nav-icon">↩</span>返回後台</a>
+    </nav>
+    <div class="sidebar-footer"><form method="POST" action="/logout"><button type="submit" class="logout">⇥　登出</button></form></div>
+  </aside>
+  <div>
+    <header class="topbar"><a href="/admin">Admin</a>　›　<a href="/admin/bookings">預訂管理</a>　›　預訂詳情</header>
+    <main class="content">
+      <div class="heading"><div><h1>預訂詳情</h1><p class="subtitle">Booking ID：<%= String(booking._id) %></p></div><a class="back" href="/admin/bookings">← 返回預訂列表</a></div>
+      <% if (notice) { %><div class="notice" role="status"><%= notice %></div><% } %>
+
+      <section class="panel">
+        <div class="panel-title">Booking Information / 預訂資料</div>
+        <div class="body grid">
+          <div><span class="label">Booking Reference</span><span class="value mono"><%= String(booking._id) %></span></div>
+          <div><span class="label">狀態 Status</span><span class="badge <%= booking.status === 'confirmed' ? 'confirmed' : 'cancelled' %>"><%= booking.status === 'confirmed' ? 'Confirmed' : 'Cancelled' %></span></div>
+          <div><span class="label">建立時間 Created At（香港時間）</span><span class="value"><%= displayTime(booking.createdAt) %></span></div>
+          <div><span class="label">取消時間 Cancelled At（香港時間）</span><span class="value"><%= displayTime(booking.cancelledAt) %></span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">Customer Information / 會員資料</div>
+        <div class="body grid">
+          <div><span class="label">會員名稱 Name</span><span class="value"><%= member && member.name ? member.name : '已刪除會員' %></span></div>
+          <div><span class="label">Email</span><span class="value"><%= member && member.email ? member.email : '—' %></span></div>
+          <div><span class="label">User ID</span><span class="value mono"><%= booking.userId ? String(booking.userId) : '—' %></span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">Vehicle / 車輛資料</div>
+        <div class="body vehicle"><img src="<%= booking.carImage || '/images/car01.jpg' %>" alt="" onerror="this.onerror=null;this.src='/images/car01.jpg'"><div><span class="value"><%= booking.carBrand || '—' %> <%= booking.carModel || '' %></span><span class="label" style="margin-top:7px">Vehicle ID：<%= booking.carId ? String(booking.carId) : '—' %></span></div></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">Rental Information / 租賃資料</div>
+        <div class="body grid">
+          <div><span class="label">取車日期 Pick-up</span><span class="value"><%= booking.pickupDate || '—' %></span></div>
+          <div><span class="label">還車日期 Return</span><span class="value"><%= booking.returnDate || '—' %></span></div>
+          <div><span class="label">租賃天數 Rental Days</span><span class="value"><%= booking.totalDays || '—' %></span></div>
+          <div><span class="label">每日租金 Price Per Day</span><span class="value">HK$<%= Number(booking.pricePerDay || 0).toLocaleString('en-HK') %></span></div>
+          <div><span class="label">總租金 Total</span><span class="value money">HK$<%= Number(booking.totalPrice || 0).toLocaleString('en-HK') %></span></div>
+        </div>
+        <% if (canCancel) { %><div class="action-bar"><form action="/admin/bookings/<%= String(booking._id) %>/cancel" method="POST" onsubmit="return confirm('確定取消此預訂？這個操作不能復原。');"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="cancel" type="submit">Cancel Booking</button></form></div><% } %>
+      </section>
+      <p class="note">取消預訂後會保留原有紀錄。已開始或已完成的預訂不可取消。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>

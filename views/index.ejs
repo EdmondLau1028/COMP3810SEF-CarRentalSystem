@@ -1,47 +1,2529 @@
+<%
+const signedIn =
+    typeof currentUser !== "undefined" && Boolean(currentUser);
+
+const usingLiveCars = typeof featuredCars !== "undefined" && Array.isArray(featuredCars);
+const visibleCars = usingLiveCars ? featuredCars : [];
+const homeLuxuryCars = typeof luxuryCars !== "undefined" && Array.isArray(luxuryCars)
+    ? luxuryCars : [];
+
+const brands = [
+    ...new Set(
+        visibleCars.map(car =>
+            String(car.brand || "").toUpperCase()
+        )
+    )
+].filter(Boolean).sort();
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>DriveEase - Car Rental System</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
 
-    <link rel="stylesheet" href="/css/style.css">
+    <meta
+        name="description"
+        content="DriveEase car rental — browse vehicles, compare rates and manage bookings."
+    >
+
+    <title>DriveEase | Rent Your Next Car</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* ===============================
+           Global Styles
+        =============================== */
+
+        :root {
+            --ec-orange: #f97316;
+            --ec-orange-dark: #df5b08;
+            --ec-navy: #142235;
+            --ec-muted: #667085;
+            --ec-border: #e7eaf0;
+            --ec-bg: #f7f8fa;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, "Noto Sans TC", sans-serif;
+            background: var(--ec-bg);
+            color: var(--ec-navy);
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .ec-container {
+            width: min(1220px, calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+
+        /* ===============================
+           Top Navigation
+        =============================== */
+
+        .ec-topline {
+            background: #111d2a;
+            color: #cbd5e1;
+            padding: 9px 0;
+            font-size: 12px;
+        }
+
+        .ec-topline .ec-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .ec-header {
+            background: white;
+            border-bottom: 1px solid var(--ec-border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .ec-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            min-height: 80px;
+        }
+
+        .ec-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--ec-navy);
+            font-size: 25px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .ec-brand-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--ec-orange);
+            color: white;
+            font-size: 23px;
+        }
+
+        .ec-menu,
+        .ec-account {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 19px;
+        }
+
+        .ec-menu a,
+        .ec-account a {
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ec-menu a:hover,
+        .ec-account a:hover {
+            color: var(--ec-orange-dark);
+        }
+
+        .ec-account form {
+            margin: 0;
+        }
+
+        .ec-greeting {
+            font-size: 13px;
+            color: #475467;
+        }
+
+        .ec-primary,
+        .ec-logout {
+            border: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: var(--ec-orange);
+            color: white !important;
+            font-weight: 700;
+            transition: background .2s, transform .2s;
+        }
+
+        .ec-primary:hover {
+            background: var(--ec-orange-dark);
+            transform: translateY(-1px);
+        }
+
+        .ec-logout {
+            background: #fff1e7;
+            color: #b54708 !important;
+        }
+
+        .ec-logout:hover {
+            background: #ffe0c9;
+        }
+
+
+        /* ===============================
+           Language Switch
+        =============================== */
+
+        .ec-lang {
+            display: flex;
+            gap: 3px;
+            background: #f2f4f7;
+            padding: 4px;
+            border-radius: 9px;
+        }
+
+        .ec-lang button {
+            border: 0;
+            background: transparent;
+            color: #667085;
+            border-radius: 7px;
+            padding: 7px 9px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .ec-lang button.active {
+            background: white;
+            color: var(--ec-orange-dark);
+            box-shadow: 0 1px 5px #0001;
+        }
+
+
+        /* ===============================
+           Hero Section
+        =============================== */
+
+        .ec-hero {
+            min-height: 650px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            color: white;
+
+            background-image:
+            linear-gradient(
+                rgba(10, 20, 32, 0.75),
+                rgba(10, 20, 32, 0.75)
+            ),
+            url("/images/car01.jpg");
+
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+
+        .ec-hero-content {
+            position: relative;
+            padding: 76px 0 125px;
+            max-width: 720px;
+        }
+
+        .ec-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffd6b9;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        .ec-hero h1 {
+            margin: 19px 0;
+            line-height: 1.1;
+            letter-spacing: -.035em;
+            font-size: clamp(40px, 5vw, 67px);
+            font-weight: 800;
+        }
+
+        .ec-hero p {
+            margin: 0 0 30px;
+            max-width: 590px;
+            font-size: 17px;
+            line-height: 1.8;
+            color: #edf2f7;
+        }
+
+        .ec-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .ec-outline {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 19px;
+            border-radius: 10px;
+            color: white;
+            border: 1px solid #ffffffab;
+            font-weight: 700;
+        }
+
+        .ec-outline:hover {
+            background: #ffffff20;
+        }
+
+
+        /* ===============================
+           Search Section
+        =============================== */
+
+        .ec-search-area {
+            position: relative;
+            z-index: 2;
+            margin-top: -65px;
+        }
+
+        .ec-search-card {
+            background: white;
+            padding: 27px;
+            border-radius: 18px;
+            box-shadow: 0 20px 55px #17243a20;
+            border: 1px solid #f1f2f6;
+        }
+
+        .ec-search-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .ec-search-head h2 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .ec-search-head small {
+            color: #667085;
+        }
+
+        .ec-search-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1.1fr 1fr 1fr auto;
+            gap: 11px;
+            align-items: end;
+        }
+
+        .ec-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 800;
+            color: #344054;
+            margin-bottom: 8px;
+        }
+
+        .ec-field select,
+        .ec-field input {
+            width: 100%;
+            height: 47px;
+            border: 1px solid #d8dde7;
+            border-radius: 9px;
+            padding: 0 12px;
+            background: white;
+            color: #243349;
+            min-width: 0;
+        }
+
+        .ec-field input:focus,
+        .ec-field select:focus,
+        .ec-filters input:focus,
+        .ec-filters select:focus {
+            outline: 2px solid #fed7aa;
+            border-color: var(--ec-orange);
+        }
+
+        .ec-search-submit {
+            height: 47px;
+            white-space: nowrap;
+        }
+
+        .ec-search-note {
+            min-height: 18px;
+            margin: 12px 0 0;
+            font-size: 12px;
+            color: var(--ec-muted);
+        }
+
+
+        /* ===============================
+           Featured Cars
+        =============================== */
+
+        .ec-section {
+            padding: 84px 0;
+        }
+
+        .ec-heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 29px;
+        }
+
+        .ec-heading h2 {
+            margin: 0 0 8px;
+            font-size: clamp(27px, 3vw, 36px);
+            letter-spacing: -.02em;
+        }
+
+        .ec-heading p {
+            margin: 0;
+            color: var(--ec-muted);
+            line-height: 1.65;
+        }
+
+        .ec-heading .ec-small-link {
+            color: var(--ec-orange-dark);
+            font-size: 14px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .ec-category-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .ec-category {
+            border: 1px solid #e1e5eb;
+            padding: 11px 17px;
+            background: white;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #475467;
+        }
+
+        .ec-category.active,
+        .ec-category:hover {
+            border-color: var(--ec-orange);
+            background: #fff5ed;
+            color: #c34a05;
+        }
+
+        .ec-filters {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .ec-filters input,
+        .ec-filters select {
+            width: 100%;
+            min-width: 0;
+            height: 44px;
+            border: 1px solid #d8dde7;
+            border-radius: 10px;
+            padding: 0 11px;
+            background: white;
+            color: #344054;
+        }
+
+        .ec-filter-reset {
+            border: 1px solid #d8dde7;
+            background: white;
+            border-radius: 10px;
+            padding: 0 16px;
+            font-weight: 700;
+            color: #475467;
+        }
+
+        .ec-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .ec-car {
+            border: 1px solid var(--ec-border);
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 22px #15203309;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .ec-car:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 17px 30px #15203318;
+        }
+
+        .ec-car-image {
+            position: relative;
+            height: 177px;
+            background: #e8ebef;
+            overflow: hidden;
+        }
+
+        .ec-car-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .ec-photo-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: white;
+            color: #b54708;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .ec-car-body {
+            padding: 18px;
+        }
+
+        .ec-car-brand {
+            color: #98a2b3;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .1em;
+        }
+
+        .ec-car h3 {
+            margin: 5px 0 11px;
+            font-size: 19px;
+            min-height: 23px;
+        }
+
+        .ec-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 13px;
+            color: #667085;
+            font-size: 12px;
+            border-bottom: 1px solid #edf0f4;
+            padding-bottom: 16px;
+        }
+
+        .ec-price-row {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 10px;
+            padding-top: 14px;
+        }
+
+        .ec-rate {
+            color: #e35c07;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        .ec-car-action {
+            border: 0;
+            background: #fff0e5;
+            color: #ba4e0e;
+            padding: 9px 11px;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .ec-car-action:hover {
+            background: #ffe2cd;
+        }
+
+        .ec-disclaimer {
+            margin: 20px 0 0;
+            color: #667085;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .ec-no-results {
+            background: white;
+            padding: 30px;
+            border-radius: 13px;
+            text-align: center;
+            color: #667085;
+            margin-top: 15px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+
+        /* ===============================
+           Rental Process
+        =============================== */
+
+        .ec-process {
+            background: white;
+        }
+
+        .ec-process-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .ec-step {
+            padding: 22px 19px;
+            background: #fafbfc;
+            border-radius: 14px;
+            border: 1px solid #eef0f4;
+        }
+
+        .ec-step-num {
+            width: 43px;
+            height: 43px;
+            background: #fff1e6;
+            color: var(--ec-orange-dark);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .ec-step h3 {
+            font-size: 17px;
+            margin: 0 0 8px;
+        }
+
+        .ec-step p {
+            color: #667085;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+
+        /* ===============================
+           About DriveEase
+        =============================== */
+
+        .ec-note-area {
+            background: #152339;
+            color: white;
+            padding: 64px 0;
+        }
+
+        .ec-note-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .ec-note-area h2 {
+            margin: 0 0 15px;
+            font-size: 32px;
+        }
+
+        .ec-note-area p {
+            color: #c8d0dd;
+            line-height: 1.85;
+            margin: 0;
+        }
+
+        .ec-checks {
+            display: grid;
+            gap: 13px;
+        }
+
+        .ec-check {
+            display: flex;
+            gap: 12px;
+            padding: 15px 17px;
+            border-radius: 12px;
+            background: #ffffff12;
+            color: #e5eaf2;
+        }
+
+        .ec-check b {
+            color: #ffa65b;
+        }
+
+
+        /* ===============================
+           Footer
+        =============================== */
+
+        .ec-footer {
+            background: #0e1826;
+            color: white;
+            padding: 34px 0;
+        }
+
+        .ec-footer-flex {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .ec-footer small {
+            color: #a8b2c1;
+            line-height: 1.6;
+        }
+
+
+        /* ===============================
+           Responsive Design
+        =============================== */
+
+        @media (max-width: 1110px) {
+
+            .ec-nav {
+                flex-wrap: wrap;
+                padding: 16px 0;
+            }
+
+            .ec-menu {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .ec-search-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ec-search-submit {
+                grid-column: 1 / -1;
+            }
+
+            .ec-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .ec-process-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 690px) {
+
+            .ec-container {
+                width: calc(100% - 28px);
+            }
+
+            .ec-topline {
+                display: none;
+            }
+
+            .ec-nav {
+                justify-content: center;
+            }
+
+            .ec-brand {
+                font-size: 22px;
+            }
+
+            .ec-menu,
+            .ec-account {
+                justify-content: center;
+                gap: 11px;
+            }
+
+            .ec-menu a,
+            .ec-account a {
+                font-size: 12px;
+            }
+
+            .ec-hero {
+                min-height: 465px;
+            }
+
+            .ec-hero-content {
+                padding: 58px 0 104px;
+            }
+
+            .ec-hero h1 {
+                font-size: 39px;
+            }
+
+            .ec-hero p {
+                font-size: 14px;
+            }
+
+            .ec-search-card {
+                padding: 19px;
+            }
+
+            .ec-search-head {
+                display: block;
+            }
+
+            .ec-search-grid,
+            .ec-filters {
+                grid-template-columns: 1fr;
+            }
+
+            .ec-search-submit {
+                grid-column: auto;
+            }
+
+            .ec-grid,
+            .ec-process-grid,
+            .ec-note-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ec-section {
+                padding: 62px 0;
+            }
+
+            .ec-heading {
+                display: block;
+            }
+
+            .ec-car-image {
+                height: 220px;
+            }
+
+            .ec-note-grid {
+                gap: 28px;
+            }
+        }
+/* =========================================
+    RENTAL PROCESS - BACKGROUND & TIMELINE
+========================================= */
+
+.ec-process {
+
+    position: relative;
+
+    padding: 95px 0 105px;
+
+    color: white;
+
+    background-image:
+        linear-gradient(
+            rgba(10, 20, 32, 0.75),
+            rgba(10, 20, 32, 0.75)
+        ),
+        url("/images/car02.jpg");
+
+    background-position: center center;
+
+    background-size: cover;
+
+    background-repeat: no-repeat;
+
+    background-attachment: scroll;
+}
+
+
+/* =========================================
+   SECTION TITLE
+========================================= */
+
+.ec-process .ec-heading {
+
+    display: block;
+
+    text-align: center;
+
+    margin-bottom: 65px;
+}
+
+.ec-process .ec-heading h2 {
+
+    color: white;
+
+    font-size: 38px;
+
+    font-weight: 800;
+
+    margin-bottom: 12px;
+}
+
+.ec-process .ec-heading p {
+
+    color: rgba(255, 255, 255, 0.85);
+
+    font-size: 16px;
+}
+
+
+/* =========================================
+   HORIZONTAL TIMELINE
+========================================= */
+
+.ec-process .ec-process-grid {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    gap: 15px;
+
+    min-height: 410px;
+}
+
+
+/* Main White Line */
+
+.ec-process .ec-process-grid::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 188px;
+
+    left: 10%;
+
+    right: 10%;
+
+    height: 2px;
+
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
+/* =========================================
+   EACH STEP
+========================================= */
+
+.ec-process .ec-step {
+
+    position: relative;
+
+    min-height: 410px;
+
+    background: transparent;
+
+    border: none;
+
+    border-radius: 0;
+
+    padding: 0 10px;
+
+    text-align: center;
+
+    color: white;
+}
+
+
+/* Step Content */
+
+.ec-process .ec-step-content {
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    padding: 0 8px;
+}
+
+
+/* Odd Steps - Above Timeline */
+
+.ec-process .ec-step-top .ec-step-content {
+
+    top: 0;
+}
+
+
+/* Even Steps - Below Timeline */
+
+.ec-process .ec-step-bottom .ec-step-content {
+
+    top: 230px;
+}
+
+
+/* =========================================
+   ICONS
+========================================= */
+
+.ec-process .ec-step svg {
+
+    width: 65px;
+
+    height: 65px;
+
+    display: block;
+
+    margin: 0 auto 16px;
+
+    color: white;
+
+    transition: transform 0.3s ease;
+}
+
+
+/* Hover Effect */
+
+.ec-process .ec-step:hover svg {
+
+    transform: translateY(-6px);
+}
+
+
+/* =========================================
+   TEXT
+========================================= */
+
+.ec-process .ec-step h3 {
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    margin: 0 0 10px;
+}
+
+
+/* Step Number */
+
+.ec-process .ec-step h3 > span:first-child {
+
+    color: #ff9d59;
+
+    font-weight: 900;
+
+    margin-right: 5px;
+}
+
+
+/* Description */
+
+.ec-process .ec-step p {
+
+    color: rgba(255, 255, 255, 0.88);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin: 0;
+}
+
+
+/* =========================================
+   TIMELINE DOTS
+========================================= */
+
+.ec-process .ec-step-dot {
+
+    position: absolute;
+
+    top: 180px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 18px;
+
+    height: 18px;
+
+    background: white;
+
+    border: 4px solid white;
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.18);
+
+    z-index: 2;
+}
+
+
+/* Vertical Connector */
+
+.ec-process .ec-step-top::before,
+.ec-process .ec-step-bottom::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    width: 1px;
+
+    background: rgba(255, 255, 255, 0.65);
+}
+
+
+/* Connector for top steps */
+
+.ec-process .ec-step-top::before {
+
+    top: 164px;
+
+    height: 16px;
+}
+
+
+/* Connector for bottom steps */
+
+.ec-process .ec-step-bottom::before {
+
+    top: 198px;
+
+    height: 25px;
+}
+
+
+/* =========================================
+   TABLET & MOBILE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .ec-process {
+
+        padding: 75px 0;
+
+        background-position: center;
+    }
+
+    .ec-process .ec-process-grid {
+
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+        min-height: auto;
+    }
+
+
+    /* Vertical Timeline */
+
+    .ec-process .ec-process-grid::before {
+
+        left: 24px;
+
+        right: auto;
+
+        top: 20px;
+
+        bottom: 20px;
+
+        width: 2px;
+
+        height: auto;
+    }
+
+
+    .ec-process .ec-step {
+
+        min-height: auto;
+
+        padding: 10px 0 25px 70px;
+
+        text-align: left;
+    }
+
+
+    .ec-process .ec-step-content {
+
+        position: static;
+
+        text-align: left;
+
+        padding: 0;
+    }
+
+
+    .ec-process .ec-step svg {
+
+        width: 50px;
+
+        height: 50px;
+
+        margin: 0 0 15px;
+    }
+
+
+    .ec-process .ec-step-dot {
+
+        top: 25px;
+
+        left: 25px;
+    }
+
+
+    .ec-process .ec-step-top::before,
+    .ec-process .ec-step-bottom::before {
+
+        display: none;
+    }
+
+
+    .ec-process .ec-heading h2 {
+
+        font-size: 30px;
+    }
+
+}
+/* =====================================
+   DRIVEEASE CUSTOM LOGO
+===================================== */
+
+    /* Navbar full width */
+    .ec-header .ec-nav {
+        width: calc(100% - 64px);
+        max-width: none;
+        margin: 0 auto;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* Main Logo */
+    .ec-header .ec-brand {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0;
+
+        font-family: "Outfit", "Avenir Next", sans-serif;
+
+        font-size: 34px;
+        font-weight: 900;
+
+        letter-spacing: -1.8px;
+
+        text-decoration: none;
+
+        white-space: nowrap;
+
+        transition: transform 0.3s ease;
+    }
+
+    /* Drive */
+    .ec-logo-drive {
+        color: #142235;
+    }
+
+    /* Ease */
+    .ec-logo-ease {
+        display: inline-block;
+
+        background: linear-gradient(
+            120deg,
+            #f97316,
+            #ff9a3d
+        );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+
+        -webkit-text-fill-color: transparent;
+
+        font-style: italic;
+
+        position: relative;
+    }
+
+    /* Orange underline */
+    .ec-logo-ease::after {
+        content: "";
+
+        position: absolute;
+
+        left: 5%;
+        bottom: -4px;
+
+        width: 85%;
+        height: 3px;
+
+        background: #f97316;
+
+        border-radius: 10px;
+    }
+
+    /* Hover animation */
+    .ec-header .ec-brand {
+    display: inline-flex;
+    align-items: baseline;
+
+    gap: 0;
+
+    font-family: "Outfit", "Avenir Next", sans-serif;
+
+    font-size: 34px;
+    font-weight: 900;
+
+    letter-spacing: -1.8px;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+
+/* Drive - Dark Navy */
+.ec-header .ec-logo-drive {
+    color: #142235;
+}
+
+
+    /* Ease - Orange Italic */
+    .ec-header .ec-logo-ease {
+        color: #f97316;
+
+        font-style: italic;
+
+        background: none;
+
+        -webkit-text-fill-color: #f97316;
+    }
+
+
+    /* Remove previous underline decoration */
+    .ec-header .ec-logo-ease::after {
+        display: none;
+    }
+
+
+    /* Mobile */
+    @media (max-width: 768px) {
+
+        .ec-header .ec-brand {
+            font-size: 29px;
+        }
+
+    }
+
+    /* Minimal horizontal featured-cars slider */
+    .ec-showcase { background: #f5f4f8; padding: 74px 0 70px; }
+    .ec-showcase h2 { margin: 0 0 37px; text-align:center; font-size:clamp(27px,3vw,35px); font-weight:800; letter-spacing:-.02em; }
+    .ec-showcase-wrap { position:relative; }
+    .ec-showcase-track { display:flex; gap:42px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; padding:0 2px 23px; scroll-behavior:smooth; }
+    .ec-showcase-track::-webkit-scrollbar { display:none; }
+    .ec-showcase-item { flex:0 0 clamp(230px,23vw,320px); min-width:0; scroll-snap-align:start; color:#2b2b2b; display:flex; flex-direction:column; }
+    .ec-showcase-item img { width:100%; height:210px; display:block; object-fit:cover; background:#e5e8ef; }
+    .ec-showcase-name { display:block; margin:13px 0 10px; font-size:16px; line-height:1.4; min-height:45px; color:#383838; }
+    .ec-showcase-price { font-size:24px; font-weight:900; color:#222; }
+    .ec-showcase-price small { font-size:14px; font-weight:600; }
+    .ec-slide-arrow { position:absolute; top:82px; z-index:2; width:43px; height:54px; border:0; background:rgba(20,34,53,.78); color:white; font-size:25px; cursor:pointer; }
+    .ec-slide-prev { left:-17px; }.ec-slide-next { right:-17px; }
+    .ec-slide-arrow:hover { background:#f97316; }
+    .ec-showcase-view-all { width:min(430px,100%); min-height:53px; margin:31px auto 0; display:flex; align-items:center; justify-content:center; border:1px solid #1b2d42; background:transparent; color:#142235; font-size:16px; font-weight:700; }
+    .ec-showcase-view-all:hover { background:#142235; color:white; }
+    @media(max-width:680px) { .ec-showcase { padding:55px 0; }.ec-showcase-track { gap:18px; }.ec-showcase-item { flex-basis:78%; }.ec-showcase-item img { height:200px; }.ec-slide-arrow { top:78px; } }
+
+    /* Luxury collection: two featured cars from MongoDB */
+    .ec-luxury-section {
+        background: #101b2b;
+        color: #ffffff;
+        padding: 78px 0;
+    }
+    .ec-luxury-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 24px;
+        margin-bottom: 26px;
+    }
+    .ec-luxury-heading h2 { font-size: clamp(28px, 3.5vw, 42px); margin: 8px 0 10px; }
+    .ec-luxury-heading p { color: #bcc7d7; margin: 0; }
+    .ec-luxury-heading .ec-luxury-all { color: #ffab73; font-weight: 700; white-space: nowrap; }
+    .ec-luxury-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 22px; }
+    .ec-luxury-card { display: block; min-height: 360px; position: relative; border-radius: 18px; overflow: hidden; background: #283750; color: white; }
+    .ec-luxury-card img { width: 100%; height: 360px; object-fit: cover; display: block; transition: transform .35s; }
+    .ec-luxury-card:hover img { transform: scale(1.05); }
+    .ec-luxury-overlay { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(8,16,29,.91), rgba(8,16,29,.01) 72%); display: flex; flex-direction: column; justify-content: end; padding: 27px; }
+    .ec-luxury-tag { color: #ffc39d; font-weight: 800; letter-spacing: .09em; font-size: 11px; text-transform: uppercase; }
+    .ec-luxury-overlay h3 { font-size: 28px; margin: 9px 0; }
+    .ec-luxury-price { color: #ffffff; font-weight: 700; }
+    @media (max-width: 720px) {
+        .ec-luxury-grid { grid-template-columns: 1fr; }
+        .ec-luxury-heading { display: block; }
+        .ec-luxury-heading .ec-luxury-all { display: inline-block; margin-top: 15px; }
+    }
+    </style>
+
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
-    <header class="navbar">
-        <h2>DriveEase</h2>
+    <!-- ===============================
+         Top Bar
+    =============================== -->
 
-        <nav>
-            <a href="/">Home</a>
-        </nav>
+    <div class="ec-topline">
+
+        <div class="ec-container">
+
+            <span data-t="topline">
+                Your local car rental marketplace
+            </span>
+
+            <span data-t="topright">
+                Daily · Weekly · Monthly
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===============================
+         Navigation Bar
+    =============================== -->
+
+    <header class="ec-header">
+
+        <div class="ec-container ec-nav">
+
+            <!-- DriveEase Logo -->
+            <a class="ec-brand" href="/" aria-label="DriveEase Home">
+
+                <span class="ec-logo-drive">Drive</span><span class="ec-logo-ease">Ease</span>
+            </a>
+
+            <nav class="ec-menu">
+
+                <a href="/" data-t="home">
+                    Home
+                </a>
+
+                <a
+                    href="/cars?category=private"
+                    data-t="private"
+                >
+                    Private Cars
+                </a>
+
+                <a
+                    href="/cars?category=family"
+                    data-t="family"
+                >
+                    Family Cars
+                </a>
+
+                <a
+                    href="/cars?category=electric"
+                    data-t="electric"
+                >
+                    Electric Cars
+                </a>
+
+                <a
+                    href="/cars?category=luxury"
+                    data-t="luxury"
+                >
+                    Luxury Cars
+                </a>
+
+                <a href="#steps" data-t="rentalGuide">
+                    How It Works
+                </a>
+
+            </nav>
+
+
+            <!-- Account & Language -->
+
+            <div class="ec-account">
+
+                <div class="ec-lang">
+
+                    <button
+                        type="button"
+                        data-language="en"
+                        class="active"
+                    >
+                        EN
+                    </button>
+
+                    <button
+                        type="button"
+                        data-language="zh"
+                    >
+                        繁中
+                    </button>
+
+                </div>
+
+
+                <% if (signedIn) { %>
+
+                    <!-- Logged-in User -->
+
+                    <span class="ec-greeting">
+                        <span data-t="hello">Hi,</span>
+                        <%= currentUser %>
+                    </span>
+
+                    <a
+                        href="/my-booking"
+                        data-t="myBookings"
+                    >
+                        My Bookings
+                    </a>
+
+                    <form
+                        action="/logout"
+                        method="POST"
+                    >
+
+                        <button
+                            class="ec-logout"
+                            type="submit"
+                            data-t="logout"
+                        >
+                            Logout
+                        </button>
+
+                    </form>
+
+                <% } else { %>
+
+                    <!-- Guest User -->
+
+                    <a href="/login" data-t="login">
+                        Login
+                    </a>
+
+                    <a
+                        class="ec-primary"
+                        href="/register"
+                        data-t="register"
+                    >
+                        Register
+                    </a>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
     </header>
 
-    <!-- Homepage -->
+
+    <!-- ===============================
+         Hero Section
+    =============================== -->
+
     <main>
-        <section class="hero">
 
-            <h1>Find Your Perfect Rental Car</h1>
+        <section class="ec-hero">
 
-            <p>
-                Discover comfortable and affordable cars
-                for your next journey.
-            </p>
+            <div class="ec-container">
+
+                <div class="ec-hero-content">
+
+                    <div class="ec-kicker">
+
+                        ✦
+
+                        <span data-t="heroKicker">
+                            EXPLORE HONG KONG YOUR WAY
+                        </span>
+
+                    </div>
+
+                    <h1 data-t="heroTitle">
+                        Your car. Your journey. Made easy.
+                    </h1>
+
+                    <p data-t="heroText">
+                        Explore cars for everyday drives,
+                        family weekends and unforgettable trips.
+                        Find the right rental without the hassle.
+                    </p>
+
+                    <div class="ec-hero-actions">
+
+                        <a
+                            class="ec-primary"
+                            href="#search-panel"
+                            data-t="findCar"
+                        >
+                            Find a Car →
+                        </a>
+
+                        <a
+                            class="ec-outline"
+                            href="#fleet"
+                            data-t="browseFleet"
+                        >
+                            Browse Popular Cars
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </section>
 
-        <section class="cars">
 
-            <h2>Explore Our Cars</h2>
+        <!-- ===============================
+             Search Section
+        =============================== -->
 
-            <p>Our available rental cars will appear here.</p>
+        <section class="ec-search-area" id="search-panel">
+
+            <div class="ec-container">
+
+                <div class="ec-search-card">
+
+                    <div class="ec-search-head">
+
+                        <h2 data-t="searchTitle">
+                            Find your rental car
+                        </h2>
+
+                        <small data-t="searchSubtitle">
+                            Choose your trip details
+                        </small>
+
+                    </div>
+
+
+                    <form id="ec-search-form">
+
+                        <div class="ec-search-grid">
+
+                            <!-- Car Type -->
+
+                            <div class="ec-field">
+
+                                <label for="ec-type" data-t="carType">
+                                    Car Type
+                                </label>
+
+                                <select id="ec-type" name="type">
+
+                                    <option value="all" data-t="allTypes">
+                                        All Types
+                                    </option>
+
+                                    <option value="private" data-t="private">
+                                        Private Cars
+                                    </option>
+
+                                    <option value="family" data-t="family">
+                                        Family Cars
+                                    </option>
+
+                                    <option value="electric" data-t="electric">
+                                        Electric Cars
+                                    </option>
+
+                                    <option value="luxury" data-t="luxury">
+                                        Luxury Cars
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Pick-up Location -->
+
+                            <div class="ec-field">
+
+                                <label for="ec-pickup" data-t="pickup">
+                                    Pick-up Area
+                                </label>
+
+                                <select
+                                    id="ec-pickup"
+                                    name="location"
+                                    required
+                                >
+
+                                    <option value="" data-t="selectArea">
+                                        Select area
+                                    </option>
+
+                                    <option value="hk" data-t="hkIsland">
+                                        Hong Kong Island
+                                    </option>
+
+                                    <option value="kowloon" data-t="kowloon">
+                                        Kowloon
+                                    </option>
+
+                                    <option value="nt" data-t="nt">
+                                        New Territories
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Pick-up Date -->
+
+                            <div class="ec-field">
+
+                                <label for="ec-from" data-t="from">
+                                    Pick-up Date
+                                </label>
+
+                                <input
+                                    id="ec-from"
+                                    name="pickupDate"
+                                    type="date"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- Return Date -->
+
+                            <div class="ec-field">
+
+                                <label for="ec-to" data-t="to">
+                                    Return Date
+                                </label>
+
+                                <input
+                                    id="ec-to"
+                                    name="returnDate"
+                                    type="date"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- Search Button -->
+
+                            <button
+                                class="ec-primary ec-search-submit"
+                                type="submit"
+                                data-t="search"
+                            >
+                                Search Cars →
+                            </button>
+
+                        </div>
+
+                        <p
+                            id="ec-search-note"
+                            class="ec-search-note"
+                            aria-live="polite"
+                        ></p>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </section>
+
+
+        <!-- Clean horizontal carousel inspired by the reference layout -->
+        <section class="ec-showcase" id="fleet">
+            <div class="ec-container">
+                <h2 data-t="popularTitle">Popular Rental Cars</h2>
+                <div class="ec-showcase-wrap">
+                    <button class="ec-slide-arrow ec-slide-prev" type="button" aria-label="Previous cars" id="ec-slide-prev">❮</button>
+                    <div class="ec-showcase-track" id="ec-showcase-track">
+                        <% visibleCars.forEach(car => { %>
+                            <a class="ec-showcase-item" href="/cars/<%= car._id.toString() %>">
+                                <img src="<%= car.image || '/images/car01.jpg' %>" alt="<%= car.brand %> <%= car.model %>" loading="lazy" onerror="this.onerror=null;this.src='/images/car01.jpg'">
+                                <span class="ec-showcase-name"><%= car.brand %> <%= car.model %></span>
+                                <span class="ec-showcase-price">HK$<%= Number(car.pricePerDay || 0).toLocaleString('en-HK') %> <small data-t="perDay">/ day</small></span>
+                            </a>
+                        <% }) %>
+                    </div>
+                    <button class="ec-slide-arrow ec-slide-next" type="button" aria-label="Next cars" id="ec-slide-next">❯</button>
+                </div>
+                <a class="ec-showcase-view-all" href="/cars" data-t="viewAllCars">View All Cars →</a>
+            </div>
+        </section>
+
+
+        <!-- Luxury Collection -->
+        <% if (homeLuxuryCars.length > 0) { %>
+        <section class="ec-luxury-section" id="luxury">
+            <div class="ec-container">
+                <div class="ec-luxury-heading">
+                    <div>
+                        <div class="ec-luxury-tag" data-t="luxuryKicker">THE LUXURY COLLECTION</div>
+                        <h2 data-t="luxuryTitle">An extraordinary drive awaits.</h2>
+                        <p data-t="luxuryText">Discover our premium rental selection.</p>
+                    </div>
+                    <a class="ec-luxury-all" href="/cars?category=luxury" data-t="viewLuxury">Explore Luxury Cars →</a>
+                </div>
+                <div class="ec-luxury-grid">
+                    <% homeLuxuryCars.forEach(car => { %>
+                    <a class="ec-luxury-card" href="/cars/<%= car._id.toString() %>">
+                        <img src="<%= car.image %>" alt="<%= car.brand %> <%= car.model %>" loading="lazy">
+                        <div class="ec-luxury-overlay">
+                            <span class="ec-luxury-tag" data-t="luxury">Luxury Cars</span>
+                            <h3><%= car.brand %> <%= car.model %></h3>
+                            <span class="ec-luxury-price">HK$<%= Number(car.pricePerDay).toLocaleString("en-HK") %> <span data-t="perDay">/ day</span> →</span>
+                        </div>
+                    </a>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+        <% } %>
+
+        <!-- ===============================
+             Rental Process
+        =============================== -->
+
+        <!-- ===================================== -->
+<!-- RENTAL PROCESS SECTION -->
+<!-- ===================================== -->
+
+    <section class="ec-section ec-process" id="steps">
+
+        <div class="ec-container">
+
+            <!-- Section Title -->
+            <div class="ec-heading ec-process-heading">
+                <div>
+                    <h2 data-t="processTitle">
+                        How Renting Works
+                    </h2>
+
+                    <p data-t="processSub">
+                        Five simple steps from browsing to returning your car.
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- Timeline -->
+            <div class="ec-process-grid">
+
+
+                <!-- STEP 1 -->
+                <div class="ec-step ec-step-top">
+
+                    <div class="ec-step-content">
+
+                        <!-- Car Icon -->
+                        <svg viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true">
+
+                            <path d="M5 17h14l1-7-3-5H7L4 10l1 7Z"/>
+                            <path d="M7 17v2M17 17v2M5 10h14"/>
+                            <circle cx="8" cy="14" r="1"/>
+                            <circle cx="16" cy="14" r="1"/>
+
+                        </svg>
+
+                        <h3>
+                            <span>01</span>
+                            <span data-t="step1">Choose a Car</span>
+                        </h3>
+
+                        <p data-t="step1d">
+                            Browse models and pick the vehicle that suits your trip.
+                        </p>
+
+                    </div>
+
+                    <div class="ec-step-dot"></div>
+
+                </div>
+
+
+                <!-- STEP 2 -->
+                <div class="ec-step ec-step-bottom">
+
+                    <div class="ec-step-dot"></div>
+
+                    <div class="ec-step-content">
+
+                        <!-- Calendar Icon -->
+                        <svg viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true">
+
+                            <rect x="3" y="5" width="18" height="16" rx="2"/>
+                            <path d="M7 3v4M17 3v4M3 10h18"/>
+                            <path d="M8 14h3M14 14h3M8 18h3"/>
+
+                        </svg>
+
+                        <h3>
+                            <span>02</span>
+                            <span data-t="step2">Select Dates</span>
+                        </h3>
+
+                        <p data-t="step2d">
+                            Choose your pick-up and return dates.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STEP 3 -->
+                <div class="ec-step ec-step-top">
+
+                    <div class="ec-step-content">
+
+                        <!-- Booking Icon -->
+                        <svg viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true">
+
+                            <path d="M6 3h12a2 2 0 0 1 2 2v15l-8-4-8 4V5a2 2 0 0 1 2-2Z"/>
+                            <path d="M8 8h8M8 12h6"/>
+
+                        </svg>
+
+                        <h3>
+                            <span>03</span>
+                            <span data-t="step3">Log In & Book</span>
+                        </h3>
+
+                        <p data-t="step3d">
+                            Create an account to submit a booking.
+                        </p>
+
+                    </div>
+
+                    <div class="ec-step-dot"></div>
+
+                </div>
+
+
+                <!-- STEP 4 -->
+                <div class="ec-step ec-step-bottom">
+
+                    <div class="ec-step-dot"></div>
+
+                    <div class="ec-step-content">
+
+                        <!-- Key Icon -->
+                        <svg viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true">
+
+                            <circle cx="8" cy="8" r="5"/>
+                            <path d="M11.5 11.5 21 21"/>
+                            <path d="M16 16l2-2M18 18l2-2"/>
+
+                        </svg>
+
+                        <h3>
+                            <span>04</span>
+                            <span data-t="step4">Collect the Car</span>
+                        </h3>
+
+                        <p data-t="step4d">
+                            Confirm the collection arrangements and inspect the vehicle.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STEP 5 -->
+                <div class="ec-step ec-step-top">
+
+                    <div class="ec-step-content">
+
+                        <!-- Location Icon -->
+                        <svg viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true">
+
+                            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                            <circle cx="12" cy="10" r="2.5"/>
+
+                        </svg>
+
+                        <h3>
+                            <span>05</span>
+                            <span data-t="step5">Return</span>
+                        </h3>
+
+                        <p data-t="step5d">
+                            Return the car at your agreed time and location.
+                        </p>
+
+                    </div>
+
+                    <div class="ec-step-dot"></div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
     </main>
+
+
+    <!-- ===============================
+         Footer
+    =============================== -->
+
+    <footer class="ec-footer">
+
+        <div class="ec-container ec-footer-flex">
+
+            <strong>
+                DriveEase
+            </strong>
+
+            <small data-t="footer">
+                © 2026 DriveEase —
+                Car Rental Booking System
+            </small>
+
+            <small>
+
+                <a
+                    href="#fleet"
+                    style="color:white"
+                    data-t="footerFleet"
+                >
+                    Browse Cars
+                </a>
+
+            </small>
+
+        </div>
+
+    </footer>
+
+
+    <!-- ===============================
+         JavaScript
+    =============================== -->
+
+    <script>
+
+        /* ===============================
+           Language Translations
+        =============================== */
+
+        const messages = {
+
+            en: {
+
+                topline: "Your local car rental marketplace",
+                topright: "Daily · Weekly · Monthly",
+
+                home: "Home",
+                private: "Private Cars",
+                family: "Family Cars",
+                electric: "Electric Cars",
+                luxury: "Luxury Cars",
+                rentalGuide: "How It Works",
+
+                hello: "Hi,",
+                myBookings: "My Bookings",
+                logout: "Logout",
+                login: "Login",
+                register: "Register",
+
+                heroKicker: "EXPLORE HONG KONG YOUR WAY",
+                heroTitle: "Your car. Your journey. Made easy.",
+
+                heroText:
+                    "Explore cars for everyday drives, family weekends and unforgettable trips. Find the right rental without the hassle.",
+
+                findCar: "Find a Car →",
+                browseFleet: "Browse Popular Cars",
+
+                searchTitle: "Find your rental car",
+                searchSubtitle: "Choose your trip details",
+
+                carType: "Car Type",
+                allTypes: "All Types",
+
+                pickup: "Pick-up Area",
+                selectArea: "Select area",
+
+                hkIsland: "Hong Kong Island",
+                kowloon: "Kowloon",
+                nt: "New Territories",
+
+                from: "Pick-up Date",
+                to: "Return Date",
+                search: "Search Cars →",
+
+                popularTitle: "Popular Rental Cars",
+
+                popularText:
+                    "Find the right ride — compare models, seat counts and daily rates.",
+
+                startSearch: "Start a Search →",
+                viewAllCars: "View All Cars →",
+                viewDetails: "View Details →",
+                luxuryKicker: "THE LUXURY COLLECTION",
+                luxuryTitle: "An extraordinary drive awaits.",
+                luxuryText: "Discover our premium rental selection.",
+                viewLuxury: "Explore Luxury Cars →",
+
+                allCars: "All Cars",
+                allBrands: "All Brands",
+                anySeats: "Any Seats",
+                anyPrice: "Any Price",
+
+                keyword: "Search brand or model",
+                reset: "Reset",
+                sample: "SAMPLE",
+                seatsUnit: "seats",
+                perDay: "/ day",
+                chooseCar: "Select →",
+
+                noResults:
+                    "No matching cars. Try another filter.",
+
+                demoDisclaimer:
+                    "Sample cars and prices are for UI demonstration only. Connect your MongoDB cars collection for real inventory.",
+
+                processTitle: "How Renting Works",
+
+                processSub:
+                    "Five simple steps from browsing to returning your car.",
+
+                step1: "Choose a Car",
+                step1d:
+                    "Browse models and pick the vehicle that suits your trip.",
+
+                step2: "Select Dates",
+                step2d:
+                    "Choose your pick-up and return dates.",
+
+                step3: "Log In & Book",
+                step3d:
+                    "Create an account to submit a booking.",
+
+                step4: "Collect the Car",
+                step4d:
+                    "Confirm the collection arrangements and inspect the vehicle.",
+
+                step5: "Return",
+                step5d:
+                    "Return the car at your agreed time and location.",
+
+                aboutKicker: "WHY DRIVEEASE",
+                aboutTitle: "One place for your next drive",
+
+                aboutText:
+                    "Discover vehicle options, compare them clearly and manage your reservations from a personal account. DriveEase is being built as a simple car-rental booking experience.",
+
+                benefit1: "Search by car type, brand and budget",
+
+                benefit2:
+                    "English and Traditional Chinese interface",
+
+                benefit3:
+                    "Register, sign in and view your bookings",
+
+                footer:
+                    "© 2026 DriveEase — Car Rental Booking System",
+
+                footerFleet: "Browse Cars",
+
+                badDate:
+                    "Return date must be later than pick-up date.",
+
+                searchDemo:
+                    "Showing car types below. Date availability will be connected when booking is implemented."
+            },
+
+
+            zh: {
+
+                topline: "你的香港租車平台",
+                topright: "日租 · 週租 · 月租",
+
+                home: "首頁",
+                private: "私家車",
+                family: "家庭車",
+                electric: "電動車",
+                luxury: "豪華車",
+                rentalGuide: "租車流程",
+
+                hello: "你好，",
+                myBookings: "我的預訂",
+                logout: "登出",
+                login: "登入",
+                register: "註冊",
+
+                heroKicker: "自在探索香港每一程",
+                heroTitle: "揀好車，輕鬆出發。",
+
+                heroText:
+                    "由日常代步、家庭出遊到週末自駕遊，探索各式車款，輕鬆規劃你的租車旅程。",
+
+                findCar: "立即搵車 →",
+                browseFleet: "瀏覽熱門車款",
+
+                searchTitle: "搜尋合適租車",
+                searchSubtitle: "選擇你的行程資料",
+
+                carType: "車輛類型",
+                allTypes: "所有類型",
+
+                pickup: "取車地區",
+                selectArea: "選擇地區",
+
+                hkIsland: "香港島",
+                kowloon: "九龍",
+                nt: "新界",
+
+                from: "取車日期",
+                to: "還車日期",
+                search: "搜尋車輛 →",
+
+                popularTitle: "熱門租賃車款",
+
+                popularText:
+                    "比較品牌、座位數和每日租金，選出心水車款。",
+
+                startSearch: "開始搜尋 →",
+                viewAllCars: "瀏覽全部車輛 →",
+                viewDetails: "查看詳情 →",
+                luxuryKicker: "豪華車精選",
+                luxuryTitle: "展開非凡駕駛體驗。",
+                luxuryText: "探索 DriveEase 精選豪華租賃車款。",
+                viewLuxury: "瀏覽豪華車 →",
+
+                allCars: "全部車款",
+                allBrands: "所有品牌",
+                anySeats: "不限座位",
+                anyPrice: "不限價格",
+
+                keyword: "搜尋品牌或車型",
+                reset: "重設",
+                sample: "示範",
+                seatsUnit: "座",
+                perDay: "／天",
+                chooseCar: "選擇 →",
+
+                noResults:
+                    "沒有符合條件的車輛，請調整篩選。",
+
+                demoDisclaimer:
+                    "車輛及價格目前只供介面示範；連接 MongoDB cars 集合後才會顯示真實庫存。",
+
+                processTitle: "簡單五步租車流程",
+
+                processSub:
+                    "由尋找車款到歸還車輛，每一步都清晰方便。",
+
+                step1: "選擇車款",
+                step1d:
+                    "比較不同車輛，揀選適合行程的款式。",
+
+                step2: "選擇日期",
+                step2d:
+                    "設定取車和還車日期。",
+
+                step3: "登入並預訂",
+                step3d:
+                    "註冊會員帳戶並提交預訂。",
+
+                step4: "取車驗車",
+                step4d:
+                    "確認取車安排，檢查車輛狀況。",
+
+                step5: "按時還車",
+                step5d:
+                    "按約定時間和地點歸還車輛。",
+
+                aboutKicker: "為何選擇 DRIVEEASE",
+
+                aboutTitle: "一站式規劃你的租車旅程",
+
+                aboutText:
+                    "集中搜尋車款、清晰比較資料，並以個人會員帳戶管理預訂。DriveEase 致力提供簡單易用的租車預訂體驗。",
+
+                benefit1:
+                    "可按類型、品牌及預算篩選",
+
+                benefit2:
+                    "支援英文與繁體中文介面",
+
+                benefit3:
+                    "註冊、登入及查閱個人預訂",
+
+                footer:
+                    "© 2026 DriveEase 汽車租賃預訂系統",
+
+                footerFleet: "瀏覽車款",
+
+                badDate:
+                    "還車日期必須遲於取車日期。",
+
+                searchDemo:
+                    "已顯示相關車款；日期庫存會在預訂功能完成後連接。"
+            }
+        };
+
+
+        /* ===============================
+           Language Switch
+        =============================== */
+
+        let language =
+            localStorage.getItem("driveease_language") === "zh"
+                ? "zh"
+                : "en";
+
+        const text = key =>
+            messages[language][key] || key;
+
+        const searchMessage =
+            document.getElementById("ec-search-note");
+
+
+        function setLanguage(lang) {
+
+            language = lang === "zh" ? "zh" : "en";
+
+            localStorage.setItem(
+                "driveease_language",
+                language
+            );
+
+            document.documentElement.lang =
+                language === "zh" ? "zh-Hant" : "en";
+
+            document.title =
+                language === "zh"
+                    ? "DriveEase｜香港租車預訂"
+                    : "DriveEase | Rent Your Next Car";
+
+
+            // Translate all elements
+            document.querySelectorAll("[data-t]").forEach(el => {
+
+                el.textContent =
+                    text(el.dataset.t);
+
+            });
+
+
+            // Translate input placeholders
+            document.querySelectorAll("[data-placeholder]").forEach(el => {
+
+                el.placeholder =
+                    text(el.dataset.placeholder);
+
+            });
+
+
+            // Update language buttons
+            document.querySelectorAll("[data-language]").forEach(btn => {
+
+                btn.classList.toggle(
+                    "active",
+                    btn.dataset.language === language
+                );
+
+            });
+
+
+            if (searchMessage.dataset.message) {
+
+                searchMessage.textContent =
+                    text(searchMessage.dataset.message);
+
+            }
+
+        }
+
+
+        document.querySelectorAll("[data-language]").forEach(btn => {
+
+            btn.addEventListener("click", () => {
+
+                setLanguage(btn.dataset.language);
+
+            });
+
+        });
+
+        setLanguage(language);
+
+
+        /* ===============================
+           Popular Cars Carousel
+        =============================== */
+        const showcaseTrack = document.getElementById("ec-showcase-track");
+        const slidePrev = document.getElementById("ec-slide-prev");
+        const slideNext = document.getElementById("ec-slide-next");
+        if (showcaseTrack && slidePrev && slideNext) {
+            const slide = direction => showcaseTrack.scrollBy({
+                left: direction * Math.max(320, showcaseTrack.clientWidth * .8),
+                behavior: "smooth"
+            });
+            slidePrev.addEventListener("click", () => slide(-1));
+            slideNext.addEventListener("click", () => slide(1));
+        }
+
+        /* ===============================
+           Date Validation
+        =============================== */
+
+        const start =
+            document.getElementById("ec-from");
+
+        const end =
+            document.getElementById("ec-to");
+
+        const now = new Date();
+
+        const today = new Date(
+            now.getTime() -
+            now.getTimezoneOffset() * 60000
+        ).toISOString().slice(0, 10);
+
+        start.min = today;
+        end.min = today;
+
+
+        start.addEventListener("change", () => {
+
+            end.min = start.value || today;
+
+        });
+
+
+        /* ===============================
+           Search Form
+        =============================== */
+
+        document.getElementById("ec-search-form")
+            .addEventListener("submit", event => {
+
+                event.preventDefault();
+
+                if (end.value <= start.value) {
+
+                    searchMessage.dataset.message =
+                        "badDate";
+
+                    searchMessage.style.color =
+                        "#c2410c";
+
+                    searchMessage.textContent =
+                        text("badDate");
+
+                    return;
+                }
+
+
+                const locations = {
+                    hk: "Hong Kong Island",
+                    kowloon: "Kowloon",
+                    nt: "New Territories"
+                };
+                const params = new URLSearchParams();
+                params.set("category", document.getElementById("ec-type").value);
+                params.set("location", locations[document.getElementById("ec-pickup").value] || "");
+                params.set("pickupDate", start.value);
+                params.set("returnDate", end.value);
+
+                // Search the MongoDB-backed listing. Date availability is checked
+                // later, when booking functionality is implemented.
+                window.location.href = "/cars?" + params.toString();
+
+            });
+
+    </script>
 
 </body>
 </html>

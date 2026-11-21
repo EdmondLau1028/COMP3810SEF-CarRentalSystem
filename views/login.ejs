@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | DriveEase</title>
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        /* ================================
+           GLOBAL
+        ================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Outfit", Arial, sans-serif;
+            background: #f7f8fa;
+            color: #142235;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+
+        /* ================================
+           LOGIN LAYOUT
+        ================================= */
+
+        .login-container {
+            display: grid;
+            grid-template-columns: 48% 52%;
+
+            min-height: 100vh;
+        }
+
+
+        /* ================================
+           LEFT SIDE
+        ================================= */
+
+        .login-left {
+            display: flex;
+            flex-direction: column;
+
+            padding: 35px 8%;
+
+            background: #ffffff;
+        }
+
+
+        /* ================================
+           LOGO
+        ================================= */
+
+        .login-logo {
+            display: inline-flex;
+            align-items: baseline;
+
+            font-size: 34px;
+            font-weight: 900;
+
+            letter-spacing: -1.8px;
+
+            width: fit-content;
+        }
+
+        .logo-drive {
+            color: #142235;
+        }
+
+        .logo-ease {
+            color: #f97316;
+            font-style: italic;
+        }
+
+
+        /* ================================
+           FORM CONTAINER
+        ================================= */
+
+        .login-content {
+            width: 100%;
+            max-width: 420px;
+
+            margin: auto;
+            padding: 55px 0;
+        }
+
+        .login-label {
+            display: inline-block;
+
+            color: #ea580c;
+            background: #fff1e6;
+
+            padding: 8px 13px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 25px;
+        }
+
+        .login-content h1 {
+            font-size: 43px;
+            font-weight: 800;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 14px;
+        }
+
+        .login-description {
+            font-size: 15px;
+
+            color: #667085;
+
+            line-height: 1.7;
+
+            margin-bottom: 38px;
+        }
+
+
+        /* ================================
+           FORM
+        ================================= */
+
+        .form-group {
+            margin-bottom: 23px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+            color: #344054;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 53px;
+
+            border: 1px solid #d8dde7;
+
+            border-radius: 11px;
+
+            padding: 0 16px;
+
+            background: #fafbfc;
+
+            color: #142235;
+
+            font-size: 14px;
+
+            transition: all 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+
+            border-color: #f97316;
+
+            background: white;
+
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.10);
+        }
+
+        .form-group input::placeholder {
+            color: #98a2b3;
+        }
+
+
+        /* ================================
+           PASSWORD INPUT
+        ================================= */
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 85px;
+        }
+
+        .password-toggle {
+            position: absolute;
+
+            right: 12px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+            background: transparent;
+
+            color: #667085;
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            padding: 8px;
+        }
+
+        .password-toggle:hover {
+            color: #f97316;
+        }
+
+
+        /* ================================
+           LOGIN BUTTON
+        ================================= */
+
+        .login-btn {
+            width: 100%;
+            height: 54px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 12px;
+
+            margin-top: 30px;
+
+            border: none;
+            border-radius: 11px;
+
+            background: linear-gradient(
+                120deg,
+                #f97316,
+                #ea580c
+            );
+
+            color: white;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: all 0.25s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.25);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+
+        /* ================================
+           ERROR MESSAGE
+        ================================= */
+
+        .error-message {
+            background: #fef2f2;
+
+            border: 1px solid #fecaca;
+
+            color: #b91c1c;
+
+            padding: 14px 16px;
+
+            border-radius: 10px;
+
+            font-size: 13px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ================================
+           REGISTER LINK
+        ================================= */
+
+        .register-text {
+            text-align: center;
+
+            margin-top: 30px;
+
+            font-size: 14px;
+
+            color: #667085;
+        }
+
+        .register-text a {
+            color: #ea580c;
+
+            font-weight: 800;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ================================
+           BACK HOME
+        ================================= */
+
+        .back-home {
+            margin-top: 24px;
+
+            display: inline-block;
+
+            color: #667085;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-home:hover {
+            color: #f97316;
+        }
+
+
+        /* ================================
+           RIGHT SIDE - CAR BACKGROUND
+        ================================= */
+
+        .login-right {
+            position: relative;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            padding: 70px;
+
+            color: white;
+
+            background-image:
+                linear-gradient(
+                    180deg,
+                    rgba(10, 20, 32, 0.10) 0%,
+                    rgba(10, 20, 32, 0.30) 40%,
+                    rgba(10, 20, 32, 0.88) 100%
+                ),
+                url("/images/car04.jpg");
+
+            background-size: cover;
+            background-position: center;
+
+            overflow: hidden;
+        }
+
+        .login-right-content {
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 550px;
+        }
+
+        .login-right-label {
+            display: inline-block;
+
+            padding: 9px 15px;
+
+            background: rgba(255, 255, 255, 0.15);
+
+            border: 1px solid rgba(255, 255, 255, 0.3);
+
+            border-radius: 30px;
+
+            backdrop-filter: blur(10px);
+
+            font-size: 12px;
+            font-weight: 700;
+
+            margin-bottom: 25px;
+        }
+
+        .login-right h2 {
+            font-size: clamp(36px, 4vw, 57px);
+
+            font-weight: 800;
+
+            line-height: 1.15;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 20px;
+        }
+
+        .login-right p {
+            color: #e5e7eb;
+
+            line-height: 1.8;
+
+            font-size: 16px;
+        }
+
+
+        /* ================================
+           LANGUAGE SWITCH
+        ================================= */
+
+        .language-switch {
+            display: flex;
+            gap: 5px;
+
+            margin-left: auto;
+
+            background: #f3f4f6;
+
+            border-radius: 9px;
+
+            padding: 4px;
+        }
+
+        .language-switch button {
+            border: none;
+
+            background: transparent;
+
+            padding: 7px 10px;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            color: #667085;
+
+            cursor: pointer;
+        }
+
+        .language-switch button.active {
+            background: white;
+            color: #ea580c;
+
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        }
+
+        .login-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        /* ================================
+           FOOTER
+        ================================= */
+
+        .login-footer {
+            color: #98a2b3;
+
+            font-size: 12px;
+
+            margin-top: 30px;
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 950px) {
+
+            .login-container {
+                grid-template-columns: 1fr;
+            }
+
+            .login-right {
+                display: none;
+            }
+
+            .login-left {
+                min-height: 100vh;
+                padding: 25px 6%;
+            }
+
+            .login-content {
+                max-width: 450px;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            .login-content h1 {
+                font-size: 34px;
+            }
+
+            .login-logo {
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div class="login-container">
+
+
+    <!-- =====================================
+         LEFT SIDE
+    ====================================== -->
+
+    <section class="login-left">
+
+
+        <!-- Logo + Language -->
+        <div class="login-top">
+
+            <a href="/" class="login-logo">
+
+                <span class="logo-drive">Drive</span><span class="logo-ease">Ease</span>
+
+            </a>
+
+
+            <div class="language-switch">
+
+                <button
+                    type="button"
+                    data-language="en"
+                    class="active"
+                >
+                    EN
+                </button>
+
+                <button
+                    type="button"
+                    data-language="zh"
+                >
+                    繁中
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Login Form -->
+        <main class="login-content">
+
+
+            <span class="login-label" data-t="welcomeLabel">
+                WELCOME BACK
+            </span>
+
+
+            <h1 data-t="loginTitle">
+                Sign in to DriveEase.
+            </h1>
+
+
+            <p class="login-description" data-t="loginDescription">
+                Welcome back! Sign in to explore rental cars and manage your bookings.
+            </p>
+
+
+
+            <!-- Error Message -->
+            <% if (typeof error !== "undefined" && error) { %>
+
+                <div class="error-message" role="alert">
+
+                    <%= error %>
+
+                </div>
+
+            <% } %>
+
+
+
+            <!-- LOGIN FORM -->
+            <form action="/login" method="POST">
+
+
+                <!-- Email -->
+                <div class="form-group">
+
+                    <label for="email" data-t="emailLabel">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        autocomplete="email"
+                        maxlength="254"
+                        required
+                        data-placeholder="emailPlaceholder"
+                    >
+
+                </div>
+
+
+
+                <!-- Password -->
+                <div class="form-group">
+
+                    <label for="password" data-t="passwordLabel">
+                        Password
+                    </label>
+
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                            data-placeholder="passwordPlaceholder"
+                        >
+
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                            aria-label="Show password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Submit -->
+                <button class="login-btn" type="submit">
+
+                    <span data-t="loginButton">Sign In</span>
+
+                    <span aria-hidden="true">→</span>
+
+                </button>
+
+
+            </form>
+
+
+
+            <!-- Register Link -->
+            <p class="register-text">
+
+                <span data-t="noAccount">
+                    Don't have an account?
+                </span>
+
+                <a href="/register" data-t="registerLink">
+                    Create an account
+                </a>
+
+            </p>
+
+
+
+            <!-- Back to Homepage -->
+            <a href="/" class="back-home" data-t="backHome">
+
+                ← Back to Homepage
+
+            </a>
+
+        </main>
+
+
+
+        <!-- Footer -->
+        <div class="login-footer">
+            © 2026 DriveEase — Car Rental Booking System
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================
+         RIGHT SIDE
+    ====================================== -->
+
+    <section class="login-right" aria-label="DriveEase car rental">
+
+
+        <div class="login-right-content">
+
+
+            <span class="login-right-label" data-t="rightLabel">
+                YOUR JOURNEY STARTS HERE
+            </span>
+
+
+            <h2 data-t="rightTitle">
+                Find your next drive.
+                <br>
+                Make every trip count.
+            </h2>
+
+
+            <p data-t="rightDescription">
+                Discover the freedom of driving with DriveEase.
+                Browse cars, compare options and enjoy a seamless rental experience.
+            </p>
+
+
+        </div>
+
+
+    </section>
+
+
+</div>
+
+
+
+<!-- =====================================
+     JAVASCRIPT
+====================================== -->
+
+<script>
+
+    /* ================================
+       PASSWORD SHOW / HIDE
+    ================================= */
+
+    const passwordInput = document.getElementById("password");
+
+    const togglePassword = document.getElementById("togglePassword");
+
+
+    togglePassword.addEventListener("click", function () {
+
+        const isHidden = passwordInput.type === "password";
+
+        passwordInput.type = isHidden ? "text" : "password";
+
+        updatePasswordButton();
+
+    });
+
+
+
+    /* ================================
+       TRANSLATIONS
+    ================================= */
+
+    const translations = {
+
+        en: {
+
+            welcomeLabel: "WELCOME BACK",
+
+            loginTitle: "Sign in to DriveEase.",
+
+            loginDescription:
+                "Welcome back! Sign in to explore rental cars and manage your bookings.",
+
+            emailLabel: "Email Address",
+
+            emailPlaceholder: "Enter your email address",
+
+            passwordLabel: "Password",
+
+            passwordPlaceholder: "Enter your password",
+
+            loginButton: "Sign In",
+
+            noAccount: "Don't have an account?",
+
+            registerLink: "Create an account",
+
+            backHome: "← Back to Homepage",
+
+            rightLabel: "YOUR JOURNEY STARTS HERE",
+
+            rightTitle: "Find your next drive. Make every trip count.",
+
+            rightDescription:
+                "Discover the freedom of driving with DriveEase. Browse cars, compare options and enjoy a seamless rental experience.",
+
+            show: "Show",
+
+            hide: "Hide"
+
+        },
+
+        zh: {
+
+            welcomeLabel: "歡迎回來",
+
+            loginTitle: "登入 DriveEase",
+
+            loginDescription:
+                "歡迎回來！登入帳戶，探索心水車款並管理你的租車預訂。",
+
+            emailLabel: "電郵地址",
+
+            emailPlaceholder: "請輸入電郵地址",
+
+            passwordLabel: "密碼",
+
+            passwordPlaceholder: "請輸入密碼",
+
+            loginButton: "登入",
+
+            noAccount: "還沒有帳戶？",
+
+            registerLink: "立即註冊",
+
+            backHome: "← 返回首頁",
+
+            rightLabel: "展開你的下一段旅程",
+
+            rightTitle: "尋找心水座駕，輕鬆享受每段旅程。",
+
+            rightDescription:
+                "DriveEase 為你提供便捷的租車體驗。輕鬆瀏覽車款、比較選擇，展開自在旅程。",
+
+            show: "顯示",
+
+            hide: "隱藏"
+
+        }
+
+    };
+
+
+
+    /* ================================
+       CURRENT LANGUAGE
+    ================================= */
+
+    let currentLanguage =
+        localStorage.getItem("driveease_language") === "zh"
+            ? "zh"
+            : "en";
+
+
+
+    /* ================================
+       UPDATE PASSWORD BUTTON
+    ================================= */
+
+    function updatePasswordButton() {
+
+        const isHidden = passwordInput.type === "password";
+
+        const key = isHidden ? "show" : "hide";
+
+        togglePassword.textContent = translations[currentLanguage][key];
+
+        togglePassword.setAttribute(
+            "aria-label",
+            translations[currentLanguage][key] + " password"
+        );
+
+    }
+
+
+
+    /* ================================
+       CHANGE LANGUAGE
+    ================================= */
+
+    function changeLanguage(language) {
+
+        currentLanguage = language;
+
+        localStorage.setItem("driveease_language", language);
+
+        document.documentElement.lang =
+            language === "zh" ? "zh-Hant" : "en";
+
+
+        // Translate text
+        document.querySelectorAll("[data-t]").forEach(function (element) {
+
+            const key = element.dataset.t;
+
+            if (translations[language][key]) {
+
+                element.textContent = translations[language][key];
+
+            }
+
+        });
+
+
+        // Translate placeholders
+        document.querySelectorAll("[data-placeholder]").forEach(function (element) {
+
+            const key = element.dataset.placeholder;
+
+            if (translations[language][key]) {
+
+                element.placeholder = translations[language][key];
+
+            }
+
+        });
+
+
+        // Language button active state
+        document.querySelectorAll("[data-language]").forEach(function (button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.language === language
+            );
+
+        });
+
+
+        updatePasswordButton();
+
+    }
+
+
+
+    /* ================================
+       LANGUAGE BUTTONS
+    ================================= */
+
+    document.querySelectorAll("[data-language]").forEach(function (button) {
+
+        button.addEventListener("click", function () {
+
+            changeLanguage(button.dataset.language);
+
+        });
+
+    });
+
+
+
+    // Initialize
+    changeLanguage(currentLanguage);
+
+</script>
+
+
+</body>
+
+</html>

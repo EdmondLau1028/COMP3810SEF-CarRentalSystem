@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>預訂詳情 | DriveEase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink:#19243a; --muted:#6c778b; --orange:#f36b21; --blue:#3165e9;
+      --teal:#07838a; --paper:#ffffff; --bg:#eef0f5; --line:#e4e8ef;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font-family:Outfit,Arial,"PingFang HK","Microsoft JhengHei",sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    button { font:inherit; cursor:pointer; }
+    .shell { width:min(1220px,calc(100% - 40px)); margin:0 auto; }
+    .header { background:#fff; border-bottom:1px solid #e3e7ef; }
+    .navigation { display:flex; justify-content:space-between; align-items:center; gap:24px; min-height:79px; }
+    .logo { font-size:30px; font-weight:900; letter-spacing:-1.7px; white-space:nowrap; }
+    .logo em { font-style:italic; color:var(--orange); }
+    .nav-links { display:flex; align-items:center; gap:25px; font-weight:700; font-size:14px; }
+    .nav-links a:hover { color:var(--orange); }
+    .lang { display:flex; gap:3px; border-radius:9px; background:#f0f2f5; padding:4px; }
+    .lang button { border:0; background:none; padding:8px 11px; color:#617084; border-radius:7px; font-size:12px; font-weight:800; }
+    .lang button.active { background:#fff; color:#df5e1c; box-shadow:0 1px 6px #00000012; }
+
+    .page { padding-top:28px; padding-bottom:88px; }
+    .layout { display:grid; grid-template-columns:minmax(0,2.06fr) minmax(300px,1fr); gap:16px; align-items:start; }
+    .left { display:flex; flex-direction:column; gap:15px; min-width:0; }
+    .card { background:var(--paper); border-radius:10px; border:1px solid #e9ecf3; box-shadow:0 5px 20px #152b4910; }
+    .card-inner { padding:27px 30px; }
+    .section-title { margin:0 0 19px; font-size:18px; font-weight:800; line-height:1.3; }
+
+    .success-heading { display:flex; align-items:center; gap:11px; margin:0 0 8px; color:var(--teal); font-size:27px; line-height:1.25; font-weight:900; }
+    .success-mark { display:grid; place-items:center; width:33px; height:33px; flex:0 0 33px; background:#e4f8f2; color:#168d6e; font-size:21px; font-weight:800; border-radius:50%; }
+    .success-card.cancelled .success-heading { color:#657084; }
+    .success-card.cancelled .success-mark { background:#eef0f4; color:#687587; }
+    .success-text { margin:0; font-size:14px; color:#465569; line-height:1.65; }
+    .reference { margin-top:15px; font-size:13px; color:#677488; overflow-wrap:anywhere; }
+    .reference strong { color:#2c3850; font-size:13px; letter-spacing:.02em; }
+    .action-row { margin-top:21px; display:flex; flex-wrap:wrap; gap:10px; }
+    .action { min-height:39px; display:inline-flex; align-items:center; justify-content:center; border:1px solid var(--blue); border-radius:5px; color:var(--blue); background:white; padding:9px 16px; font-size:13px; font-weight:800; transition:background .15s ease; }
+    .action:hover { background:#f0f5ff; }
+    .action.cancel { color:#bb5039; border-color:#ecab98; }
+    .action.cancel:hover { background:#fff4ef; }
+    .action-hint { margin:12px 0 0; font-size:11px; color:#8390a3; }
+
+    .vehicle { display:flex; gap:22px; align-items:center; min-width:0; }
+    .vehicle-photo { width:235px; height:164px; border-radius:7px; object-fit:cover; background:#eef1f4; flex:0 0 235px; }
+    .vehicle-copy { min-width:0; }
+    .vehicle-copy h3 { font-size:25px; line-height:1.3; margin:0 0 10px; letter-spacing:-.025em; }
+    .mini-label { display:inline-block; color:#718099; font-size:12px; margin-bottom:6px; }
+    .vehicle-desc { color:#6f7a8e; font-size:14px; line-height:1.7; margin:0; }
+    .vehicle-price { margin-top:17px; color:#46536a; font-size:13px; }
+    .vehicle-price b { color:var(--orange); font-size:19px; }
+
+    .trip-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .trip-item { padding:16px 17px; background:#f7f8fb; border:1px solid #eef0f5; border-radius:7px; }
+    .trip-item span { display:block; margin-bottom:7px; color:#78859b; font-size:12px; }
+    .trip-item strong { font-size:17px; font-weight:800; overflow-wrap:anywhere; }
+    .trip-note { margin:17px 0 0; font-size:12px; color:#8390a2; line-height:1.7; }
+
+    .summary { padding:23px 25px 26px; position:sticky; top:22px; }
+    .summary-head { display:flex; align-items:start; justify-content:space-between; gap:15px; }
+    .summary-head h2 { font-size:18px; font-weight:800; line-height:1.5; margin:0; }
+    .summary-price { color:var(--orange); font-size:24px; font-weight:900; white-space:nowrap; }
+    .summary-car { color:#5b687c; line-height:1.6; margin:13px 0 24px; font-size:14px; }
+    .summary-divider { border:0; border-top:1px dashed #d6dce7; margin:20px 0; }
+    .breakdown-title { margin:0 0 17px; font-size:14px; font-weight:800; }
+    .summary-line { display:flex; align-items:start; justify-content:space-between; gap:18px; margin-bottom:16px; font-size:13px; }
+    .summary-line .label { color:#68778b; }
+    .summary-line strong { white-space:nowrap; color:#253249; }
+    .summary-total { margin-top:22px; padding-top:19px; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; gap:14px; font-size:14px; font-weight:800; }
+    .summary-total strong { font-size:27px; color:var(--orange); white-space:nowrap; }
+    .summary-note { margin:20px 0 0; line-height:1.7; font-size:12px; color:#8894a4; }
+
+    .footer { background:#142031; padding:24px; text-align:center; color:#c5cfda; font-size:12px; }
+    @media(max-width:1000px) { .layout { grid-template-columns:minmax(0,1.55fr) minmax(270px,1fr); } .vehicle-photo { width:190px; flex-basis:190px; height:145px; } .trip-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:780px) { .layout { grid-template-columns:1fr; } .summary { position:static; } .nav-links { display:none; } .trip-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+    @media(max-width:550px) {
+      .shell { width:calc(100% - 24px); } .navigation { min-height:69px; }
+      .logo { font-size:26px; } .page { padding-top:15px; }
+      .card-inner { padding:21px 18px; } .success-heading { font-size:24px; }
+      .vehicle { display:block; } .vehicle-photo { width:100%; height:205px; margin-bottom:18px; }
+      .trip-grid { grid-template-columns:1fr 1fr; gap:10px; } .trip-item { padding:13px 12px; }
+      .action { flex:1 1 135px; } .summary { padding:23px 19px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="shell navigation">
+      <a class="logo" href="/" aria-label="DriveEase Home">Drive<em>Ease</em></a>
+      <nav class="nav-links">
+        <a href="/" data-t="home">首頁</a>
+        <a href="/cars" data-t="cars">瀏覽車輛</a>
+        <a href="/my-booking" data-t="bookings">我的預訂</a>
+      </nav>
+      <div class="lang" aria-label="Language">
+        <button type="button" data-lang="en">EN</button><button type="button" data-lang="zh">繁中</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell page">
+    <div class="layout">
+      <div class="left">
+        <!-- 1. Booking status + actions -->
+        <section class="card success-card <%= booking.status === 'cancelled' ? 'cancelled' : '' %>">
+          <div class="card-inner">
+            <h1 class="success-heading">
+              <span class="success-mark" aria-hidden="true"><%= booking.status === 'cancelled' ? '−' : '✓' %></span>
+              <span data-t="<%= booking.status === 'cancelled' ? 'cancelledHeading' : 'successHeading' %>">
+                <%= booking.status === 'cancelled' ? '預訂已取消' : '預訂確認成功' %>
+              </span>
+            </h1>
+            <p class="success-text" data-t="<%= booking.status === 'cancelled' ? 'cancelledSubtitle' : 'successSubtitle' %>">
+              <%= booking.status === 'cancelled' ? '此租車預訂已經取消。' : '你的租車預訂已成功確認，以下是預訂資料。' %>
+            </p>
+            <div class="reference"><span data-t="reference">預訂編號：</span> <strong><%= booking._id.toString() %></strong></div>
+            <div class="action-row">
+              <a href="/my-booking" class="action" data-t="myBookings">我的預訂</a>
+              <a href="/cars" class="action" data-t="browseCars">瀏覽其他車款</a>
+              <% if (booking.status === 'confirmed' && booking.pickupDate > new Date(Date.now() + 8 * 3600000).toISOString().slice(0,10)) { %>
+                <a href="/my-booking" class="action cancel" data-t="cancelBooking">取消預訂</a>
+              <% } %>
+            </div>
+            <% if (booking.status === 'confirmed' && booking.pickupDate > new Date(Date.now() + 8 * 3600000).toISOString().slice(0,10)) { %>
+              <p class="action-hint" data-t="cancelHint">按「取消預訂」會前往「我的預訂」頁面操作。</p>
+            <% } %>
+          </div>
+        </section>
+
+        <!-- 2. Car details (existing image is preserved) -->
+        <section class="card">
+          <div class="card-inner">
+            <h2 class="section-title" data-t="vehicleDetails">車輛資料</h2>
+            <div class="vehicle">
+              <img class="vehicle-photo"
+                   src="<%= booking.carImage || '/images/car01.jpg' %>"
+                   alt="<%= booking.carBrand %> <%= booking.carModel %>"
+                   onerror="this.onerror=null;this.src='/images/car01.jpg'">
+              <div class="vehicle-copy">
+                <span class="mini-label" data-t="selectedCar">已選車款</span>
+                <h3><%= booking.carBrand %> <%= booking.carModel %></h3>
+                <p class="vehicle-desc" data-t="vehicleText">你所選的租賃車輛已記錄在此預訂。</p>
+                <div class="vehicle-price"><span data-t="dailyRate">每日租金</span>　<b>HK$<%= Number(booking.pricePerDay || 0).toLocaleString('en-HK') %></b></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Rental date details -->
+        <section class="card">
+          <div class="card-inner">
+            <h2 class="section-title" data-t="tripDetails">取還車資訊</h2>
+            <div class="trip-grid">
+              <div class="trip-item"><span data-t="pickupDate">取車日期</span><strong><%= booking.pickupDate %></strong></div>
+              <div class="trip-item"><span data-t="returnDate">還車日期</span><strong><%= booking.returnDate %></strong></div>
+              <div class="trip-item"><span data-t="rentalDays">租用日數</span><strong><%= booking.totalDays %> <span data-t="dayUnit" style="display:inline;font-size:13px;color:inherit">天</span></strong></div>
+            </div>
+            <p class="trip-note" data-t="dateNote">以上資料來自你已確認的租車預訂。</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Order summary: daily rental and total only (no payment method). -->
+      <aside class="card summary" aria-label="Order summary">
+        <div class="summary-head">
+          <h2 data-t="summaryTitle">預訂總額</h2>
+          <div class="summary-price">HK$<%= Number(booking.totalPrice || 0).toLocaleString('en-HK') %></div>
+        </div>
+        <p class="summary-car"><%= booking.carBrand %> <%= booking.carModel %></p>
+        <hr class="summary-divider">
+        <h3 class="breakdown-title" data-t="priceBreakdown">租金明細</h3>
+        <div class="summary-line"><span class="label" data-t="dailyRate">每日租金</span><strong>HK$<%= Number(booking.pricePerDay || 0).toLocaleString('en-HK') %></strong></div>
+        <div class="summary-line"><span class="label" data-t="rentalDays">租用日數</span><strong><%= booking.totalDays %> <span data-t="dayUnit">天</span></strong></div>
+        <div class="summary-total"><span data-t="totalRental">租金總額</span><strong>HK$<%= Number(booking.totalPrice || 0).toLocaleString('en-HK') %></strong></div>
+        <p class="summary-note" data-t="summaryNote">金額按每日租金和實際租用日數計算。</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">© 2026 DriveEase. All Rights Reserved.</footer>
+
+  <script>
+    const words = {
+      en: {
+        home:'Home', cars:'Browse Cars', bookings:'My Bookings',
+        successHeading:'Booking confirmed', successSubtitle:'Your car rental booking is confirmed. Here are your booking details.',
+        cancelledHeading:'Booking cancelled', cancelledSubtitle:'This car rental booking has been cancelled.',
+        reference:'Booking reference:', myBookings:'My Bookings', browseCars:'Browse other cars', cancelBooking:'Cancel booking',
+        cancelHint:'The Cancel Booking button takes you to My Bookings to complete the cancellation.',
+        vehicleDetails:'Vehicle details', selectedCar:'Selected vehicle',
+        vehicleText:'The selected rental car is recorded in this booking.',
+        dailyRate:'Daily rental', tripDetails:'Pick-up & return details',
+        pickupDate:'Pick-up date', returnDate:'Return date', rentalDays:'Rental days',
+        dayUnit:'days', dateNote:'These details are from your confirmed booking.',
+        summaryTitle:'Booking total', priceBreakdown:'Rental breakdown', totalRental:'Total rental',
+        summaryNote:'The amount is calculated from the daily rate and the rental period.'
+      },
+      zh: {
+        home:'首頁', cars:'瀏覽車輛', bookings:'我的預訂',
+        successHeading:'預訂確認成功', successSubtitle:'你的租車預訂已成功確認，以下是預訂資料。',
+        cancelledHeading:'預訂已取消', cancelledSubtitle:'此租車預訂已經取消。',
+        reference:'預訂編號：', myBookings:'我的預訂', browseCars:'瀏覽其他車款', cancelBooking:'取消預訂',
+        cancelHint:'按「取消預訂」會前往「我的預訂」頁面操作。',
+        vehicleDetails:'車輛資料', selectedCar:'已選車款',
+        vehicleText:'你所選的租賃車輛已記錄在此預訂。',
+        dailyRate:'每日租金', tripDetails:'取還車資訊',
+        pickupDate:'取車日期', returnDate:'還車日期', rentalDays:'租用日數',
+        dayUnit:'天', dateNote:'以上資料來自你已確認的租車預訂。',
+        summaryTitle:'預訂總額', priceBreakdown:'租金明細', totalRental:'租金總額',
+        summaryNote:'金額按每日租金和實際租用日數計算。'
+      }
+    };
+    function setLanguage(lang) {
+      localStorage.setItem('driveease_language',lang);
+      document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+      document.querySelectorAll('[data-lang]').forEach(el => {
+        el.classList.toggle('active',el.dataset.lang === lang);
+      });
+      document.querySelectorAll('[data-t]').forEach(el => {
+        const word = words[lang][el.dataset.t];
+        if (word) el.textContent = word;
+      });
+    }
+    document.querySelectorAll('[data-lang]').forEach(button => {
+      button.addEventListener('click',() => setLanguage(button.dataset.lang));
+    });
+    setLanguage(localStorage.getItem('driveease_language') === 'en' ? 'en' : 'zh');
+  </script>
+</body>
+</html>
