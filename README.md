@@ -70,10 +70,10 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 
 | Member | Student ID | Role / Workload division | Contribution |
 | --- | --- | --- | --- |
-| `LAU Wing Kuen` | `13898680` | `Project Lead & Main Full-Stack Developer` | `Led the overall development; designed and implemented the Express.js server, MongoDB integration, authentication, RESTful CRUD APIs, vehicle management, booking system, member management, EJS interfaces.` |
+| `LAU Wing Kuen` | `13898680` | `Project Lead & Main Full-Stack Developer` | `Led the overall development: designed and implemented the Express.js server, MongoDB integration, authentication, RESTful CRUD APIs, vehicle management, booking system, member management, EJS interfaces.` |
 | `[Member 2 name]` | `[SID]` | `Data Collection & Testing Support` | `Support Vehicle information collection, image preparation, data verification and test case preparation.` |
 | `[Member 3 name]` | `[SID]` | `UI Review & Testing Support` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
-| `[Member 4 name]` | `[SID]` | `[e.g., Testing and documentation]` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
+| `[Member 4 name]` | `[SID]` | `Testing and documentation` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
 | `[Member 5 name]` | `[SID]` | `Quality Assurance Support` | `Functional testing, error identification, test case preparation and reporting issues for correction.` |
 | `[Member 6 name]` | `[SID]` | `Documentation & Testing Support` | `README review, test case preparation and presentation support.` |
 
