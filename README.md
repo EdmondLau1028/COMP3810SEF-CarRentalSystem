@@ -41,8 +41,6 @@ The system is implemented as a server-side Express.js application. EJS templates
 | Administrator | Member management | Create, search, view, edit, and delete eligible regular-member accounts. |
 | API client | RESTful vehicle CRUD | Use HTTP GET, POST, PUT, and DELETE endpoints. |
 
-> **Data protection rules:** The web admin tools prevent direct deletion of cars or members with existing booking history. The booking cancellation action preserves the booking document and changes its status. Accounts with administrator privileges are excluded from ordinary member management.
-
 ### Technology stack
 
 - **Runtime:** Node.js
@@ -66,8 +64,6 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 ---
 
 ## 2. Group Information
-
-> **Complete this section with the group's actual information before submission.** Do not claim contributions that a member did not make.
 
 **Course:** COMP 3810SEF — Group Project, Autumn 2026  
 **Group number:** `[ENTER GROUP NUMBER]`
