@@ -20,11 +20,11 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Traditional Chinese descriptions for the 20 demo vehicles.
+// Traditional Chinese descriptions for the 23 demo vehicles.
 // A descriptionZh field in MongoDB takes precedence if one is added later.
 const CAR_DESCRIPTIONS_ZH = {
-    "Toyota Corolla": "可靠省油的房車，適合日常市區駕駛。",
-    "Honda Civic": "外形時尚的緊湊型房車，駕駛舒適。",
+    "Toyota Corolla Sedan": "可靠省油的房車，適合日常市區駕駛。",
+    "Honda Civic Type R FL5": "外形時尚的緊湊型房車，駕駛舒適。",
     "Mazda Mazda3": "富運動感的緊湊型房車，車廂設計精緻。",
     "Honda Jazz": "靈活實用的小型揭背車，方便泊車及收納。",
     "Toyota Camry": "寬敞舒適的混能房車，適合日常及長途駕駛。",
@@ -42,7 +42,10 @@ const CAR_DESCRIPTIONS_ZH = {
     "Tesla Model Y": "車廂及行李空間實用的純電 SUV。",
     "BYD ATTO 3": "舒適實用的純電 SUV，適合日常代步。",
     "Ferrari Purosangue": "高性能豪華 SUV，帶來獨特駕駛體驗。",
-    "Mercedes-Benz S-Class": "旗艦級豪華房車，提供卓越的乘坐舒適度。"
+    "Mercedes-Benz S-Class": "旗艦級豪華房車，提供卓越的乘坐舒適度。",
+    "Honda Fit GE8": "操控靈活的棍波揭背車，適合享受駕駛樂趣。",
+    "Toyota GR86": "後輪驅動六速棍波雙門跑車，專為純粹駕駛樂趣而設。",
+    "Honda Civic Type R FK8": "渦輪增壓六速棍波高性能揭背車，專為極致賽道駕駛樂趣而設。"
 };
 
 function localizeCar(car) {
