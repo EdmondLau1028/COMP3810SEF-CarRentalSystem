@@ -74,8 +74,8 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 | `[Member 2 name]` | `[SID]` | `Data Collection & Testing Support` | `Support Vehicle information collection, image preparation, data verification and test case preparation.` |
 | `[Member 3 name]` | `[SID]` | `UI Review & Testing Support` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
 | `[Member 4 name]` | `[SID]` | `[e.g., Testing and documentation]` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
-| `[Member 5 name, if applicable]` | `[SID]` | `Quality Assurance Support` | `Functional testing, error identification, test case preparation and reporting issues for correction.` |
-| `[Member 6 name, if applicable]` | `[SID]` | `Documentation & Testing Support` | `README review, test case preparation and presentation support.` |
+| `[Member 5 name]` | `[SID]` | `Quality Assurance Support` | `Functional testing, error identification, test case preparation and reporting issues for correction.` |
+| `[Member 6 name]` | `[SID]` | `Documentation & Testing Support` | `README review, test case preparation and presentation support.` |
 
 ---
 
