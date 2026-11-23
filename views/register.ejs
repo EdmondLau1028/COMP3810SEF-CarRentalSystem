@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Register | DriveEase</title>
+    <title>Register | RentDrive</title>
 
     <!-- Google Fonts -->
     <link
@@ -94,11 +94,11 @@
             white-space: nowrap;
         }
 
-        .logo-drive {
+        .logo-primary {
             color: #142235;
         }
 
-        .logo-ease {
+        .logo-accent {
             color: #f97316;
             font-style: italic;
         }
@@ -566,7 +566,7 @@
 
             <a href="/" class="register-logo">
 
-                <span class="logo-drive">Drive</span><span class="logo-ease">Ease</span>
+                <span class="logo-primary">Rent</span><span class="logo-accent">Drive</span>
 
             </a>
 
@@ -600,7 +600,7 @@
 
 
             <span class="register-label" data-t="welcomeLabel">
-                JOIN DRIVEEASE
+                JOIN RENTDRIVE
             </span>
 
 
@@ -610,7 +610,7 @@
 
 
             <p class="register-description" data-t="registerDescription">
-                Join DriveEase and discover a better way to rent your next car.
+                Join RentDrive and discover a better way to rent your next car.
             </p>
 
 
@@ -817,7 +817,7 @@
         <!-- Footer -->
         <div class="register-footer">
 
-            © 2026 DriveEase — Car Rental Booking System
+            © 2026 RentDrive — Car Rental Booking System
 
         </div>
 
@@ -830,7 +830,7 @@
          RIGHT SIDE
     ====================================== -->
 
-    <section class="register-right" aria-label="DriveEase car rental">
+    <section class="register-right" aria-label="RentDrive car rental">
 
 
         <div class="register-right-content">
@@ -847,7 +847,7 @@
 
 
             <p data-t="rightDescription">
-                Create your DriveEase account to discover rental cars,
+                Create your RentDrive account to discover rental cars,
                 explore new destinations and manage your bookings in one place.
             </p>
 
@@ -877,12 +877,12 @@
 
         en: {
 
-            welcomeLabel: "JOIN DRIVEEASE",
+            welcomeLabel: "JOIN RENTDRIVE",
 
             registerTitle: "Create your account.",
 
             registerDescription:
-                "Join DriveEase and discover a better way to rent your next car.",
+                "Join RentDrive and discover a better way to rent your next car.",
 
             nameLabel: "Full Name",
 
@@ -915,7 +915,7 @@
             rightTitle: "Your next adventure starts here.",
 
             rightDescription:
-                "Create your DriveEase account to discover rental cars, explore new destinations and manage your bookings in one place.",
+                "Create your RentDrive account to discover rental cars, explore new destinations and manage your bookings in one place.",
 
             show: "Show",
 
@@ -927,12 +927,12 @@
 
         zh: {
 
-            welcomeLabel: "加入 DRIVEEASE",
+            welcomeLabel: "加入 RENTDRIVE",
 
             registerTitle: "建立你的帳戶",
 
             registerDescription:
-                "立即加入 DriveEase，探索更方便的租車體驗。",
+                "立即加入 RentDrive，探索更方便的租車體驗。",
 
             nameLabel: "姓名",
 
@@ -965,7 +965,7 @@
             rightTitle: "下一段精彩旅程，由這裡開始。",
 
             rightDescription:
-                "立即註冊 DriveEase，探索不同租車選擇，輕鬆管理預訂，享受自在出行。",
+                "立即註冊 RentDrive，探索不同租車選擇，輕鬆管理預訂，享受自在出行。",
 
             show: "顯示",
 
@@ -984,7 +984,7 @@
     ================================= */
 
     let currentLanguage =
-        localStorage.getItem("driveease_language") === "zh"
+        localStorage.getItem("rentdrive_language") === "zh"
             ? "zh"
             : "en";
 
@@ -994,7 +994,7 @@
 
         currentLanguage = language;
 
-        localStorage.setItem("driveease_language", language);
+        localStorage.setItem("rentdrive_language", language);
 
         document.documentElement.lang =
             language === "zh" ? "zh-Hant" : "en";

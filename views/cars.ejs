@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>DriveEase | Browse Cars</title>
+  <title>RentDrive | Browse Cars</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -78,7 +78,7 @@
 <body>
   <div class="topline"><div class="container"><span data-t="topline">Your Hong Kong car rental platform</span><span data-t="rentalModes">Daily · Weekly · Monthly</span></div></div>
   <header class="header"><div class="container nav">
-    <a href="/" class="brand" aria-label="DriveEase Home">Drive<em>Ease</em></a>
+    <a href="/" class="brand" aria-label="RentDrive Home">Rent<em>Drive</em></a>
     <nav class="nav-links">
       <a href="/" data-t="home">Home</a><a href="/cars?category=private" data-t="private">Private Cars</a><a href="/cars?category=family" data-t="family">Family Cars</a><a href="/cars?category=electric" data-t="electric">Electric Cars</a><a href="/cars?category=luxury" data-t="luxury">Luxury Cars</a>
     </nav>
@@ -98,7 +98,7 @@
 
   <section class="banner"><h1 data-t="bannerTitle">Choose your ideal car</h1></section>
   <main class="page container">
-    <!-- Only the four categories supported by DriveEase -->
+    <!-- Only the four categories supported by RentDrive -->
     <nav class="category-row" aria-label="Car categories">
       <a href="/cars" class="cat-link <%= filters.category === 'all' ? 'active' : '' %>">
         <span class="cat-icon"><svg viewBox="0 0 64 44"><path d="M5 30l5-10h43l6 10v7H5z"/><path d="M15 20l7-9h21l9 9"/><circle cx="17" cy="36" r="5"/><circle cx="49" cy="36" r="5"/><path d="M10 30h49M28 20v-9"/></svg></span><span data-t="allCars">All Cars</span>
@@ -152,7 +152,7 @@
       <% }) %>
     </section>
   </main>
-  <footer class="footer">© 2026 DriveEase. All Rights Reserved.</footer>
+  <footer class="footer">© 2026 RentDrive. All Rights Reserved.</footer>
   <script>
     const messages = {
       en:{topline:'Your Hong Kong car rental platform',rentalModes:'Daily · Weekly · Monthly',home:'Home',private:'Private Cars',family:'Family Cars',electric:'Electric Cars',luxury:'Luxury Cars',allCars:'All Cars',hello:'Hi,',myBookings:'My Bookings',adminPanel:'Admin',logout:'Logout',login:'Login',register:'Register',bannerTitle:'Choose your ideal car',brandLabel:'Brand',anyBrand:'All Brands',modelLabel:'Model',anyModel:'All Models',priceLabel:'Daily Price',anyPrice:'All Prices',locationLabel:'Location',anyLocation:'All Areas',seatsLabel:'Seats',anySeats:'Any Seats',transmissionLabel:'Transmission',anyTransmission:'All Transmissions',automatic:'Automatic',manual:'Manual',keywordLabel:'Keyword',keywordPlaceholder:'Search car brand or model',search:'Search Cars',reset:'Clear All',availableCars:'Available Cars',results:'matching vehicles',emptyTitle:'No cars found',emptyText:'Try changing your filters.',modelYear:'Model Year',seats:'Seats',dayRate:'Daily Rental',perDay:'/ day',viewDetails:'View Details →'},
@@ -167,7 +167,7 @@
       }
     };
     function setLanguage(lang){
-      localStorage.setItem('driveease_language',lang);
+      localStorage.setItem('rentdrive_language',lang);
       document.documentElement.lang=lang==='zh'?'zh-Hant':'en';
       document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
       document.querySelectorAll('[data-t]').forEach(el=>el.textContent=messages[lang][el.dataset.t]||el.textContent);
@@ -186,7 +186,7 @@
       });
     }
     document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.lang)));
-    setLanguage(localStorage.getItem('driveease_language')==='en'?'en':'zh');
+    setLanguage(localStorage.getItem('rentdrive_language')==='en'?'en':'zh');
   </script>
 </body>
 </html>

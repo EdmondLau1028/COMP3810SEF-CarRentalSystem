@@ -30,10 +30,10 @@ const brands = [
 
     <meta
         name="description"
-        content="DriveEase car rental — browse vehicles, compare rates and manage bookings."
+        content="RentDrive car rental — browse vehicles, compare rates and manage bookings."
     >
 
-    <title>DriveEase | Rent Your Next Car</title>
+    <title>RentDrive | Rent Your Next Car</title>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&display=swap"
@@ -652,7 +652,7 @@ const brands = [
 
 
         /* ===============================
-           About DriveEase
+           About RentDrive
         =============================== */
 
         .ec-note-area {
@@ -1225,7 +1225,7 @@ const brands = [
 
 }
 /* =====================================
-   DRIVEEASE CUSTOM LOGO
+   RENTDRIVE CUSTOM LOGO
 ===================================== */
 
     /* Navbar full width */
@@ -1259,13 +1259,13 @@ const brands = [
         transition: transform 0.3s ease;
     }
 
-    /* Drive */
-    .ec-logo-drive {
+    /* Rent */
+    .ec-logo-primary {
         color: #142235;
     }
 
-    /* Ease */
-    .ec-logo-ease {
+    /* Drive */
+    .ec-logo-accent {
         display: inline-block;
 
         background: linear-gradient(
@@ -1285,7 +1285,7 @@ const brands = [
     }
 
     /* Orange underline */
-    .ec-logo-ease::after {
+    .ec-logo-accent::after {
         content: "";
 
         position: absolute;
@@ -1321,14 +1321,14 @@ const brands = [
 }
 
 
-/* Drive - Dark Navy */
-.ec-header .ec-logo-drive {
+/* Rent - Dark Navy */
+.ec-header .ec-logo-primary {
     color: #142235;
 }
 
 
-    /* Ease - Orange Italic */
-    .ec-header .ec-logo-ease {
+    /* Drive - Orange Italic */
+    .ec-header .ec-logo-accent {
         color: #f97316;
 
         font-style: italic;
@@ -1340,7 +1340,7 @@ const brands = [
 
 
     /* Remove previous underline decoration */
-    .ec-header .ec-logo-ease::after {
+    .ec-header .ec-logo-accent::after {
         display: none;
     }
 
@@ -1436,10 +1436,10 @@ const brands = [
 
         <div class="ec-container ec-nav">
 
-            <!-- DriveEase Logo -->
-            <a class="ec-brand" href="/" aria-label="DriveEase Home">
+            <!-- RentDrive Logo -->
+            <a class="ec-brand" href="/" aria-label="RentDrive Home">
 
-                <span class="ec-logo-drive">Drive</span><span class="ec-logo-ease">Ease</span>
+                <span class="ec-logo-primary">Rent</span><span class="ec-logo-accent">Drive</span>
             </a>
 
             <nav class="ec-menu">
@@ -2068,11 +2068,11 @@ const brands = [
         <div class="ec-container ec-footer-flex">
 
             <strong>
-                DriveEase
+                RentDrive
             </strong>
 
             <small data-t="footer">
-                © 2026 DriveEase —
+                © 2026 RentDrive —
                 Car Rental Booking System
             </small>
 
@@ -2206,11 +2206,11 @@ const brands = [
                 step5d:
                     "Return the car at your agreed time and location.",
 
-                aboutKicker: "WHY DRIVEEASE",
+                aboutKicker: "WHY RENTDRIVE",
                 aboutTitle: "One place for your next drive",
 
                 aboutText:
-                    "Discover vehicle options, compare them clearly and manage your reservations from a personal account. DriveEase is being built as a simple car-rental booking experience.",
+                    "Discover vehicle options, compare them clearly and manage your reservations from a personal account. RentDrive is being built as a simple car-rental booking experience.",
 
                 benefit1: "Search by car type, brand and budget",
 
@@ -2221,7 +2221,7 @@ const brands = [
                     "Register, sign in and view your bookings",
 
                 footer:
-                    "© 2026 DriveEase — Car Rental Booking System",
+                    "© 2026 RentDrive — Car Rental Booking System",
 
                 footerFleet: "Browse Cars",
 
@@ -2288,7 +2288,7 @@ const brands = [
                 viewDetails: "查看詳情 →",
                 luxuryKicker: "豪華車精選",
                 luxuryTitle: "展開非凡駕駛體驗。",
-                luxuryText: "探索 DriveEase 精選豪華租賃車款。",
+                luxuryText: "探索 RentDrive 精選豪華租賃車款。",
                 viewLuxury: "瀏覽豪華車 →",
 
                 allCars: "全部車款",
@@ -2334,12 +2334,12 @@ const brands = [
                 step5d:
                     "按約定時間和地點歸還車輛。",
 
-                aboutKicker: "為何選擇 DRIVEEASE",
+                aboutKicker: "為何選擇 RENTDRIVE",
 
                 aboutTitle: "一站式規劃你的租車旅程",
 
                 aboutText:
-                    "集中搜尋車款、清晰比較資料，並以個人會員帳戶管理預訂。DriveEase 致力提供簡單易用的租車預訂體驗。",
+                    "集中搜尋車款、清晰比較資料，並以個人會員帳戶管理預訂。RentDrive 致力提供簡單易用的租車預訂體驗。",
 
                 benefit1:
                     "可按類型、品牌及預算篩選",
@@ -2351,7 +2351,7 @@ const brands = [
                     "註冊、登入及查閱個人預訂",
 
                 footer:
-                    "© 2026 DriveEase 汽車租賃預訂系統",
+                    "© 2026 RentDrive 汽車租賃預訂系統",
 
                 footerFleet: "瀏覽車款",
 
@@ -2369,7 +2369,7 @@ const brands = [
         =============================== */
 
         let language =
-            localStorage.getItem("driveease_language") === "zh"
+            localStorage.getItem("rentdrive_language") === "zh"
                 ? "zh"
                 : "en";
 
@@ -2385,7 +2385,7 @@ const brands = [
             language = lang === "zh" ? "zh" : "en";
 
             localStorage.setItem(
-                "driveease_language",
+                "rentdrive_language",
                 language
             );
 
@@ -2394,8 +2394,8 @@ const brands = [
 
             document.title =
                 language === "zh"
-                    ? "DriveEase｜香港租車預訂"
-                    : "DriveEase | Rent Your Next Car";
+                    ? "RentDrive｜香港租車預訂"
+                    : "RentDrive | Rent Your Next Car";
 
 
             // Translate all elements

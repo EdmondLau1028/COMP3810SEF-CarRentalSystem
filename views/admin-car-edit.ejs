@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>編輯車輛 | DriveEase Admin</title>
+  <title>編輯車輛 | RentDrive Admin</title>
   <style>
     :root { --sidebar:#28323b; --ice:#32a7df; --ice-bg:#eff7fb; --text:#344955; --muted:#7b8d99; --border:#dce5eb; --green:#35bb74; }
     * { box-sizing:border-box; }
@@ -14,7 +14,7 @@
     .sidebar { background:var(--sidebar); color:#a8b9c6; display:flex; flex-direction:column; }
     .side-brand { height:61px; padding:0 20px; display:flex; align-items:center; gap:12px; background:var(--ice); color:#fff; font-size:15px; font-weight:700; }
     .de-brand { display:inline-flex; align-items:baseline; gap:0; font-size:21px; line-height:1; font-weight:900; letter-spacing:-1px; white-space:nowrap; }
-    .de-brand .de-ease { color:#ff781f; font-style:italic; }
+    .de-brand .de-accent { color:#ff781f; font-style:italic; }
     .de-admin { font-size:10px; letter-spacing:1px; color:#e8f6fd; font-weight:700; }
     .user-card { padding:20px 18px; border-bottom:1px solid #3a454f; color:white; font-weight:600; }
     .user-card small { display:block; margin-top:5px; color:#9ab0bf; font-size:11px; font-weight:400; }
@@ -64,7 +64,7 @@
 %>
 <div class="layout">
   <aside class="sidebar">
-    <div class="side-brand"><a class="de-brand" href="/admin" aria-label="DriveEase Admin"><span>Drive</span><span class="de-ease">Ease</span></a><small class="de-admin">ADMIN</small></div>
+    <div class="side-brand"><a class="de-brand" href="/admin" aria-label="RentDrive Admin"><span>Rent</span><span class="de-accent">Drive</span></a><small class="de-admin">ADMIN</small></div>
     <div class="user-card"><%= who %><small>Administrator</small></div>
     <nav>
       <div class="group-label">MANAGEMENT</div>
