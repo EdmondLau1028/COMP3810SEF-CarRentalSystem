@@ -241,55 +241,6 @@ All routes below are provided by the supplied `server.js` and return JSON. The c
 
 **Important restriction of this demo API:** `DELETE` deliberately only deletes cars whose `brand` is `TestBrand`, `model` is `CRUD Demo Car`, and `available` is `false`. The admin **web** Delete action has its own booking-history safety rule.
 
-### Ready-to-run CURL demo
-
-Execute the following in a terminal while the server is running. Each request uses the same application instance and MongoDB database.
-
-**1. GET — read cars**
-
-```bash
-curl -i http://localhost:3000/api/cars
-```
-
-**2. POST — create a safe demonstration car**
-
-```bash
-curl -i -X POST http://localhost:3000/api/cars \
-  -H 'Content-Type: application/json' \
-  -d '{"brand":"TestBrand","model":"CRUD Demo Car","category":"private","pricePerDay":100}'
-```
-
-Record the `carId` from the JSON response. Or create a new test record and capture its ID automatically:
-
-```bash
-CAR_ID=$(curl -fsS -X POST http://localhost:3000/api/cars \
-  -H 'Content-Type: application/json' \
-  -d '{"brand":"TestBrand","model":"CRUD Demo Car","category":"private","pricePerDay":100}' \
-  | python3 -c 'import json,sys; print(json.load(sys.stdin)["carId"])')
-echo "Demo car ID: $CAR_ID"
-```
-
-**3. PUT — change the test car's daily price**
-
-```bash
-curl -i -X PUT "http://localhost:3000/api/cars/$CAR_ID" \
-  -H 'Content-Type: application/json' \
-  -d '{"pricePerDay":200}'
-```
-
-**4. DELETE — remove the test car**
-
-```bash
-curl -i -X DELETE "http://localhost:3000/api/cars/$CAR_ID"
-```
-
-**5. GET — verify the inventory remains accessible**
-
-```bash
-curl -i http://localhost:3000/api/cars
-```
-
-Do not run DELETE against a real inventory record. For the demo above, a successful removal returns a JSON message and `deletedCount: 1`. If you manually run the POST command and the automatic-ID command, you create two test records: delete each by its own ID when finished.
 
 ### Troubleshooting
 
