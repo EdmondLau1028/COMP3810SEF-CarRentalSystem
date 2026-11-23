@@ -241,19 +241,6 @@ All routes below are provided by the supplied `server.js` and return JSON. The c
 
 **Important restriction of this demo API:** `DELETE` deliberately only deletes cars whose `brand` is `TestBrand`, `model` is `CRUD Demo Car`, and `available` is `false`. The admin **web** Delete action has its own booking-history safety rule.
 
-
-### Troubleshooting
-
-| Problem | Check |
-| --- | --- |
-| Server will not start | Make sure `MONGODB_URI`, `DB_NAME`, and `SESSION_SECRET` exist in `.env`. |
-| `Cannot find module` | Run `npm install`, then install any missing imported dependency. |
-| Admin page returns 403 | Sign in with an actual `role: "admin"` account. |
-| Vehicle images are missing | Confirm that the specified `/images/...` file exists under `public/images/`. |
-| Booking cannot be confirmed | Check the dates, vehicle `available` status, and any overlapping confirmed booking. |
-| API returns 400 | Check required JSON data types and whether `:id` is a valid 24-character ObjectId. |
-| Test-car DELETE returns 404 | Confirm the record has the allowed test brand/model, is unavailable, and has not already been deleted. |
-
 ### Functional verification checklist
 
 - [ ] User registration, sign-in, and logout
