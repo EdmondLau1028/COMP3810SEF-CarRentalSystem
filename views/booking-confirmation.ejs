@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>預訂詳情 | DriveEase</title>
+  <title>預訂詳情 | RentDrive</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -91,7 +91,7 @@
 <body>
   <header class="header">
     <div class="shell navigation">
-      <a class="logo" href="/" aria-label="DriveEase Home">Drive<em>Ease</em></a>
+      <a class="logo" href="/" aria-label="RentDrive Home">Rent<em>Drive</em></a>
       <nav class="nav-links">
         <a href="/" data-t="home">首頁</a>
         <a href="/cars" data-t="cars">瀏覽車輛</a>
@@ -182,7 +182,7 @@
     </div>
   </main>
 
-  <footer class="footer">© 2026 DriveEase. All Rights Reserved.</footer>
+  <footer class="footer">© 2026 RentDrive. All Rights Reserved.</footer>
 
   <script>
     const words = {
@@ -216,7 +216,7 @@
       }
     };
     function setLanguage(lang) {
-      localStorage.setItem('driveease_language',lang);
+      localStorage.setItem('rentdrive_language',lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
       document.querySelectorAll('[data-lang]').forEach(el => {
         el.classList.toggle('active',el.dataset.lang === lang);
@@ -229,7 +229,7 @@
     document.querySelectorAll('[data-lang]').forEach(button => {
       button.addEventListener('click',() => setLanguage(button.dataset.lang));
     });
-    setLanguage(localStorage.getItem('driveease_language') === 'en' ? 'en' : 'zh');
+    setLanguage(localStorage.getItem('rentdrive_language') === 'en' ? 'en' : 'zh');
   </script>
 </body>
 </html>

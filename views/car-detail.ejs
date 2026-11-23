@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= car.brand %> <%= car.model %> | DriveEase</title>
+  <title><%= car.brand %> <%= car.model %> | RentDrive</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root { --ink:#172237; --muted:#6a7381; --accent:#ef641c; --line:#e5e6e9; --pale:#f7f7f8; }
@@ -88,7 +88,7 @@
 <body>
   <header class="header">
     <div class="container nav">
-      <a class="logo" href="/" aria-label="DriveEase Home">Drive<em>Ease</em></a>
+      <a class="logo" href="/" aria-label="RentDrive Home">Rent<em>Drive</em></a>
       <nav class="nav-links" aria-label="Main navigation">
         <a href="/" data-t="home">Home</a>
         <a href="/cars" data-t="cars">Browse Cars</a>
@@ -176,7 +176,7 @@
     </section>
   </main>
 
-  <footer class="footer">© 2026 DriveEase. All Rights Reserved.</footer>
+  <footer class="footer">© 2026 RentDrive. All Rights Reserved.</footer>
 
   <script>
     const phrases = {
@@ -215,7 +215,7 @@
     let language = 'zh';
     function setLanguage(lang) {
       language = lang;
-      localStorage.setItem('driveease_language',lang);
+      localStorage.setItem('rentdrive_language',lang);
       document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
       document.querySelectorAll('[data-lang]').forEach(button => button.classList.toggle('active',button.dataset.lang===lang));
       document.querySelectorAll('[data-t]').forEach(el => { el.textContent = phrases[lang][el.dataset.t] || el.textContent; });
@@ -267,7 +267,7 @@
     pickup.addEventListener('change',calculate);
     dropoff.addEventListener('change',calculate);
     document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click',() => setLanguage(button.dataset.lang)));
-    setLanguage(localStorage.getItem('driveease_language') === 'en' ? 'en' : 'zh');
+    setLanguage(localStorage.getItem('rentdrive_language') === 'en' ? 'en' : 'zh');
   </script>
 </body>
 </html>

@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login | DriveEase</title>
+    <title>Login | RentDrive</title>
 
     <!-- Google Font -->
     <link
@@ -84,11 +84,11 @@
             width: fit-content;
         }
 
-        .logo-drive {
+        .logo-primary {
             color: #142235;
         }
 
-        .logo-ease {
+        .logo-accent {
             color: #f97316;
             font-style: italic;
         }
@@ -545,7 +545,7 @@
 
             <a href="/" class="login-logo">
 
-                <span class="logo-drive">Drive</span><span class="logo-ease">Ease</span>
+                <span class="logo-primary">Rent</span><span class="logo-accent">Drive</span>
 
             </a>
 
@@ -583,7 +583,7 @@
 
 
             <h1 data-t="loginTitle">
-                Sign in to DriveEase.
+                Sign in to RentDrive.
             </h1>
 
 
@@ -710,7 +710,7 @@
 
         <!-- Footer -->
         <div class="login-footer">
-            © 2026 DriveEase — Car Rental Booking System
+            © 2026 RentDrive — Car Rental Booking System
         </div>
 
 
@@ -722,7 +722,7 @@
          RIGHT SIDE
     ====================================== -->
 
-    <section class="login-right" aria-label="DriveEase car rental">
+    <section class="login-right" aria-label="RentDrive car rental">
 
 
         <div class="login-right-content">
@@ -741,7 +741,7 @@
 
 
             <p data-t="rightDescription">
-                Discover the freedom of driving with DriveEase.
+                Discover the freedom of driving with RentDrive.
                 Browse cars, compare options and enjoy a seamless rental experience.
             </p>
 
@@ -793,7 +793,7 @@
 
             welcomeLabel: "WELCOME BACK",
 
-            loginTitle: "Sign in to DriveEase.",
+            loginTitle: "Sign in to RentDrive.",
 
             loginDescription:
                 "Welcome back! Sign in to explore rental cars and manage your bookings.",
@@ -819,7 +819,7 @@
             rightTitle: "Find your next drive. Make every trip count.",
 
             rightDescription:
-                "Discover the freedom of driving with DriveEase. Browse cars, compare options and enjoy a seamless rental experience.",
+                "Discover the freedom of driving with RentDrive. Browse cars, compare options and enjoy a seamless rental experience.",
 
             show: "Show",
 
@@ -831,7 +831,7 @@
 
             welcomeLabel: "歡迎回來",
 
-            loginTitle: "登入 DriveEase",
+            loginTitle: "登入 RentDrive",
 
             loginDescription:
                 "歡迎回來！登入帳戶，探索心水車款並管理你的租車預訂。",
@@ -857,7 +857,7 @@
             rightTitle: "尋找心水座駕，輕鬆享受每段旅程。",
 
             rightDescription:
-                "DriveEase 為你提供便捷的租車體驗。輕鬆瀏覽車款、比較選擇，展開自在旅程。",
+                "RentDrive 為你提供便捷的租車體驗。輕鬆瀏覽車款、比較選擇，展開自在旅程。",
 
             show: "顯示",
 
@@ -874,7 +874,7 @@
     ================================= */
 
     let currentLanguage =
-        localStorage.getItem("driveease_language") === "zh"
+        localStorage.getItem("rentdrive_language") === "zh"
             ? "zh"
             : "en";
 
@@ -909,7 +909,7 @@
 
         currentLanguage = language;
 
-        localStorage.setItem("driveease_language", language);
+        localStorage.setItem("rentdrive_language", language);
 
         document.documentElement.lang =
             language === "zh" ? "zh-Hant" : "en";
