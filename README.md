@@ -65,17 +65,17 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 
 ## 2. Group Information
 
-**Course:** COMP 3810SEF — Group Project, Autumn 2026  
-**Group number:** `[ENTER GROUP NUMBER]`
+**Course:** COMP 3810SEF
+**Group number:** `G76`
 
 | Member | Student ID | Role / Workload division | Contribution |
 | --- | --- | --- | --- |
-| `[Member 1 name]` | `[SID]` | `[e.g., Server-side development]` | `[Actual work completed]` |
-| `[Member 2 name]` | `[SID]` | `[e.g., MongoDB and data]` | `[Actual work completed]` |
-| `[Member 3 name]` | `[SID]` | `[e.g., Front-end UI and EJS]` | `[Actual work completed]` |
-| `[Member 4 name]` | `[SID]` | `[e.g., Testing and documentation]` | `[Actual work completed]` |
-| `[Member 5 name, if applicable]` | `[SID]` | `[Actual role]` | `[Actual work completed]` |
-| `[Member 6 name, if applicable]` | `[SID]` | `[Actual role]` | `[Actual work completed]` |
+| `LAU Wing Kuen` | `13898680` | `Project Lead & Main Full-Stack Developer` | `Led the overall development; designed and implemented the Express.js server, MongoDB integration, authentication, RESTful CRUD APIs, vehicle management, booking system, member management, EJS interfaces.` |
+| `[Member 2 name]` | `[SID]` | `Data Collection & Testing Support` | `Support Vehicle information collection, image preparation, data verification and test case preparation.` |
+| `[Member 3 name]` | `[SID]` | `UI Review & Testing Support` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
+| `[Member 4 name]` | `[SID]` | `[e.g., Testing and documentation]` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
+| `[Member 5 name, if applicable]` | `[SID]` | `Quality Assurance Support` | `Functional testing, error identification, test case preparation and reporting issues for correction.` |
+| `[Member 6 name, if applicable]` | `[SID]` | `Documentation & Testing Support` | `README review, test case preparation and presentation support.` |
 
 ---
 
