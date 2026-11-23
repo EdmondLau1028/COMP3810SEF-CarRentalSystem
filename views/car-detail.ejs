@@ -100,6 +100,9 @@
         </div>
         <% if (currentUser) { %>
           <span class="greeting"><span data-t="hello">Hi,</span> <%= currentUser %></span>
+          <% if (currentUser === 'admin01' || (typeof role !== 'undefined' && role === 'admin')) { %>
+            <a href="/admin" data-t="adminPanel" style="background:#172237;color:#fff;padding:10px 14px;border-radius:10px;font-weight:800;">Admin</a>
+          <% } %>
           <form action="/logout" method="POST"><button class="logout" type="submit" data-t="logout">Logout</button></form>
         <% } else { %>
           <a class="login-link" href="/login" data-t="login">Login</a>
@@ -181,7 +184,7 @@
   <script>
     const phrases = {
       en: {
-        home:'Home',cars:'Browse Cars',luxury:'Luxury Cars',hello:'Hi,',logout:'Logout',login:'Login',register:'Register',
+        home:'Home',cars:'Browse Cars',luxury:'Luxury Cars',hello:'Hi,',adminPanel:'Admin',logout:'Logout',login:'Login',register:'Register',
         backCars:'← Back to Cars',dailyRate:'Daily rental',perDay:'/ day',chooseDates:'Choose rental dates →',
         seats:'Seats',transmission:'Transmission',fuel:'Fuel type',year:'Model year',location:'Pick-up area',
         carDetails:'About this car',pickupLocation:'Pick-up location',planTrip:'Plan your trip',
@@ -192,7 +195,7 @@
         private:'Private Car',family:'Family Car',electric:'Electric Car',luxuryCategory:'Luxury Car'
       },
       zh: {
-        home:'首頁',cars:'瀏覽車輛',luxury:'豪華車',hello:'你好，',logout:'登出',login:'登入',register:'註冊',
+        home:'首頁',cars:'瀏覽車輛',luxury:'豪華車',hello:'你好，',adminPanel:'管理後台',logout:'登出',login:'登入',register:'註冊',
         backCars:'← 返回車輛列表',dailyRate:'日租價錢',perDay:'／天',chooseDates:'選擇租用日期 →',
         seats:'座位數',transmission:'波箱類型',fuel:'燃料類型',year:'車輛年份',location:'取車地區',
         carDetails:'車輛介紹',pickupLocation:'取車地點',planTrip:'規劃你的行程',

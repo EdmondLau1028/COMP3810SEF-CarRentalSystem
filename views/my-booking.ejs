@@ -88,6 +88,9 @@
       <a href="/" data-t="home">首頁</a>
       <a href="/cars" data-t="cars">瀏覽車輛</a>
       <a href="/my-booking" data-t="myBookings">我的預訂</a>
+      <% if (typeof currentUser === 'string' && currentUser.toLowerCase().startsWith('admin')) { %>
+        <a href="/admin" data-t="adminPanel" style="color: var(--orange);">管理後台</a>
+      <% } %>
     </nav>
     <div class="account">
       <div class="language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="zh">繁中</button></div>
@@ -161,7 +164,7 @@
   <script>
     const words = {
       en: {
-        home:'Home',cars:'Browse Cars',myBookings:'My Bookings',hello:'Hi,',logout:'Logout',
+        home:'Home',cars:'Browse Cars',myBookings:'My Bookings',hello:'Hi,',logout:'Logout',adminPanel:'Admin',
         intro:'Review your car rentals, total prices and booking statuses.',
         bookingCount:'bookings',browseCars:'Browse other cars →',
         cancelResult:'Your booking has been cancelled.',cancelFailed:'This booking cannot be cancelled or has already been cancelled.',
@@ -173,7 +176,7 @@
         confirmCancel:'Are you sure you want to cancel this booking?'
       },
       zh: {
-        home:'首頁',cars:'瀏覽車輛',myBookings:'我的預訂',hello:'你好，',logout:'登出',
+        home:'首頁',cars:'瀏覽車輛',myBookings:'我的預訂',hello:'你好，',logout:'登出',adminPanel:'管理後台',
         intro:'查看你的租車預訂、租金及預訂狀態。',
         bookingCount:'筆預訂',browseCars:'瀏覽其他車款 →',
         cancelResult:'已成功取消預訂。',cancelFailed:'此預訂未能取消，或已經取消。',

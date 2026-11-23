@@ -1523,6 +1523,16 @@ const brands = [
                         My Bookings
                     </a>
 
+                    <% if (currentUser === 'admin01' || (typeof role !== 'undefined' && role === 'admin')) { %>
+                        <a
+                            href="/admin"
+                            data-t="adminPanel"
+                            style="background:#142235;color:#fff;padding:10px 15px;border-radius:10px;font-weight:700;"
+                        >
+                            Admin
+                        </a>
+                    <% } %>
+
                     <form
                         action="/logout"
                         method="POST"
@@ -2109,6 +2119,7 @@ const brands = [
 
                 hello: "Hi,",
                 myBookings: "My Bookings",
+                adminPanel: "Admin",
                 logout: "Logout",
                 login: "Login",
                 register: "Register",
@@ -2236,6 +2247,7 @@ const brands = [
 
                 hello: "你好，",
                 myBookings: "我的預訂",
+                adminPanel: "管理後台",
                 logout: "登出",
                 login: "登入",
                 register: "註冊",
