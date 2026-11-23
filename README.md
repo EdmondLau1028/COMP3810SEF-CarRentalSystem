@@ -75,7 +75,7 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 | `Chen Kin San` | `14513559` | `UI Review & Testing Support` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
 | `Wong Wai Yiu` | `13880638` | `Testing and documentation` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
 | `Lam Kam Wai` | `14487906` | `Quality Assurance Support` | `Functional testing, error identification, test case preparation and reporting issues for correction.` |
-| `[Member 6 name]` | `[SID]` | `Documentation & Testing Support` | `README review, test case preparation and presentation support.` |
+| `Tsui Ho Yin` | `14339910` | `Documentation & Testing Support` | `README review, test case preparation and presentation support.` |
 
 ---
 
