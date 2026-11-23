@@ -206,7 +206,7 @@ app.set("trust proxy", 1);
 // Configure Session
 app.use(session({
 
-    name: "driveease.sid",
+    name: "rentdrive.sid",
 
     secret: process.env.SESSION_SECRET,
 
@@ -1943,7 +1943,7 @@ app.post("/logout", (req, res) => {
 
 
         // Clear Session Cookie
-        res.clearCookie("driveease.sid", {
+        res.clearCookie("rentdrive.sid", {
             path: "/"
         });
 

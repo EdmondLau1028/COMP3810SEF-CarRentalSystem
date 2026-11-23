@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= mode === 'edit' ? '編輯會員' : '新增會員' %> | DriveEase Admin</title>
+  <title><%= mode === 'edit' ? '編輯會員' : '新增會員' %> | RentDrive Admin</title>
   <style>
     :root { --sidebar:#28323b; --blue:#32a7df; --bg:#eff7fb; --text:#334550; --muted:#758692; --line:#dce5eb; }
     * { box-sizing:border-box; }
@@ -14,7 +14,7 @@
     .sidebar { display:flex; flex-direction:column; background:var(--sidebar); color:#a8b9c6; }
     .brand { height:61px; display:flex; align-items:center; gap:12px; padding:0 20px; color:white; background:var(--blue); }
     .de-brand { display:inline-flex; align-items:baseline; font-size:21px; font-weight:900; line-height:1; letter-spacing:-1px; }
-    .de-ease { color:#ff781f; font-style:italic; }
+    .de-accent { color:#ff781f; font-style:italic; }
     .de-admin { font-size:10px; letter-spacing:1px; color:#e8f6fd; font-weight:700; }
     .identity { padding:20px 18px; font-weight:700; color:white; border-bottom:1px solid #3a454f; }
     .identity small { display:block; font-size:11px; margin-top:5px; color:#9ab0bf; font-weight:400; }
@@ -57,7 +57,7 @@
 %>
 <div class="layout">
   <aside class="sidebar">
-    <div class="brand"><a class="de-brand" href="/admin"><span>Drive</span><span class="de-ease">Ease</span></a><small class="de-admin">ADMIN</small></div>
+    <div class="brand"><a class="de-brand" href="/admin"><span>Rent</span><span class="de-accent">Drive</span></a><small class="de-admin">ADMIN</small></div>
     <div class="identity"><%= who %><small>Administrator</small></div>
     <nav>
       <div class="group">MANAGEMENT</div>
