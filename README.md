@@ -175,9 +175,6 @@ The above `views/` entries correspond to templates referenced by the supplied `s
    ```
 
 5. Open `http://localhost:3000/`, or open the forwarded port **3000** in GitHub Codespaces.
-
-**Never commit `.env`, genuine demo-account passwords, connection credentials, or production database secrets.** For assessment, use a disposable demo database and explicitly authorized test accounts.
-
 ---
 
 ## 4. Operation Guides
