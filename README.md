@@ -87,8 +87,7 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 comp3810sef_groupNo/
 ├── server.js                     # Express routes, authentication, business logic, MongoDB
 ├── package.json                  # Node.js package metadata, dependencies and npm scripts
-├── package-lock.json             # Dependency lockfile, if present
-├── .env.example                  # Sample environment variable names (no secrets)
+├── .env.example                  # Sample environment variable names
 ├── README.md                     # Project information and operating guides
 ├── public/
 │   ├── css/                      # CSS assets, if separated from the templates
