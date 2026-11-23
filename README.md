@@ -81,7 +81,8 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 
 ## 3. Project File Introduction
 
-### Suggested project structure
+### P
+roject structure
 
 ```text
 comp3810sef_groupNo/
