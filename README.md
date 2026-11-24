@@ -1,7 +1,4 @@
 <div align="center">
-
-#RentDrive
-
 **Car Rental Booking & Management System**
 
 A full-stack car rental platform built with **Node.js, Express.js, EJS, and MongoDB**.
