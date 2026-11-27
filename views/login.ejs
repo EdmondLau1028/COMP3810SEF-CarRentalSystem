@@ -16,9 +16,6 @@
 
     <style>
 
-        /* ================================
-           GLOBAL
-        ================================= */
 
         * {
             margin: 0;
@@ -41,22 +38,12 @@
             font: inherit;
         }
 
-
-        /* ================================
-           LOGIN LAYOUT
-        ================================= */
-
         .login-container {
             display: grid;
             grid-template-columns: 48% 52%;
 
             min-height: 100vh;
         }
-
-
-        /* ================================
-           LEFT SIDE
-        ================================= */
 
         .login-left {
             display: flex;
@@ -68,9 +55,6 @@
         }
 
 
-        /* ================================
-           LOGO
-        ================================= */
 
         .login-logo {
             display: inline-flex;
@@ -93,10 +77,6 @@
             font-style: italic;
         }
 
-
-        /* ================================
-           FORM CONTAINER
-        ================================= */
 
         .login-content {
             width: 100%;
@@ -143,10 +123,6 @@
             margin-bottom: 38px;
         }
 
-
-        /* ================================
-           FORM
-        ================================= */
 
         .form-group {
             margin-bottom: 23px;
@@ -197,10 +173,6 @@
         }
 
 
-        /* ================================
-           PASSWORD INPUT
-        ================================= */
-
         .password-wrapper {
             position: relative;
         }
@@ -235,9 +207,6 @@
         }
 
 
-        /* ================================
-           LOGIN BUTTON
-        ================================= */
 
         .login-btn {
             width: 100%;
@@ -281,9 +250,6 @@
         }
 
 
-        /* ================================
-           ERROR MESSAGE
-        ================================= */
 
         .error-message {
             background: #fef2f2;
@@ -302,9 +268,7 @@
         }
 
 
-        /* ================================
-           REGISTER LINK
-        ================================= */
+
 
         .register-text {
             text-align: center;
@@ -327,10 +291,6 @@
         }
 
 
-        /* ================================
-           BACK HOME
-        ================================= */
-
         .back-home {
             margin-top: 24px;
 
@@ -346,10 +306,6 @@
             color: #f97316;
         }
 
-
-        /* ================================
-           RIGHT SIDE - CAR BACKGROUND
-        ================================= */
 
         .login-right {
             position: relative;
@@ -425,10 +381,6 @@
         }
 
 
-        /* ================================
-           LANGUAGE SWITCH
-        ================================= */
-
         .language-switch {
             display: flex;
             gap: 5px;
@@ -473,10 +425,6 @@
         }
 
 
-        /* ================================
-           FOOTER
-        ================================= */
-
         .login-footer {
             color: #98a2b3;
 
@@ -485,10 +433,6 @@
             margin-top: 30px;
         }
 
-
-        /* ================================
-           RESPONSIVE
-        ================================= */
 
         @media (max-width: 950px) {
 
@@ -531,11 +475,6 @@
 
 
 <div class="login-container">
-
-
-    <!-- =====================================
-         LEFT SIDE
-    ====================================== -->
 
     <section class="login-left">
 
@@ -718,9 +657,6 @@
 
 
 
-    <!-- =====================================
-         RIGHT SIDE
-    ====================================== -->
 
     <section class="login-right" aria-label="RentDrive car rental">
 
@@ -756,15 +692,9 @@
 
 
 
-<!-- =====================================
-     JAVASCRIPT
-====================================== -->
-
 <script>
 
-    /* ================================
-       PASSWORD SHOW / HIDE
-    ================================= */
+
 
     const passwordInput = document.getElementById("password");
 
@@ -781,11 +711,6 @@
 
     });
 
-
-
-    /* ================================
-       TRANSLATIONS
-    ================================= */
 
     const translations = {
 
@@ -869,9 +794,7 @@
 
 
 
-    /* ================================
-       CURRENT LANGUAGE
-    ================================= */
+
 
     let currentLanguage =
         localStorage.getItem("rentdrive_language") === "zh"
@@ -880,9 +803,6 @@
 
 
 
-    /* ================================
-       UPDATE PASSWORD BUTTON
-    ================================= */
 
     function updatePasswordButton() {
 
@@ -900,10 +820,6 @@
     }
 
 
-
-    /* ================================
-       CHANGE LANGUAGE
-    ================================= */
 
     function changeLanguage(language) {
 
@@ -959,10 +875,6 @@
     }
 
 
-
-    /* ================================
-       LANGUAGE BUTTONS
-    ================================= */
 
     document.querySelectorAll("[data-language]").forEach(function (button) {
 

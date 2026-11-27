@@ -1,9 +1,5 @@
 require("dotenv").config();
 
-// =====================================
-// Import Libraries
-// =====================================
-
 const express = require("express");
 const { MongoClient, ObjectId } = require("mongodb");
 const path = require("path");
@@ -12,16 +8,13 @@ const session = require("express-session");
 const crypto = require("crypto");
 
 
-// =====================================
+
 // Express Setup
-// =====================================
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Traditional Chinese descriptions for the 23 demo vehicles.
-// A descriptionZh field in MongoDB takes precedence if one is added later.
 const CAR_DESCRIPTIONS_ZH = {
     "Toyota Corolla Sedan": "可靠省油的房車，適合日常市區駕駛。",
     "Honda Civic Type R FL5": "外形時尚的緊湊型房車，駕駛舒適。",
@@ -103,10 +96,7 @@ async function requireLogin(req, res, next) {
         return res.status(500).send("Unable to verify login");
     }
 }
-// =====================================
 // Admin Authentication Middleware
-// =====================================
-
 async function requireAdmin(req, res, next) {
 
     // 1. Check login status
@@ -170,18 +160,15 @@ class BookingError extends Error {
 }
 
 
-// =====================================
+
 // EJS Setup
-// =====================================
 
 app.set("view engine", "ejs");
 
 app.set("views", path.join(__dirname, "views"));
 
-
-// =====================================
 // Middleware
-// =====================================
+
 
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
@@ -193,9 +180,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-// =====================================
 // Session Configuration
-// =====================================
 
 // Check Session Secret
 if (!process.env.SESSION_SECRET) {
@@ -230,9 +215,7 @@ app.use(session({
 }));
 
 
-// =====================================
-// Make Login Status Available to EJS
-// =====================================
+// Login Status
 
 app.use((req, res, next) => {
 
@@ -244,13 +227,9 @@ app.use((req, res, next) => {
 });
 
 
-// =====================================
 // Routes
-// =====================================
 
-// =====================================
-// RESTful API - GET All Cars
-// =====================================
+// RESTful API - GET 
 
 app.get("/api/cars", async (req, res) => {
 
@@ -275,9 +254,7 @@ app.get("/api/cars", async (req, res) => {
     }
 
 });
-// =====================================
 // RESTful API - POST Create Car
-// =====================================
 
 app.post("/api/cars", async (req, res) => {
 
@@ -340,9 +317,7 @@ app.post("/api/cars", async (req, res) => {
 
 });
 
-// =====================================
 // RESTful API - PUT Update Car
-// =====================================
 
 app.put("/api/cars/:id", async (req, res) => {
 
@@ -397,9 +372,7 @@ app.put("/api/cars/:id", async (req, res) => {
 
 });
 
-// =====================================
 // RESTful API - DELETE Car
-// =====================================
 
 app.delete("/api/cars/:id", async (req, res) => {
 
@@ -448,18 +421,15 @@ app.delete("/api/cars/:id", async (req, res) => {
 
 });
 
-// =====================================
-// Admin entry point - go straight to vehicle management
-// =====================================
+// Admin entry
 
 app.get("/admin", requireAdmin, (req, res) => {
 
     return res.redirect("/admin/cars");
 
 });
-// =====================================
+
 // Admin - Car Management
-// =====================================
 
 app.get("/admin/cars", requireAdmin, async (req, res) => {
 
@@ -531,10 +501,8 @@ app.get("/admin/cars", requireAdmin, async (req, res) => {
     }
 
 });
-// =====================================
-// Admin - New Car Form
-// =====================================
 
+// Admin - New Car Form
 app.get("/admin/cars/new", requireAdmin, (req, res) => {
 
     return res.render("admin-car-new", {
@@ -544,9 +512,8 @@ app.get("/admin/cars/new", requireAdmin, (req, res) => {
     });
 
 });
-// =====================================
+
 // Admin - Create New Car
-// =====================================
 
 app.post("/admin/cars/new", requireAdmin, async (req, res) => {
 
@@ -650,9 +617,7 @@ app.post("/admin/cars/new", requireAdmin, async (req, res) => {
 
 });
 
-// =====================================
-// Admin - Edit Car (HTML form)
-// =====================================
+// Admin - Edit Car
 
 app.get("/admin/cars/:id/edit", requireAdmin, async (req, res) => {
     if (!/^[0-9a-fA-F]{24}$/.test(req.params.id)) {
@@ -754,9 +719,7 @@ app.post("/admin/cars/:id/edit", requireAdmin, async (req, res) => {
     }
 });
 
-// =====================================
-// Admin - Delete Car (only when no booking history exists)
-// =====================================
+// Admin - Delete Car 
 
 app.post("/admin/cars/:id/delete", requireAdmin, async (req, res) => {
     if (!/^[0-9a-fA-F]{24}$/.test(req.params.id)) {
@@ -798,9 +761,7 @@ app.post("/admin/cars/:id/delete", requireAdmin, async (req, res) => {
     }
 });
 
-// =====================================
 // Admin - Booking Management
-// =====================================
 
 app.get("/admin/bookings", requireAdmin, async (req, res) => {
     const q = typeof req.query.q === "string" ? req.query.q.trim().slice(0, 80) : "";
@@ -948,9 +909,7 @@ app.post("/admin/bookings/:id/cancel", requireAdmin, async (req, res) => {
     }
 });
 
-// =====================================
 // Admin - User Management
-// =====================================
 
 function adminMemberFields(form) {
     const text = key => typeof form[key] === "string" ? form[key].trim() : "";
@@ -1220,9 +1179,7 @@ app.post("/admin/users/:id/delete", requireAdmin, async (req, res) => {
     }
 });
 
-// =====================================
 // Home Page
-// =====================================
 
 app.get("/", async (req, res) => {
     try {
@@ -1250,9 +1207,7 @@ app.get("/", async (req, res) => {
 });
 
 
-// =====================================
 // Car Listing (GET /cars)
-// =====================================
 
 app.get("/cars", async (req, res) => {
     try {
@@ -1331,9 +1286,7 @@ app.get("/cars", async (req, res) => {
 });
 
 
-// =====================================
 // Car Details (GET /cars/:id)
-// =====================================
 
 app.get("/cars/:id", async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) {
@@ -1366,9 +1319,7 @@ app.get("/cars/:id", async (req, res) => {
 });
 
 
-// =====================================
 // Create Booking (POST /booking)
-// =====================================
 
 app.post("/booking", requireLogin, async (req, res) => {
     const { carId, pickupDate, returnDate } = req.body;
@@ -1456,9 +1407,7 @@ app.post("/booking", requireLogin, async (req, res) => {
 });
 
 
-// =====================================
-// My Bookings (GET /my-booking)
-// =====================================
+// My Bookings
 
 app.get("/my-booking", requireLogin, async (req, res) => {
     try {
@@ -1479,9 +1428,7 @@ app.get("/my-booking", requireLogin, async (req, res) => {
 });
 
 
-// =====================================
-// Booking Confirmation (GET)
-// =====================================
+// Booking Confirmation
 
 app.get("/booking/confirmation/:id", requireLogin, async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(404).send("Booking not found.");
@@ -1499,10 +1446,7 @@ app.get("/booking/confirmation/:id", requireLogin, async (req, res) => {
 });
 
 
-// =====================================
 // Cancel Booking (POST)
-// =====================================
-
 app.post("/booking/:id/cancel", requireLogin, async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) return res.status(404).send("Booking not found.");
     if (!bookingCsrfValid(req)) {
@@ -1526,9 +1470,7 @@ app.post("/booking/:id/cancel", requireLogin, async (req, res) => {
 });
 
 
-// =====================================
 // Register Page (GET)
-// =====================================
 
 app.get("/register", (req, res) => {
 
@@ -1540,9 +1482,7 @@ app.get("/register", (req, res) => {
 });
 
 
-// =====================================
 // Register User (POST)
-// =====================================
 
 app.post("/register", async (req, res) => {
 
@@ -1554,10 +1494,7 @@ app.post("/register", async (req, res) => {
     } = req.body;
 
 
-    // ---------------------------------
     // 1. Validate Input
-    // ---------------------------------
-
     if (
         typeof name !== "string" ||
         typeof email !== "string" ||
@@ -1574,11 +1511,7 @@ app.post("/register", async (req, res) => {
 
     }
 
-
-    // ---------------------------------
     // 2. Validate Email
-    // ---------------------------------
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (
@@ -1595,9 +1528,7 @@ app.post("/register", async (req, res) => {
     }
 
 
-    // ---------------------------------
     // 3. Validate Password
-    // ---------------------------------
 
     if (
         password.length < 8 ||
@@ -1612,9 +1543,7 @@ app.post("/register", async (req, res) => {
     }
 
 
-    // ---------------------------------
     // 4. Confirm Password
-    // ---------------------------------
 
     if (password !== confirmPassword) {
 
@@ -1628,30 +1557,22 @@ app.post("/register", async (req, res) => {
 
     try {
 
-        // ---------------------------------
         // 5. Access MongoDB
-        // ---------------------------------
 
         const db = req.app.locals.db;
 
 
-        // ---------------------------------
         // 6. Normalize Email
-        // ---------------------------------
 
         const normalizedEmail = email.trim().toLowerCase();
 
 
-        // ---------------------------------
         // 7. Hash Password
-        // ---------------------------------
 
         const passwordHash = await bcrypt.hash(password, 12);
 
 
-        // ---------------------------------
         // 8. Save User to MongoDB
-        // ---------------------------------
 
         await db.collection("users").insertOne({
 
@@ -1666,9 +1587,7 @@ app.post("/register", async (req, res) => {
         });
 
 
-        // ---------------------------------
         // 9. Registration Successful
-        // ---------------------------------
 
         console.log("New user registered successfully");
 
@@ -1685,9 +1604,8 @@ app.post("/register", async (req, res) => {
     } catch (error) {
 
 
-        // ---------------------------------
+
         // Duplicate Email
-        // ---------------------------------
 
         if (error.code === 11000) {
 
@@ -1702,9 +1620,7 @@ app.post("/register", async (req, res) => {
         }
 
 
-        // ---------------------------------
-        // Other Errors
-        // ---------------------------------
+=        // Other Errors
 
         console.error("Registration error:", error.message);
 
@@ -1722,9 +1638,7 @@ app.post("/register", async (req, res) => {
 });
 
 
-// =====================================
 // Login Page (GET)
-// =====================================
 
 app.get("/login", (req, res) => {
 
@@ -1742,9 +1656,7 @@ app.get("/login", (req, res) => {
 });
 
 
-// =====================================
 // Login User (POST)
-// =====================================
 
 app.post("/login", async (req, res) => {
 
@@ -1754,9 +1666,7 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
 
-    // ---------------------------------
     // 1. Validate Input
-    // ---------------------------------
 
     if (
         typeof email !== "string" ||
@@ -1776,24 +1686,17 @@ app.post("/login", async (req, res) => {
 
     try {
 
-        // ---------------------------------
         // 2. Access MongoDB
-        // ---------------------------------
 
         const db = req.app.locals.db;
 
 
-        // ---------------------------------
         // 3. Normalize Email
-        // ---------------------------------
 
         const normalizedEmail = email.trim().toLowerCase();
 
 
-        // ---------------------------------
         // 4. Find User
-        // ---------------------------------
-
         const user = await db.collection("users").findOne({
 
             email: normalizedEmail
@@ -1801,9 +1704,7 @@ app.post("/login", async (req, res) => {
         });
 
 
-        // ---------------------------------
         // 5. Check User
-        // ---------------------------------
 
         if (
             !user ||
@@ -1817,11 +1718,7 @@ app.post("/login", async (req, res) => {
             });
 
         }
-
-
-        // ---------------------------------
         // 6. Verify Password
-        // ---------------------------------
 
         const passwordMatch = await bcrypt.compare(
 
@@ -1842,10 +1739,7 @@ app.post("/login", async (req, res) => {
 
         }
 
-
-        // ---------------------------------
         // 7. Regenerate Session
-        // ---------------------------------
 
         await new Promise((resolve, reject) => {
 
@@ -1862,18 +1756,13 @@ app.post("/login", async (req, res) => {
         });
 
 
-        // ---------------------------------
         // 8. Store User in Session
-        // ---------------------------------
 
         req.session.userId = String(user._id);
 
         req.session.userName = user.name;
 
-
-        // ---------------------------------
         // 9. Save Session
-        // ---------------------------------
 
         await new Promise((resolve, reject) => {
 
@@ -1889,9 +1778,7 @@ app.post("/login", async (req, res) => {
 
         });
 
-// ---------------------------------
 // 10. Login Successful
-// ---------------------------------
 
         console.log("User logged in successfully");
 
@@ -1906,10 +1793,7 @@ app.post("/login", async (req, res) => {
 
     } catch (error) {
 
-
-        // ---------------------------------
         // Login Error
-        // ---------------------------------
 
         console.error("Login error:", error.message);
 
@@ -1925,9 +1809,8 @@ app.post("/login", async (req, res) => {
 });
 
 
-// =====================================
+
 // Logout User (POST)
-// =====================================
 
 app.post("/logout", (req, res) => {
 
@@ -1962,9 +1845,7 @@ app.post("/logout", (req, res) => {
 });
 
 
-// =====================================
 // MongoDB Connection
-// =====================================
 
 async function startServer() {
 
@@ -1972,10 +1853,7 @@ async function startServer() {
 
     try {
 
-        // ---------------------------------
         // 1. Check Environment Variables
-        // ---------------------------------
-
         if (
             !process.env.MONGODB_URI ||
             !process.env.DB_NAME
@@ -1987,11 +1865,7 @@ async function startServer() {
 
         }
 
-
-        // ---------------------------------
         // 2. Create MongoDB Client
-        // ---------------------------------
-
         client = new MongoClient(process.env.MONGODB_URI, {
 
             serverSelectionTimeoutMS: 10000
@@ -1999,38 +1873,28 @@ async function startServer() {
         });
 
 
-        // ---------------------------------
         // 3. Connect to MongoDB
-        // ---------------------------------
 
         await client.connect();
 
 
-        // ---------------------------------
         // 4. Select Database
-        // ---------------------------------
 
         const db = client.db(process.env.DB_NAME);
 
 
-        // ---------------------------------
         // 5. Test Database Connection
-        // ---------------------------------
 
         await db.command({ ping: 1 });
 
 
-        // ---------------------------------
         // 6. Make Database Available
-        // ---------------------------------
 
         app.locals.db = db;
         app.locals.mongoClient = client;
 
 
-        // ---------------------------------
         // 7. Create Unique Email Index
-        // ---------------------------------
 
         await db.collection("users").createIndex(
 
@@ -2051,9 +1915,7 @@ async function startServer() {
         console.log("MongoDB connected successfully");
 
 
-        // ---------------------------------
         // 8. Start Express Server
-        // ---------------------------------
 
         app.listen(PORT, () => {
 
@@ -2084,9 +1946,5 @@ async function startServer() {
 
 }
 
-
-// =====================================
 // Start Application
-// =====================================
-
 startServer();
