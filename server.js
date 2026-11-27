@@ -1618,10 +1618,7 @@ app.post("/register", async (req, res) => {
             });
 
         }
-
-
-=        // Other Errors
-
+        
         console.error("Registration error:", error.message);
 
 
