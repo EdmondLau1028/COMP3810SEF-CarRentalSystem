@@ -1,7 +1,4 @@
 <div align="center">
-
-#RentDrive
-
 **Car Rental Booking & Management System**
 
 A full-stack car rental platform built with **Node.js, Express.js, EJS, and MongoDB**.
@@ -41,8 +38,6 @@ The system is implemented as a server-side Express.js application. EJS templates
 | Administrator | Member management | Create, search, view, edit, and delete eligible regular-member accounts. |
 | API client | RESTful vehicle CRUD | Use HTTP GET, POST, PUT, and DELETE endpoints. |
 
-> **Data protection rules:** The web admin tools prevent direct deletion of cars or members with existing booking history. The booking cancellation action preserves the booking document and changes its status. Accounts with administrator privileges are excluded from ordinary member management.
-
 ### Technology stack
 
 - **Runtime:** Node.js
@@ -67,32 +62,30 @@ Vehicle images are referenced with paths such as `/images/car05.jpg` and are ser
 
 ## 2. Group Information
 
-> **Complete this section with the group's actual information before submission.** Do not claim contributions that a member did not make.
-
-**Course:** COMP 3810SEF — Group Project, Autumn 2026  
-**Group number:** `[ENTER GROUP NUMBER]`
+**Course:** COMP 3810SEF
+**Group number:** `G76`
 
 | Member | Student ID | Role / Workload division | Contribution |
 | --- | --- | --- | --- |
-| `[Member 1 name]` | `[SID]` | `[e.g., Server-side development]` | `[Actual work completed]` |
-| `[Member 2 name]` | `[SID]` | `[e.g., MongoDB and data]` | `[Actual work completed]` |
-| `[Member 3 name]` | `[SID]` | `[e.g., Front-end UI and EJS]` | `[Actual work completed]` |
-| `[Member 4 name]` | `[SID]` | `[e.g., Testing and documentation]` | `[Actual work completed]` |
-| `[Member 5 name, if applicable]` | `[SID]` | `[Actual role]` | `[Actual work completed]` |
-| `[Member 6 name, if applicable]` | `[SID]` | `[Actual role]` | `[Actual work completed]` |
+| `LAU Wing Kuen` | `13898680` | `Project Lead & Main Full-Stack Developer` | `Led the overall development: designed and implemented the Express.js server, MongoDB integration, authentication, RESTful CRUD APIs, vehicle management, booking system, member management, EJS interfaces.` |
+| `So Wing Sing` | `14377084` | `Data Collection & Testing Support` | `Support Vehicle information collection, image preparation, data verification and test case preparation.` |
+| `Chen Kin San` | `14513559` | `UI Review & Testing Support` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
+| `Wong Wai Yiu` | `13880638` | `Testing and documentation` | `User interface review, bilingual content checking, test case preparation and usability testing.` |
+| `Lam Kam Wai` | `14487906` | `Quality Assurance Support` | `Functional testing, error identification, test case preparation and reporting issues for correction.` |
+| `Tsui Ho Yin` | `14339910` | `Documentation & Testing Support` | `README review, test case preparation and presentation support.` |
 
 ---
 
 ## 3. Project File Introduction
 
-### Suggested project structure
+### P
+roject structure
 
 ```text
 comp3810sef_groupNo/
 ├── server.js                     # Express routes, authentication, business logic, MongoDB
 ├── package.json                  # Node.js package metadata, dependencies and npm scripts
-├── package-lock.json             # Dependency lockfile, if present
-├── .env.example                  # Sample environment variable names (no secrets)
+├── .env.example                  # Sample environment variable names
 ├── README.md                     # Project information and operating guides
 ├── public/
 │   ├── css/                      # CSS assets, if separated from the templates
@@ -179,9 +172,6 @@ The above `views/` entries correspond to templates referenced by the supplied `s
    ```
 
 5. Open `http://localhost:3000/`, or open the forwarded port **3000** in GitHub Codespaces.
-
-**Never commit `.env`, genuine demo-account passwords, connection credentials, or production database secrets.** For assessment, use a disposable demo database and explicitly authorized test accounts.
-
 ---
 
 ## 4. Operation Guides
@@ -241,68 +231,6 @@ All routes below are provided by the supplied `server.js` and return JSON. The c
 
 **Important restriction of this demo API:** `DELETE` deliberately only deletes cars whose `brand` is `TestBrand`, `model` is `CRUD Demo Car`, and `available` is `false`. The admin **web** Delete action has its own booking-history safety rule.
 
-### Ready-to-run CURL demo
-
-Execute the following in a terminal while the server is running. Each request uses the same application instance and MongoDB database.
-
-**1. GET — read cars**
-
-```bash
-curl -i http://localhost:3000/api/cars
-```
-
-**2. POST — create a safe demonstration car**
-
-```bash
-curl -i -X POST http://localhost:3000/api/cars \
-  -H 'Content-Type: application/json' \
-  -d '{"brand":"TestBrand","model":"CRUD Demo Car","category":"private","pricePerDay":100}'
-```
-
-Record the `carId` from the JSON response. Or create a new test record and capture its ID automatically:
-
-```bash
-CAR_ID=$(curl -fsS -X POST http://localhost:3000/api/cars \
-  -H 'Content-Type: application/json' \
-  -d '{"brand":"TestBrand","model":"CRUD Demo Car","category":"private","pricePerDay":100}' \
-  | python3 -c 'import json,sys; print(json.load(sys.stdin)["carId"])')
-echo "Demo car ID: $CAR_ID"
-```
-
-**3. PUT — change the test car's daily price**
-
-```bash
-curl -i -X PUT "http://localhost:3000/api/cars/$CAR_ID" \
-  -H 'Content-Type: application/json' \
-  -d '{"pricePerDay":200}'
-```
-
-**4. DELETE — remove the test car**
-
-```bash
-curl -i -X DELETE "http://localhost:3000/api/cars/$CAR_ID"
-```
-
-**5. GET — verify the inventory remains accessible**
-
-```bash
-curl -i http://localhost:3000/api/cars
-```
-
-Do not run DELETE against a real inventory record. For the demo above, a successful removal returns a JSON message and `deletedCount: 1`. If you manually run the POST command and the automatic-ID command, you create two test records: delete each by its own ID when finished.
-
-### Troubleshooting
-
-| Problem | Check |
-| --- | --- |
-| Server will not start | Make sure `MONGODB_URI`, `DB_NAME`, and `SESSION_SECRET` exist in `.env`. |
-| `Cannot find module` | Run `npm install`, then install any missing imported dependency. |
-| Admin page returns 403 | Sign in with an actual `role: "admin"` account. |
-| Vehicle images are missing | Confirm that the specified `/images/...` file exists under `public/images/`. |
-| Booking cannot be confirmed | Check the dates, vehicle `available` status, and any overlapping confirmed booking. |
-| API returns 400 | Check required JSON data types and whether `:id` is a valid 24-character ObjectId. |
-| Test-car DELETE returns 404 | Confirm the record has the allowed test brand/model, is unavailable, and has not already been deleted. |
-
 ### Functional verification checklist
 
 - [ ] User registration, sign-in, and logout
@@ -315,15 +243,3 @@ Do not run DELETE against a real inventory record. For the demo above, a success
 - [ ] Admin member list, details, and editing
 - [ ] REST `GET`, `POST`, `PUT`, and `DELETE` demonstrated with CURL
 - [ ] All visible website branding reads **RentDrive**
-
----
-
-## Submission Notes
-
-The course requires the deliverable project folder to be named `comp3810sef_groupNo` (replace `groupNo` with the real group number), and the submitted ZIP to be named `comp3810sef_groupNo.zip`. Include `server.js`, `package.json`, `README.md`, and all required `views/` and `public/` resources. **Do not include `node_modules/` or `.env`.** Keep a working copy of the application and prepare CURL commands for the presentation.
-
-**Reminder:** Every team member should review and understand the parts they claim to have implemented. Record genuine individual contributions in the group-information table above.
-
----
-
-<sub>README layout uses straightforward headings, badges, installation steps, and usage guidance, taking structural inspiration from [jstrieb/github-stats](https://github.com/jstrieb/github-stats). GitHub statistics generation is not part of RentDrive's runtime.</sub>
